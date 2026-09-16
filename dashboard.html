@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Kratero Fit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    .leaflet-control-attribution { font-size: 8px !important; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background:
+        radial-gradient(1100px 520px at 12% -12%, rgba(59,130,246,0.07), transparent 60%),
+        radial-gradient(900px 480px at 105% 0%, rgba(59,130,246,0.05), transparent 55%),
+        #05070D;
+      background-attachment: fixed;
+    }
+    .font-display { font-family: 'Fraunces', serif; }
+    [class*="bg-[#0D1526]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #05070D; }
+    ::-webkit-scrollbar-thumb { background: #24345c; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3B82F6; }
+  
+    /* --- Kratero Fit: tab bar inferior (móvil) --- */
+    .kf-tabbar-scroll::-webkit-scrollbar { display: none; }
+    .kf-tabbar-scroll { -ms-overflow-style: none; scrollbar-width: none; scroll-behavior: smooth; }
+    .kf-tab {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; min-width: 60px; padding: 6px 6px; border-radius: 12px;
+      color: rgba(245,247,250,.45); font-size: 9px; font-weight: 800; letter-spacing: .01em;
+      white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
+    }
+    .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
+    .kf-tab-icon-img { width: 18px; height: 18px; object-fit: contain; display: block; }
+    .kf-tab.active { color: #3B82F6; background: rgba(59,130,246,.10); }
+    .kf-tab:active { background: rgba(59,130,246,.16); }
+    /* La tab bar es visible en TODOS los tamaños (móvil y escritorio) */
+    #kf-tabbar { padding-bottom: env(safe-area-inset-bottom); }
+    body.has-kf-tabbar { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+    @media (min-width: 768px) {
+      .kf-tab { min-width: 76px; font-size: 10px; padding: 8px 10px; }
+      .kf-tab .kf-tab-icon { font-size: 20px; }
+      .kf-tab-icon-img { width: 20px; height: 20px; }
+    }
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 84px; }
+
+    /* Selector de capa del mapa de Cardio (Calles/Satélite) */
+    .cardio-capa-btn { color: rgba(245,247,250,.55); }
+    .cardio-capa-btn.activa { background: #3B82F6; color: #05070D; }
+    /* Punto de ubicación en vivo estilo "GPS azul" */
+    .cardio-gps-dot { background:#3B82F6; border:2px solid #fff; border-radius:50%; box-shadow:0 0 0 4px rgba(59,130,246,.35); width:14px; height:14px; }
+    .cardio-gps-accuracy { background: rgba(59,130,246,.15); border: 1px solid rgba(59,130,246,.4); border-radius: 50%; }
+  
+    /* --- Kratero Fit: modo claro / oscuro --- */
+    html { transition: filter .25s ease; }
+    html[data-theme="light"] {
+      filter: invert(1) hue-rotate(180deg);
+      background: #fff;
+    }
+    html[data-theme="light"] img:not(.kf-tab-icon-img),
+    html[data-theme="light"] svg,
+    html[data-theme="light"] video,
+    html[data-theme="light"] iframe {
+      filter: invert(1) hue-rotate(180deg);
+    }
+    #kf-theme-toggle {
+      position: fixed; z-index: 60; top: 14px; right: 14px;
+      width: 38px; height: 38px; border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.35);
+      color: #F5F7FA; font-size: 16px; cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+    #kf-theme-toggle:active { background: rgba(59,130,246,0.25); }
+  </style>
+</head>
+<body class="bg-[#05070D] text-[#F5F7FA] min-h-screen pb-12 has-kf-tabbar">
+  <button id="kf-theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar modo claro/oscuro">🌙</button>
+
+
+  <!-- NAVBAR -->
+  <nav class="bg-[#0D1526] border-b border-[#3B82F6]/20 px-6 py-4 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <img src="logo.png" alt="Kratero Fit" class="w-9 h-9 object-contain drop-shadow-[0_0_10px_rgba(59,130,246,0.25)]">
+        <div class="leading-none hidden sm:block">
+          <span class="font-display text-lg text-[#3B82F6]">Kratero</span>
+          <span class="ml-1 text-[10px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <span id="user-display-name" class="text-xs font-semibold text-white/80">Cargando...</span>
+        <a href="perfil.html" class="bg-[#05070D] border border-[#3B82F6]/40 px-3 py-1.5 rounded-xl text-xs font-bold text-[#3B82F6] hover:bg-[#3B82F6] hover:text-[#05070D] transition">Mi Perfil</a>
+        <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition">Salir</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="sec-inicio" class="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
+
+    <!-- 1. RESUMEN DE MI PERFIL FÍSICO Y PLAN -->
+    <section class="bg-[#0D1526] border border-[#3B82F6]/20 p-6 rounded-2xl shadow-xl space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#3B82F6]/10 pb-4">
+        <div>
+          <h2 class="font-display text-3xl text-[#3B82F6]" id="welcome-title">¡Bienvenido!</h2>
+          <p class="text-xs text-white/60 mt-1">Resumen de tu ficha corporal y plan activo</p>
+        </div>
+        <div class="self-start md:self-auto flex flex-col items-end gap-1.5">
+          <span id="user-plan-badge" class="bg-gradient-to-r from-[#3B82F6]/15 to-[#3B82F6]/5 border border-[#3B82F6]/40 text-[#3B82F6] px-4 py-1.5 rounded-full text-xs font-bold">Plan Básico</span>
+          <span id="user-plan-app-badge" class="bg-gradient-to-r from-orange-500/15 to-orange-500/5 border border-orange-500/40 text-orange-400 px-4 py-1 rounded-full text-[10px] font-bold">App: Plan Básico</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-[#05070D] p-3 rounded-xl border border-[#3B82F6]/15 text-center">
+          <span class="block text-[10px] text-white/50 uppercase font-bold">Edad</span>
+          <span id="stat-edad" class="text-base font-bold text-[#3B82F6]">- años</span>
+        </div>
+        <div class="bg-[#05070D] p-3 rounded-xl border border-[#3B82F6]/15 text-center">
+          <span class="block text-[10px] text-white/50 uppercase font-bold">Peso Actual</span>
+          <span id="stat-peso" class="text-base font-bold text-[#3B82F6]">- kg</span>
+        </div>
+        <div class="bg-[#05070D] p-3 rounded-xl border border-[#3B82F6]/15 text-center">
+          <span class="block text-[10px] text-white/50 uppercase font-bold">Estatura</span>
+          <span id="stat-estatura" class="text-base font-bold text-[#3B82F6]">- cm</span>
+        </div>
+        <div class="bg-[#05070D] p-3 rounded-xl border border-[#3B82F6]/15 text-center">
+          <span class="block text-[10px] text-white/50 uppercase font-bold">Actividad</span>
+          <span id="stat-actividad" class="text-base font-bold text-white">-</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. HABIT TRACKER VISUAL -->
+    <section id="sec-habitos" data-plan-req="avanzado" class="bg-[#0D1526] border border-[#3B82F6]/20 p-6 rounded-2xl shadow-xl space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <h2 class="text-lg font-bold text-[#3B82F6]">📅 Hábitos y Constancia</h2>
+        <div class="flex items-center gap-3">
+          <span id="streak-badge" class="text-xs font-bold bg-orange-500/10 border border-orange-500/30 text-orange-400 px-3 py-1.5 rounded-full">🔥 0 días seguidos</span>
+          <span id="today-date" class="text-xs text-white/60 font-semibold">--/--/----</span>
+        </div>
+      </div>
+
+      <!-- Filas por hábito: vista semanal + heatmap histórico -->
+      <div id="habitos-rows" class="space-y-4">
+        <p class="text-xs text-white/40">Cargando hábitos...</p>
+      </div>
+
+      <!-- Calendario de rachas (vista mensual) -->
+      <div class="border-t border-[#3B82F6]/10 pt-5">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold text-white">Calendario del mes</h3>
+          <span id="calendar-month-label" class="text-xs text-white/50 font-semibold uppercase"></span>
+        </div>
+        <div class="grid grid-cols-7 gap-1.5 text-center mb-1">
+          <span class="text-[10px] text-white/40 font-bold">L</span>
+          <span class="text-[10px] text-white/40 font-bold">M</span>
+          <span class="text-[10px] text-white/40 font-bold">X</span>
+          <span class="text-[10px] text-white/40 font-bold">J</span>
+          <span class="text-[10px] text-white/40 font-bold">V</span>
+          <span class="text-[10px] text-white/40 font-bold">S</span>
+          <span class="text-[10px] text-white/40 font-bold">D</span>
+        </div>
+        <div id="calendar-grid" class="grid grid-cols-7 gap-1.5"></div>
+      </div>
+    </section>
+
+    <!-- 2.5. CARDIO (running / caminata con mapa en vivo) -->
+    <section id="sec-cardio" data-plan-req="avanzado" class="bg-[#0D1526] border border-[#3B82F6]/20 p-6 rounded-2xl shadow-xl space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h2 class="text-lg font-bold text-[#3B82F6]">🏃 Cardio</h2>
+        <div id="cardio-tipo-selector" class="flex gap-2">
+          <button type="button" data-tipo="running" class="cardio-tipo-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-[#3B82F6]/30 transition">🏃 Correr</button>
+          <button type="button" data-tipo="caminata" class="cardio-tipo-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-[#3B82F6]/30 transition">🚶 Caminar</button>
+        </div>
+      </div>
+
+      <!-- MAPA: siempre visible. Muestra tu punto azul en vivo antes, durante y después de correr -->
+      <div class="relative">
+        <div id="cardio-map" class="w-full h-72 rounded-xl overflow-hidden border border-[#3B82F6]/20 bg-[#05070D]"></div>
+
+        <!-- Selector de capa (Calles / Satélite) -->
+        <div class="absolute top-2 left-2 z-[400] flex bg-[#05070D]/90 backdrop-blur border border-[#3B82F6]/25 rounded-lg overflow-hidden shadow-lg">
+          <button type="button" id="btn-capa-calles" class="cardio-capa-btn px-2.5 py-1.5 text-[10px] font-bold transition">🗺️ Calles</button>
+          <button type="button" id="btn-capa-satelite" class="cardio-capa-btn px-2.5 py-1.5 text-[10px] font-bold transition">🛰️ Satélite</button>
+        </div>
+
+        <!-- Estado del GPS -->
+        <div id="cardio-gps-status" class="absolute top-2 right-2 z-[400] bg-[#05070D]/90 backdrop-blur border border-[#3B82F6]/25 rounded-lg px-2.5 py-1.5 text-[10px] font-bold text-white/60 shadow-lg">
+          📡 Buscando GPS...
+        </div>
+
+        <!-- Botón de recentrar en mi ubicación -->
+        <button type="button" id="btn-recentrar-cardio" title="Centrar en mi ubicación" class="absolute bottom-2 right-2 z-[400] w-9 h-9 flex items-center justify-center bg-[#05070D]/90 backdrop-blur border border-[#3B82F6]/25 rounded-full shadow-lg text-base hover:bg-[#3B82F6] hover:text-[#05070D] transition">🧭</button>
+      </div>
+
+      <!-- Panel de inicio -->
+      <div id="cardio-start-panel">
+        <button id="btn-iniciar-cardio" class="w-full bg-[#3B82F6] text-[#05070D] font-bold py-3 rounded-xl text-sm hover:bg-[#2563eb] transition">▶ Iniciar Actividad</button>
+        <p class="text-[10px] text-white/40 text-center mt-2">Tu ruta se dibuja en vivo sobre el mapa mientras corres.</p>
+      </div>
+
+      <!-- Panel en vivo (oculto hasta que se inicia una actividad) -->
+      <div id="cardio-live-panel" class="hidden space-y-3">
+        <!-- Panel de estadísticas tipo "bottom sheet": distancia como métrica protagonista -->
+        <div class="bg-[#05070D] border border-[#3B82F6]/15 rounded-xl p-4 text-center">
+          <span class="block text-[10px] text-white/50 uppercase font-bold tracking-wide">Distancia</span>
+          <span id="cardio-live-distancia" class="block text-4xl font-black text-[#3B82F6] font-display">0.00 <span class="text-lg font-bold">km</span></span>
+        </div>
+        <div class="grid grid-cols-3 gap-3 text-center">
+          <div class="bg-[#05070D] p-3 rounded-xl border border-[#3B82F6]/15">
+            <span class="block text-[10px] text-white/50 uppercase font-bold">Duración</span>
+            <span id="cardio-live-duracion" class="text-lg font-bold text-[#3B82F6]">00:00</span>
+          </div>
+          <div class="bg-[#05070D] p-3 rounded-xl border border-[#3B82F6]/15">
+            <span class="block text-[10px] text-white/50 uppercase font-bold">Ritmo</span>
+            <span id="cardio-live-ritmo" class="text-lg font-bold text-[#3B82F6]">--:-- /km</span>
+          </div>
+          <div class="bg-[#05070D] p-3 rounded-xl border border-[#3B82F6]/15">
+            <span class="block text-[10px] text-white/50 uppercase font-bold">Kcal</span>
+            <span id="cardio-live-calorias" class="text-lg font-bold text-[#3B82F6]">0</span>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <button id="btn-pausar-cardio" type="button" class="flex-1 bg-white/10 text-white font-bold py-2.5 rounded-xl text-xs hover:bg-white/20 transition">Pausar</button>
+          <button id="btn-finalizar-cardio" type="button" class="flex-1 bg-red-500 text-white font-bold py-2.5 rounded-xl text-xs hover:bg-red-600 transition">Finalizar y Guardar</button>
+        </div>
+
+        <p id="cardio-gps-warning" class="hidden text-[10px] text-yellow-400/80 text-center">⚠️ Estás usando la versión de navegador: el GPS se pausa si bloqueas el teléfono o cambias de app. En la app instalada (Android) el registro sigue en segundo plano.</p>
+      </div>
+
+      <!-- Historial de actividades -->
+      <div class="border-t border-[#3B82F6]/10 pt-4">
+        <h3 class="text-sm font-bold text-white mb-3">Historial de Actividades</h3>
+        <div id="cardio-historial" class="space-y-3">
+          <p class="text-xs text-white/40">Cargando actividades...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. ANUNCIOS DEL ENTRENADOR -->
+    <section>
+      <h2 class="text-lg font-bold text-[#3B82F6] mb-3 flex items-center gap-2">📢 Anuncios e Avisos <span id="anuncios-unread-dot" class="hidden w-2 h-2 bg-red-500 rounded-full"></span></h2>
+      <div id="anuncios-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p class="text-xs text-white/50">Cargando anuncios...</p>
+      </div>
+    </section>
+
+    <!-- 4. RUTINAS DE ENTRENAMIENTO -->
+    <section id="sec-rutina">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <h2 class="text-lg font-bold text-[#3B82F6]">💪 Mi Rutina de Entrenamiento</h2>
+        <button id="btn-toggle-form-ejercicio" type="button" class="text-xs font-bold bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-[#3B82F6] px-3 py-1.5 rounded-lg hover:bg-[#3B82F6] hover:text-[#05070D] transition">+ Agregar mi ejercicio</button>
+      </div>
+
+      <!-- Formulario para que el propio alumno agregue sus ejercicios (plan Básico) -->
+      <form id="form-ejercicio-propio" class="hidden bg-[#0D1526] border border-[#3B82F6]/20 p-4 rounded-2xl space-y-3 mb-4">
+        <p class="text-xs text-white/50">Agrega un ejercicio a tu rutina: pon el peso, las repeticiones (puedes usar un rango, ej. "8-12") y las series.</p>
+
+        <!-- Buscador de gif de referencia (librería pública de ejercicios) -->
+        <div>
+          <label class="block text-xs font-bold text-white mb-1">Buscar gif del ejercicio (opcional)</label>
+          <input type="text" id="prop-buscar-gif" placeholder="Ej. press banca, sentadilla, curl biceps..." autocomplete="off" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+          <div id="prop-gif-resultados" class="hidden mt-2 max-h-40 overflow-y-auto space-y-1 bg-[#05070D] border border-[#3B82F6]/10 rounded-xl p-1.5"></div>
+          <div id="prop-gif-preview" class="hidden mt-2 flex items-center gap-3 bg-[#05070D] border border-[#3B82F6]/20 rounded-xl p-2">
+            <img id="prop-gif-preview-img" class="w-16 h-16 object-cover rounded-lg bg-black/30" alt="Vista previa del ejercicio">
+            <div class="flex-1 min-w-0">
+              <p id="prop-gif-preview-nombre" class="text-xs font-bold text-white truncate"></p>
+              <button type="button" id="prop-gif-quitar" class="text-[10px] text-red-400 hover:text-red-300 font-bold">Quitar gif</button>
+            </div>
+          </div>
+          <p class="text-[9px] text-white/30 mt-1">Gifs de referencia: free-exercise-db (dominio público)</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-white mb-1">Día</label>
+            <select id="prop-dia" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+              <option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-white mb-1">Nombre del ejercicio</label>
+            <input type="text" id="prop-titulo" placeholder="Ej. Press banca" required class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-white mb-1">Series</label>
+            <input type="number" min="1" max="20" id="prop-series" placeholder="4" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-white mb-1">Repeticiones (o rango)</label>
+            <input type="text" id="prop-reps" placeholder="Ej. 10 u 8-12" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+          </div>
+        </div>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" id="prop-requiere-peso" checked class="w-4 h-4 accent-[#3B82F6]">
+          <span class="text-xs text-white/80">Este ejercicio se hace con pesas — quiero registrar el peso que use</span>
+        </label>
+        <div class="flex gap-2">
+          <button type="submit" class="flex-1 bg-[#3B82F6] text-[#05070D] font-bold py-2.5 rounded-xl text-xs hover:bg-[#2563eb] transition">Guardar ejercicio</button>
+          <button type="button" id="btn-cancelar-form-ejercicio" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-white/10 text-white hover:bg-white/20 transition">Cancelar</button>
+        </div>
+        <p id="msg-ejercicio-propio" class="text-xs hidden"></p>
+      </form>
+
+      <div id="rutinas-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p class="text-xs text-white/50">Cargando rutinas...</p>
+      </div>
+    </section>
+
+    <!-- 5. PLAN DE NUTRICIÓN -->
+    <section id="sec-nutricion" class="bg-[#0D1526] border border-[#3B82F6]/20 p-6 rounded-2xl shadow-xl space-y-4">
+      <h2 class="text-lg font-bold text-[#3B82F6]">🥗 Mi Plan Nutricional</h2>
+      <div id="nutricion-container" class="space-y-4">
+        <p class="text-xs text-white/50">Cargando plan de nutrición...</p>
+      </div>
+    </section>
+
+    <!-- 6. REGISTRO DE AVANCES Y CHAT -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      <!-- REGISTRO DE AVANCES + GRÁFICA -->
+      <section id="sec-progreso" data-plan-req="avanzado" class="bg-[#0D1526] border border-[#3B82F6]/20 p-6 rounded-2xl shadow-xl space-y-4">
+        <h2 class="text-lg font-bold text-[#3B82F6]">📊 Mi Progreso Corporal</h2>
+
+        <div class="bg-[#05070D] border border-[#3B82F6]/10 rounded-xl p-3">
+          <canvas id="chart-avances" height="160"></canvas>
+          <p id="chart-empty-msg" class="text-xs text-white/40 text-center py-6 hidden">Aún no hay suficientes registros para graficar. ¡Guarda tu primer avance!</p>
+        </div>
+
+        <form id="form-avance" class="space-y-3 pt-2">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-white mb-1">Peso (kg)</label>
+              <input type="number" step="0.1" id="av-peso" required placeholder="72.5" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-white mb-1">% Grasa (Opcional)</label>
+              <input type="number" step="0.1" id="av-grasa" placeholder="15" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-white mb-1">Notas / Sensaciones</label>
+            <input type="text" id="av-notas" placeholder="Ej. Me sentí fuerte esta semana" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+          </div>
+          <button type="submit" class="w-full bg-[#3B82F6] text-[#05070D] font-bold py-2.5 rounded-xl text-xs hover:bg-[#2563eb] transition">Guardar Avance</button>
+        </form>
+
+        <h3 class="text-xs font-bold text-[#3B82F6] pt-2">Historial Reciente:</h3>
+        <div id="historial-avances" class="space-y-2 max-h-40 overflow-y-auto pr-1">
+          <p class="text-xs text-white/40">Sin registros previos.</p>
+        </div>
+      </section>
+
+      <!-- CHAT DIRECTO CON ENTRENADOR -->
+      <section id="sec-chat" class="bg-[#0D1526] border border-[#3B82F6]/20 p-6 rounded-2xl shadow-xl flex flex-col h-[400px]">
+        <h2 class="text-lg font-bold text-[#3B82F6] mb-2 flex items-center gap-2">
+          💬 Mensajes con <span id="chat-coach-name">Tu Entrenador</span>
+          <span id="chat-unread-dot" class="hidden w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+        </h2>
+
+        <div id="chat-messages" class="flex-1 overflow-y-auto bg-[#05070D] p-3 rounded-xl space-y-3 border border-[#3B82F6]/10 mb-3">
+          <p class="text-xs text-white/40 text-center">Cargando conversación...</p>
+        </div>
+
+        <form id="form-chat" class="flex gap-2">
+          <input type="text" id="chat-input" placeholder="Escribe un mensaje..." required class="flex-1 bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+          <button type="submit" class="bg-[#3B82F6] text-[#05070D] font-bold px-4 rounded-xl text-xs hover:bg-[#2563eb] transition">Enviar</button>
+        </form>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL DE VIDEO -->
+  <div id="video-modal" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4">
+    <div class="bg-[#0D1526] border border-[#3B82F6]/30 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl">
+      <div class="flex justify-between items-center p-3 border-b border-[#3B82F6]/10">
+        <span class="text-xs font-bold text-[#3B82F6]">Demostración del Ejercicio</span>
+        <button onclick="cerrarVideoModal()" class="text-white/60 hover:text-white text-lg leading-none px-2">✕</button>
+      </div>
+      <div class="aspect-video bg-black">
+        <iframe id="video-modal-iframe" class="w-full h-full" src="" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPABASE JS + CHART.JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const supabaseClient = supabase.createClient('https://etdfskwtaargtrzisvmj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0ZGZza3d0YWFyZ3Ryemlzdm1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNjQ4NjEsImV4cCI6MjEwNDc0MDg2MX0.5UlqtJfVORgsZXNvO-Mx12YKeP_kb_BrxqI2nXgyjcs', {
+      auth: {
+        persistSession: true,     // guarda la sesión en este dispositivo
+        autoRefreshToken: true,   // la renueva sola en segundo plano
+        detectSessionInUrl: true  // necesario para los links de recuperación de contraseña
+      }
+    });
+
+    let currentUser = null;
+    let miCoachId = null;
+    let coachProfile = null;
+    let chartAvances = null;
+    let miPeso = 70; // fallback si el perfil no tiene peso registrado (usado en estimación de calorías)
+
+    // --- Estado del tracker de Cardio ---
+    let cardioWatchId = null;
+    let cardioMap = null;
+    let cardioTileLayers = null;   // { calles, satelite }
+    let cardioCapaActual = 'calles';
+    let cardioAccuracyCircle = null; // círculo de precisión del GPS, como en apps nativas
+    let cardioGrabando = false;      // true solo mientras hay una actividad en curso
+    let cardioSeguirUbicacion = true; // auto-centrar el mapa (se apaga si arrastras el mapa)
+    let cardioUltimaPos = null;      // última posición conocida (para el botón de recentrar)
+    let cardioStartMarker = null;    // marcador verde del inicio de la ruta
+    let cardioPolyline = null;
+    let cardioMarker = null;
+    let cardioPuntos = [];       // [{lat, lng}, ...]
+    let cardioDistanciaKm = 0;
+    let cardioTipo = 'running';  // 'running' | 'caminata'
+    let cardioStartTimestamp = null; // null cuando está pausado
+    let cardioElapsedAccum = 0;      // segundos acumulados antes del tramo actual (soporta pausar/reanudar)
+    let cardioTimerInterval = null;
+    let cardioPausado = false;
+
+    // FIX zona horaria: toISOString() convierte a UTC, lo que hacía que un
+    // registro marcado de noche (hora local) cayera en la fecha del día
+    // siguiente para usuarios con UTC negativo (todo LatAm). Esta función
+    // arma la fecha SIEMPRE con la hora local del dispositivo.
+    function fechaLocalStr(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+    const todayStr = fechaLocalStr(new Date());
+
+    // --- Identidad visual por hábito ---
+    const HABITS = [
+      { key: 'agua',          label: 'Agua (2.5L+)', icon: '💧', color: '#3B82F6' },
+      { key: 'pasos',         label: '10k Pasos',    icon: '👟', color: '#A855F7' },
+      { key: 'sueno',         label: '7-8h Sueño',   icon: '💤', color: '#6366F1' },
+      { key: 'entrenamiento', label: 'Rutina',       icon: '🏋️', color: '#22C55E' },
+      { key: 'dieta',         label: 'Cumplí Dieta', icon: '🥗', color: '#F97316' }
+    ];
+
+    let habitosMap = {}; // fecha(YYYY-MM-DD) -> row de habitos
+    let miPlanApp = 'basico'; // 'basico' | 'avanzado' — controla qué secciones ve el alumno
+
+    // ============================================================
+    // Aplica el plan de la app: el plan Básico solo ve Inicio, Rutina
+    // (con sus propios ejercicios), Nutrición y Chat con su coach.
+    // El plan Avanzado ve además Hábitos, Cardio y Progreso.
+    // ============================================================
+    function aplicarPlanApp(plan) {
+      const esAvanzado = plan === 'avanzado';
+      document.querySelectorAll('[data-plan-req="avanzado"]').forEach(el => {
+        el.classList.toggle('hidden', !esAvanzado);
+      });
+      // Si se ocultó "Progreso", que el chat ocupe el ancho completo de su fila.
+      const chatSection = document.getElementById('sec-chat');
+      if (chatSection) chatSection.classList.toggle('lg:col-span-2', !esAvanzado);
+    }
+
+    async function initDashboard() {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (!user) { window.location.href = 'login.html'; return; }
+      currentUser = user;
+
+      document.getElementById('today-date').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+
+      const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', user.id).maybeSingle();
+      if (profile) {
+        document.getElementById('user-display-name').innerText = profile.nombre || profile.email;
+        document.getElementById('welcome-title').innerText = `¡Bienvenido, ${profile.nombre || 'Atleta'}!`;
+        document.getElementById('user-plan-badge').innerText = profile.plan || 'Plan Básico';
+        miPlanApp = profile.plan_app === 'avanzado' ? 'avanzado' : 'basico';
+        document.getElementById('user-plan-app-badge').innerText = miPlanApp === 'avanzado' ? 'App: Plan Avanzado' : 'App: Plan Básico';
+        aplicarPlanApp(miPlanApp);
+        document.getElementById('stat-edad').innerText = profile.edad ? `${profile.edad} años` : '-';
+        document.getElementById('stat-peso').innerText = profile.peso ? `${profile.peso} kg` : '-';
+        document.getElementById('stat-estatura').innerText = profile.estatura ? `${profile.estatura} cm` : '-';
+        document.getElementById('stat-actividad').innerText = profile.nivel_actividad || '-';
+        if (profile.peso) miPeso = parseFloat(profile.peso) || 70;
+      }
+
+      // Cada alumno chatea con SU coach asignado (profiles.coach_id), no con
+      // "un admin" fijo — necesario ahora que puede haber varios coaches.
+      if (profile && profile.coach_id) {
+        miCoachId = profile.coach_id;
+        const { data: coach } = await supabaseClient.from('profiles').select('*').eq('id', miCoachId).maybeSingle();
+        if (coach) {
+          coachProfile = coach;
+          document.getElementById('chat-coach-name').innerText = coach.nombre || 'Tu Entrenador';
+        }
+      }
+
+      initFormEjercicioPropio();
+
+      await Promise.all([
+        cargarHabitosYCalendario(),
+        cargarAnuncios(),
+        cargarRutinas(),
+        cargarNutricion(),
+        cargarAvances(),
+        cargarChat(),
+        cargarHistorialCardio()
+      ]);
+
+      // El mapa de cardio arranca junto con el dashboard: así el punto azul
+      // del GPS ya está listo antes de que le des a "Iniciar Actividad".
+      initCardioMap();
+    }
+
+    // ============================================================
+    // A. HABIT TRACKER VISUAL (semanal + heatmap + calendario)
+    // ============================================================
+    function fechaStr(d) { return fechaLocalStr(d); } // alias: todo el habit tracker usa fecha LOCAL, no UTC
+
+    function getMonday(d) {
+      const date = new Date(d);
+      const day = date.getDay(); // 0=domingo
+      const diff = day === 0 ? -6 : 1 - day;
+      date.setDate(date.getDate() + diff);
+      return date;
+    }
+
+    async function cargarHabitosYCalendario() {
+      const hoy = new Date();
+      const desde = new Date();
+      desde.setDate(hoy.getDate() - 60); // suficiente para heatmap + mes + racha
+
+      const { data } = await supabaseClient
+        .from('habitos')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .gte('fecha', fechaStr(desde))
+        .lte('fecha', todayStr);
+
+      habitosMap = {};
+      (data || []).forEach(row => { habitosMap[row.fecha] = row; });
+
+      renderHabitRows();
+      renderCalendario();
+      renderRacha();
+    }
+
+    function countCompletos(row) {
+      if (!row) return 0;
+      return HABITS.reduce((acc, h) => acc + (row[h.key] ? 1 : 0), 0);
+    }
+
+    function renderHabitRows() {
+      const cont = document.getElementById('habitos-rows');
+      const monday = getMonday(new Date());
+      const weekDates = [...Array(7)].map((_, i) => {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        return d;
+      });
+
+      // últimos 28 días para el mini-heatmap (de más antiguo a más reciente)
+      const heatDates = [...Array(28)].map((_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (27 - i));
+        return d;
+      });
+
+      cont.innerHTML = HABITS.map(h => {
+        const weekCircles = weekDates.map(d => {
+          const ds = fechaStr(d);
+          const isFuture = ds > todayStr;
+          const isToday = ds === todayStr;
+          const done = !!(habitosMap[ds] && habitosMap[ds][h.key]);
+          const dayLetter = ['L','M','X','J','V','S','D'][ (d.getDay()+6)%7 ];
+
+          const baseStyle = done
+            ? `background:${h.color}; border-color:${h.color};`
+            : `background:transparent; border-color:${h.color}55;`;
+
+          if (isFuture) {
+            return `<div class="flex flex-col items-center gap-1">
+                <span class="text-[9px] text-white/30 font-bold">${dayLetter}</span>
+                <div class="w-6 h-6 rounded-full border border-dashed border-white/10"></div>
+              </div>`;
+          }
+          if (isToday) {
+            return `<div class="flex flex-col items-center gap-1">
+                <span class="text-[9px] text-white font-bold">${dayLetter}</span>
+                <button onclick="toggleHabit('${h.key}')" title="Marcar/Desmarcar hoy"
+                  class="w-6 h-6 rounded-full border-2 transition hover:scale-110" style="${baseStyle}"></button>
+              </div>`;
+          }
+          return `<div class="flex flex-col items-center gap-1">
+              <span class="text-[9px] text-white/40 font-bold">${dayLetter}</span>
+              <div class="w-6 h-6 rounded-full border-2" style="${baseStyle}"></div>
+            </div>`;
+        }).join('');
+
+        const heatSquares = heatDates.map(d => {
+          const ds = fechaStr(d);
+          const done = !!(habitosMap[ds] && habitosMap[ds][h.key]);
+          const style = done ? `background:${h.color};` : `background:#05070D; border:1px solid ${h.color}33;`;
+          return `<div class="w-2.5 h-2.5 rounded-[3px]" style="${style}" title="${ds}"></div>`;
+        }).join('');
+
+        return `
+          <div class="bg-[#05070D] border border-[#3B82F6]/10 rounded-xl p-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="text-lg">${h.icon}</span>
+                <span class="text-xs font-bold text-white">${h.label}</span>
+              </div>
+              <div class="flex gap-2">${weekCircles}</div>
+            </div>
+            <div class="flex flex-wrap gap-1 mt-3 pt-3 border-t border-white/5">${heatSquares}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function toggleHabit(habitKey) {
+      const base = habitosMap[todayStr] || { agua:false, pasos:false, sueno:false, entrenamiento:false, dieta:false };
+      const nuevo = { ...base, [habitKey]: !base[habitKey] };
+      habitosMap[todayStr] = nuevo;
+      renderHabitRows();
+      renderCalendario();
+      renderRacha();
+
+      await supabaseClient.from('habitos').upsert({
+        user_id: currentUser.id,
+        fecha: todayStr,
+        agua: nuevo.agua,
+        pasos: nuevo.pasos,
+        sueno: nuevo.sueno,
+        entrenamiento: nuevo.entrenamiento,
+        dieta: nuevo.dieta
+      }, { onConflict: 'user_id,fecha' });
+    }
+
+    function renderCalendario() {
+      const hoy = new Date();
+      const year = hoy.getFullYear();
+      const month = hoy.getMonth();
+      const primerDia = new Date(year, month, 1);
+      const ultimoDia = new Date(year, month + 1, 0);
+
+      document.getElementById('calendar-month-label').innerText =
+        hoy.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+
+      // offset para que la semana empiece en lunes
+      let offset = (primerDia.getDay() + 6) % 7;
+
+      let cells = [];
+      for (let i = 0; i < offset; i++) cells.push('<div></div>');
+
+      for (let day = 1; day <= ultimoDia.getDate(); day++) {
+        const d = new Date(year, month, day);
+        const ds = fechaStr(d);
+        const isFuture = ds > todayStr;
+        const row = habitosMap[ds];
+        const completos = countCompletos(row);
+
+        let cls = 'bg-white/5 text-white/30 border border-white/5';
+        if (!isFuture && completos > 0) {
+          const intensity = completos >= 4 ? 'bg-[#3B82F6] text-[#05070D] font-bold border-[#3B82F6]'
+            : completos >= 2 ? 'bg-[#3B82F6]/50 text-[#05070D] font-bold border-[#3B82F6]/60'
+            : 'bg-[#3B82F6]/20 text-white border-[#3B82F6]/30';
+          cls = intensity;
+        }
+        if (ds === todayStr) cls += ' ring-2 ring-white';
+
+        cells.push(`<div class="aspect-square rounded-lg flex items-center justify-center text-[10px] ${cls}">${day}</div>`);
+      }
+
+      document.getElementById('calendar-grid').innerHTML = cells.join('');
+    }
+
+    function renderRacha() {
+      let streak = 0;
+      let d = new Date();
+      while (true) {
+        const ds = fechaStr(d);
+        const row = habitosMap[ds];
+        if (countCompletos(row) >= 3) {
+          streak++;
+          d.setDate(d.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+      document.getElementById('streak-badge').innerText = `🔥 ${streak} día${streak === 1 ? '' : 's'} seguido${streak === 1 ? '' : 's'}`;
+    }
+
+    // ============================================================
+    // B. ANUNCIOS
+    // ============================================================
+    async function cargarAnuncios() {
+      const { data: anuncios } = await supabaseClient.from('anuncios').select('*').order('created_at', { ascending: false });
+      const container = document.getElementById('anuncios-container');
+
+      // Notificación de anuncios nuevos: como la tabla es la misma para todos
+      // los alumnos, guardamos en este dispositivo la fecha del último anuncio
+      // que ya viste (por usuario), y comparamos contra el más reciente.
+      const KEY_VISTOS = `kf-anuncios-vistos-${currentUser.id}`;
+      const ultimoVisto = localStorage.getItem(KEY_VISTOS);
+      const hayNuevos = anuncios && anuncios.length > 0 && (!ultimoVisto || new Date(anuncios[0].created_at) > new Date(ultimoVisto));
+      document.getElementById('anuncios-unread-dot').classList.toggle('hidden', !hayNuevos);
+      document.getElementById('kf-tab-inicio-dot')?.classList.toggle('hidden', !hayNuevos);
+
+      if (anuncios && anuncios.length > 0) {
+        container.innerHTML = anuncios.map(a => `
+          <div class="bg-[#0D1526] border border-[#3B82F6]/20 p-4 rounded-xl space-y-1">
+            <h3 class="font-bold text-[#3B82F6] text-sm">${a.titulo}</h3>
+            <p class="text-xs text-white/80">${a.contenido}</p>
+          </div>
+        `).join('');
+        // Ya se mostraron en pantalla: los marcamos como vistos para este dispositivo.
+        localStorage.setItem(KEY_VISTOS, anuncios[0].created_at);
+      } else {
+        container.innerHTML = `<p class="text-xs text-white/40">No hay anuncios publicados actualmente.</p>`;
+      }
+    }
+
+    // ============================================================
+    // C. RUTINAS + MODAL DE VIDEO
+    // ============================================================
+    function toEmbedUrl(url) {
+      if (!url) return '';
+      try {
+        if (url.includes('youtube.com/watch')) {
+          const id = new URL(url).searchParams.get('v');
+          return `https://www.youtube.com/embed/${id}`;
+        }
+        if (url.includes('youtu.be/')) {
+          const id = url.split('youtu.be/')[1].split('?')[0];
+          return `https://www.youtube.com/embed/${id}`;
+        }
+        return url; // ya es embed, o es de otra plataforma compatible con iframe
+      } catch (e) {
+        return url;
+      }
+    }
+
+    function abrirVideoModal(url) {
+      document.getElementById('video-modal-iframe').src = toEmbedUrl(url);
+      document.getElementById('video-modal').classList.remove('hidden');
+    }
+    function cerrarVideoModal() {
+      document.getElementById('video-modal').classList.add('hidden');
+      document.getElementById('video-modal-iframe').src = '';
+    }
+
+    async function cargarRutinas() {
+      const { data: rutinas } = await supabaseClient.from('rutinas').select('*').eq('user_id', currentUser.id);
+      const container = document.getElementById('rutinas-container');
+
+      if (!rutinas || rutinas.length === 0) {
+        container.innerHTML = `<p class="text-xs text-white/40">Aún no tienes rutinas asignadas por tu entrenador.</p>`;
+        return;
+      }
+
+      // Último registro de peso guardado para cada ejercicio (uno por rutina_id).
+      const { data: pesos } = await supabaseClient
+        .from('registro_pesos')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false });
+
+      const ultimoPorRutina = {};
+      (pesos || []).forEach(p => { if (!ultimoPorRutina[p.rutina_id]) ultimoPorRutina[p.rutina_id] = p; });
+
+      function textoUltimo(r) {
+        const u = ultimoPorRutina[r.id];
+        if (!u) return 'Aún no has registrado peso en este ejercicio.';
+        const fecha = new Date(u.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+        const repsTxt = u.repeticiones_completadas ? ` × ${u.repeticiones_completadas} reps` : '';
+        const seriesTxt = u.series_completadas ? ` (${u.series_completadas} series)` : '';
+        return `Último registro: ${u.peso_kg} kg${repsTxt}${seriesTxt} — ${fecha}`;
+      }
+
+      container.innerHTML = rutinas.map(r => `
+        <div class="bg-[#0D1526] border border-[#3B82F6]/20 p-4 rounded-xl space-y-2 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] bg-[#3B82F6]/10 text-[#3B82F6] px-2 py-0.5 rounded font-bold uppercase">${r.dia_semana}</span>
+              ${r.origen === 'propio'
+                ? `<span class="flex items-center gap-2">
+                     <span class="text-[10px] bg-orange-500/10 text-orange-400 px-2 py-0.5 rounded font-bold">Agregado por ti</span>
+                     <button data-borrar-propio="${r.id}" title="Eliminar" class="text-[10px] text-red-400 hover:text-red-300 font-bold">✕</button>
+                   </span>`
+                : `<span class="text-[10px] text-white/30 font-semibold">Asignado por tu coach</span>`}
+            </div>
+            <h3 class="font-bold text-white text-base mt-1">${r.titulo}</h3>
+            ${r.demo_ejercicio_id ? `<img data-demo-gif="${r.demo_ejercicio_id}" class="w-full h-28 object-cover rounded-lg bg-black/20 mt-2" alt="${r.titulo}">` : ''}
+            <p class="text-xs text-white/70 whitespace-pre-line mt-1">${r.descripcion || ''}</p>
+            ${r.series ? `<p class="text-[10px] text-white/50 mt-1">Meta: ${r.series} series x ${r.repeticiones || ''} reps</p>` : ''}
+          </div>
+          ${r.video_url ? `<button onclick="abrirVideoModal('${r.video_url.replace(/'/g, "\\'")}')" class="text-xs bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-[#3B82F6] font-bold mt-2 py-2 rounded-lg hover:bg-[#3B82F6] hover:text-[#05070D] transition">▶ Ver Demostración</button>` : ''}
+          ${r.requiere_peso === false ? '' : `
+          <div class="mt-1 pt-3 border-t border-[#3B82F6]/10 space-y-2">
+            <p class="text-[10px] font-bold text-white/50 uppercase tracking-wide">Registra lo de hoy</p>
+            <div class="grid grid-cols-3 gap-1.5">
+              <input type="number" step="0.5" min="0" placeholder="Kg" data-peso-input="${r.id}" class="min-w-0 w-full bg-[#05070D] border border-[#3B82F6]/20 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+              <input type="text" placeholder="${r.repeticiones || 'Reps'}" data-reps-input="${r.id}" class="min-w-0 w-full bg-[#05070D] border border-[#3B82F6]/20 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+              <input type="number" min="0" max="30" placeholder="${r.series || 'Series'}" data-series-input="${r.id}" class="min-w-0 w-full bg-[#05070D] border border-[#3B82F6]/20 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+            </div>
+            <button data-guardar-peso="${r.id}" class="w-full text-[10px] font-bold bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-[#3B82F6] py-1.5 rounded-lg hover:bg-[#3B82F6] hover:text-[#05070D] transition">Guardar registro de hoy</button>
+            <p data-ultimo-peso="${r.id}" class="text-[10px] text-white/40">${textoUltimo(r)}</p>
+          </div>`}
+        </div>
+      `).join('');
+
+      container.querySelectorAll('[data-guardar-peso]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const rutinaId = btn.getAttribute('data-guardar-peso');
+          const pesoInput = container.querySelector(`[data-peso-input="${rutinaId}"]`);
+          const repsInput = container.querySelector(`[data-reps-input="${rutinaId}"]`);
+          const seriesInput = container.querySelector(`[data-series-input="${rutinaId}"]`);
+          const nota = container.querySelector(`[data-ultimo-peso="${rutinaId}"]`);
+
+          const peso = parseFloat(pesoInput.value);
+          if (!Number.isFinite(peso) || peso <= 0) {
+            pesoInput.focus();
+            pesoInput.classList.add('border-red-500');
+            setTimeout(() => pesoInput.classList.remove('border-red-500'), 1500);
+            return;
+          }
+
+          btn.disabled = true;
+          btn.innerText = 'Guardando...';
+
+          const { data: nuevo, error } = await supabaseClient.from('registro_pesos').insert([{
+            rutina_id: rutinaId,
+            user_id: currentUser.id,
+            peso_kg: peso,
+            repeticiones_completadas: repsInput.value.trim() || null,
+            series_completadas: parseInt(seriesInput.value) || null
+          }]).select().single();
+
+          btn.disabled = false;
+          btn.innerText = 'Guardar registro de hoy';
+
+          if (error) {
+            alert('No se pudo guardar: ' + error.message);
+            return;
+          }
+
+          const fecha = new Date(nuevo.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+          const repsTxt = nuevo.repeticiones_completadas ? ` × ${nuevo.repeticiones_completadas} reps` : '';
+          const seriesTxt = nuevo.series_completadas ? ` (${nuevo.series_completadas} series)` : '';
+          nota.innerText = `Último registro: ${nuevo.peso_kg} kg${repsTxt}${seriesTxt} — ${fecha}`;
+          pesoInput.value = '';
+          repsInput.value = '';
+          seriesInput.value = '';
+        });
+      });
+
+      container.querySelectorAll('[data-borrar-propio]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('¿Eliminar este ejercicio que agregaste?')) return;
+          const { error } = await supabaseClient.from('rutinas').delete().eq('id', btn.getAttribute('data-borrar-propio'));
+          if (error) { alert('No se pudo eliminar: ' + error.message); return; }
+          cargarRutinas();
+        });
+      });
+
+      // Anima (alterna 2 cuadros) el gif de referencia de cada tarjeta que tenga uno.
+      container.querySelectorAll('[data-demo-gif]').forEach(img => {
+        const id = img.getAttribute('data-demo-gif');
+        let frame = 0;
+        img.src = `${GIFDB_IMG_BASE}${id}/0.jpg`;
+        setInterval(() => {
+          frame = frame === 0 ? 1 : 0;
+          img.src = `${GIFDB_IMG_BASE}${id}/${frame}.jpg`;
+        }, 700);
+      });
+    }
+
+    // ============================================================
+    // C.1 — El propio alumno agrega sus ejercicios (plan Básico)
+    // ============================================================
+    const GIFDB_URL = 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json';
+    const GIFDB_IMG_BASE = 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/';
+    let gifDbCache = null; // se carga una sola vez, la primera vez que el alumno busca
+    let gifSeleccionado = null; // { id, name }
+
+    // Alias en español -> palabras clave en inglés (la base de datos de gifs es en inglés)
+    const GIF_ALIASES = {
+      'press banca': 'bench press', 'press de banca': 'bench press', 'press pecho': 'chest press',
+      'sentadilla': 'squat', 'sentadillas': 'squat',
+      'peso muerto': 'deadlift',
+      'curl biceps': 'curl', 'biceps': 'curl biceps', 'curl de biceps': 'curl',
+      'press militar': 'shoulder press military', 'press hombro': 'shoulder press',
+      'remo': 'row',
+      'dominadas': 'pull up', 'jalon': 'lat pulldown pull down',
+      'fondos': 'dip',
+      'zancada': 'lunge', 'zancadas': 'lunge',
+      'elevaciones laterales': 'lateral raise', 'elevacion lateral': 'lateral raise',
+      'extension de triceps': 'triceps extension', 'triceps': 'triceps',
+      'gemelos': 'calf raise', 'pantorrilla': 'calf raise',
+      'abdominales': 'crunch sit up', 'abdomen': 'crunch',
+      'plancha': 'plank',
+      'puente de gluteos': 'glute bridge', 'gluteos': 'glute',
+      'aperturas': 'fly',
+      'encogimientos': 'shrug',
+      'espalda': 'row lat pulldown',
+      'pecho': 'chest press fly',
+      'pierna': 'squat leg',
+      'hombro': 'shoulder press raise'
+    };
+
+    async function cargarGifDb() {
+      if (gifDbCache) return gifDbCache;
+      try {
+        const res = await fetch(GIFDB_URL);
+        gifDbCache = await res.json();
+      } catch (e) {
+        gifDbCache = [];
+      }
+      return gifDbCache;
+    }
+
+    function initFormEjercicioPropio() {
+      const btnToggle = document.getElementById('btn-toggle-form-ejercicio');
+      const form = document.getElementById('form-ejercicio-propio');
+      const btnCancelar = document.getElementById('btn-cancelar-form-ejercicio');
+      const msg = document.getElementById('msg-ejercicio-propio');
+
+      btnToggle.addEventListener('click', () => form.classList.toggle('hidden'));
+      btnCancelar.addEventListener('click', () => {
+        form.reset();
+        form.classList.add('hidden');
+        limpiarGifSeleccionado();
+      });
+
+      // --- Buscador de gif ---
+      const inputBuscar = document.getElementById('prop-buscar-gif');
+      const resultadosBox = document.getElementById('prop-gif-resultados');
+      const previewBox = document.getElementById('prop-gif-preview');
+      const previewImg = document.getElementById('prop-gif-preview-img');
+      const previewNombre = document.getElementById('prop-gif-preview-nombre');
+      let animInterval = null;
+      let debounceTimer = null;
+
+      function animarPreview(id) {
+        if (animInterval) clearInterval(animInterval);
+        let frame = 0;
+        previewImg.src = `${GIFDB_IMG_BASE}${id}/0.jpg`;
+        animInterval = setInterval(() => {
+          frame = frame === 0 ? 1 : 0;
+          previewImg.src = `${GIFDB_IMG_BASE}${id}/${frame}.jpg`;
+        }, 700);
+      }
+
+      function limpiarGifSeleccionado() {
+        gifSeleccionado = null;
+        previewBox.classList.add('hidden');
+        if (animInterval) { clearInterval(animInterval); animInterval = null; }
+      }
+
+      document.getElementById('prop-gif-quitar').addEventListener('click', limpiarGifSeleccionado);
+
+      inputBuscar.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        const q = inputBuscar.value.trim().toLowerCase();
+        if (q.length < 3) { resultadosBox.classList.add('hidden'); resultadosBox.innerHTML = ''; return; }
+
+        debounceTimer = setTimeout(async () => {
+          const db = await cargarGifDb();
+          const terminos = [q, GIF_ALIASES[q] || ''].filter(Boolean).join(' ').split(' ').filter(Boolean);
+
+          const resultados = db.filter(ej => {
+            const nombre = ej.name.toLowerCase();
+            return terminos.some(t => nombre.includes(t));
+          }).slice(0, 8);
+
+          if (resultados.length === 0) {
+            resultadosBox.innerHTML = '<p class="text-[10px] text-white/40 p-2">Sin resultados. Prueba en inglés, ej. "bench press".</p>';
+            resultadosBox.classList.remove('hidden');
+            return;
+          }
+
+          resultadosBox.innerHTML = resultados.map(ej => `
+            <button type="button" data-gif-id="${ej.id}" data-gif-nombre="${ej.name.replace(/"/g, '&quot;')}"
+              class="w-full text-left text-xs text-white/80 hover:bg-[#3B82F6]/10 px-2 py-1.5 rounded-lg transition">${ej.name}</button>
+          `).join('');
+          resultadosBox.classList.remove('hidden');
+
+          resultadosBox.querySelectorAll('[data-gif-id]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const id = btn.getAttribute('data-gif-id');
+              const nombre = btn.getAttribute('data-gif-nombre');
+              gifSeleccionado = { id, name: nombre };
+              document.getElementById('prop-titulo').value = document.getElementById('prop-titulo').value.trim() || nombre;
+              previewNombre.innerText = nombre;
+              previewBox.classList.remove('hidden');
+              animarPreview(id);
+              resultadosBox.classList.add('hidden');
+              inputBuscar.value = '';
+            });
+          });
+        }, 300);
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const titulo = document.getElementById('prop-titulo').value.trim();
+        if (!titulo) return;
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Guardando...';
+
+        const { error } = await supabaseClient.from('rutinas').insert([{
+          user_id: currentUser.id,
+          origen: 'propio',
+          dia_semana: document.getElementById('prop-dia').value,
+          titulo,
+          series: parseInt(document.getElementById('prop-series').value) || null,
+          repeticiones: document.getElementById('prop-reps').value.trim() || null,
+          requiere_peso: document.getElementById('prop-requiere-peso').checked,
+          demo_ejercicio_id: gifSeleccionado ? gifSeleccionado.id : null
+        }]);
+
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Guardar ejercicio';
+
+        msg.classList.remove('hidden');
+        if (error) {
+          msg.className = 'text-xs text-red-400';
+          msg.innerText = 'No se pudo guardar: ' + error.message;
+          return;
+        }
+
+        msg.className = 'text-xs text-green-400';
+        msg.innerText = '¡Ejercicio agregado!';
+        form.reset();
+        limpiarGifSeleccionado();
+        setTimeout(() => { form.classList.add('hidden'); msg.classList.add('hidden'); }, 1200);
+        cargarRutinas();
+      });
+    }
+
+    // ============================================================
+    // D. NUTRICIÓN — desglose visual de macros
+    // ============================================================
+    async function cargarNutricion() {
+      const { data: nut, error } = await supabaseClient
+        .from('planes_nutricion')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .maybeSingle();
+
+      const container = document.getElementById('nutricion-container');
+
+      if (error) {
+        container.innerHTML = `<p class="text-xs text-red-400">No se pudo cargar tu plan de nutrición.</p>`;
+        return;
+      }
+      if (!nut) {
+        container.innerHTML = `<p class="text-xs text-white/40">Tu entrenador aún no te ha asignado un plan de nutrición.</p>`;
+        return;
+      }
+
+      const prot = parseFloat(nut.proteinas) || 0;
+      const carb = parseFloat(nut.carbos) || 0;
+      const gras = parseFloat(nut.grasas) || 0;
+      // calorías aproximadas por macro (4 kcal/g proteína y carbo, 9 kcal/g grasa)
+      const kcalProt = prot * 4, kcalCarb = carb * 4, kcalGras = gras * 9;
+      const totalKcalMacros = kcalProt + kcalCarb + kcalGras || 1;
+      const pProt = Math.round((kcalProt / totalKcalMacros) * 100);
+      const pCarb = Math.round((kcalCarb / totalKcalMacros) * 100);
+      const pGras = Math.max(0, 100 - pProt - pCarb);
+
+      container.innerHTML = `
+        <h3 class="font-bold text-base text-[#3B82F6]">${nut.titulo}</h3>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
+          <div class="bg-[#05070D] p-2.5 rounded-xl border border-[#3B82F6]/10"><span class="block font-bold text-[#3B82F6] text-sm">${nut.calorias || 0}</span> Calorías</div>
+          <div class="bg-[#05070D] p-2.5 rounded-xl border border-blue-400/20"><span class="block font-bold text-blue-400 text-sm">${prot}g</span> Proteínas</div>
+          <div class="bg-[#05070D] p-2.5 rounded-xl border border-green-400/20"><span class="block font-bold text-green-400 text-sm">${carb}g</span> Carbohidratos</div>
+          <div class="bg-[#05070D] p-2.5 rounded-xl border border-orange-400/20"><span class="block font-bold text-orange-400 text-sm">${gras}g</span> Grasas</div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-[10px] text-white/50 mb-1">
+            <span>Distribución de Macronutrientes</span>
+            <span>${pProt}% / ${pCarb}% / ${pGras}%</span>
+          </div>
+          <div class="w-full h-3 rounded-full overflow-hidden flex bg-[#05070D]">
+            <div style="width:${pProt}%" class="bg-blue-400"></div>
+            <div style="width:${pCarb}%" class="bg-green-400"></div>
+            <div style="width:${pGras}%" class="bg-orange-400"></div>
+          </div>
+          <div class="flex gap-4 mt-1.5 text-[10px] text-white/50">
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-400 inline-block"></span>Proteína</span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span>Carbos</span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span>Grasa</span>
+          </div>
+        </div>
+
+        <p class="text-xs text-white/80 whitespace-pre-line bg-[#05070D] p-3 rounded-xl border border-[#3B82F6]/10">${nut.detalles || ''}</p>
+      `;
+    }
+
+    // ============================================================
+    // E. AVANCES + GRÁFICA DE PROGRESO
+    // ============================================================
+    async function cargarAvances() {
+      const { data: avances } = await supabaseClient.from('avances').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+      const container = document.getElementById('historial-avances');
+
+      if (avances && avances.length > 0) {
+        container.innerHTML = avances.map(a => `
+          <div class="bg-[#05070D] border border-[#3B82F6]/10 p-2.5 rounded-xl flex justify-between items-center text-xs">
+            <div>
+              <span class="font-bold text-[#3B82F6]">${a.peso} kg</span>
+              ${a.grasa ? `<span class="text-white/60">(${a.grasa}% grasa)</span>` : ''}
+              ${a.notas ? `<p class="text-[10px] text-white/50">${a.notas}</p>` : ''}
+            </div>
+            <span class="text-[10px] text-white/40">${new Date(a.created_at).toLocaleDateString()}</span>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = `<p class="text-xs text-white/40">No has guardado registros de peso todavía.</p>`;
+      }
+
+      renderGraficaAvances((avances || []).slice().reverse());
+    }
+
+    function renderGraficaAvances(avancesAsc) {
+      const canvas = document.getElementById('chart-avances');
+      const emptyMsg = document.getElementById('chart-empty-msg');
+
+      if (!avancesAsc || avancesAsc.length < 2) {
+        canvas.classList.add('hidden');
+        emptyMsg.classList.remove('hidden');
+        return;
+      }
+      canvas.classList.remove('hidden');
+      emptyMsg.classList.add('hidden');
+
+      const labels = avancesAsc.map(a => new Date(a.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }));
+      const pesos = avancesAsc.map(a => a.peso);
+      const grasas = avancesAsc.map(a => a.grasa);
+
+      if (chartAvances) chartAvances.destroy();
+      chartAvances = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Peso (kg)',
+              data: pesos,
+              borderColor: '#3B82F6',
+              backgroundColor: 'rgba(59,130,246,0.15)',
+              yAxisID: 'y',
+              tension: 0.3,
+              fill: true
+            },
+            {
+              label: '% Grasa',
+              data: grasas,
+              borderColor: '#3B82F6',
+              backgroundColor: 'rgba(59,130,246,0.1)',
+              yAxisID: 'y1',
+              tension: 0.3,
+              spanGaps: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { labels: { color: '#F5F7FA', font: { size: 10 } } } },
+          scales: {
+            x: { ticks: { color: '#F5F7FAAA', font: { size: 9 } }, grid: { color: '#ffffff10' } },
+            y: { position: 'left', ticks: { color: '#3B82F6', font: { size: 9 } }, grid: { color: '#ffffff10' } },
+            y1: { position: 'right', ticks: { color: '#3B82F6', font: { size: 9 } }, grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    document.getElementById('form-avance').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const peso = parseFloat(document.getElementById('av-peso').value);
+      const grasa = document.getElementById('av-grasa').value ? parseFloat(document.getElementById('av-grasa').value) : null;
+      const notas = document.getElementById('av-notas').value;
+
+      const { error } = await supabaseClient.from('avances').insert([{ user_id: currentUser.id, peso, grasa, notas }]);
+
+      if (error) {
+        alert('Error guardando avance: ' + error.message);
+      } else {
+        await supabaseClient.from('profiles').update({ peso: peso }).eq('id', currentUser.id);
+        document.getElementById('stat-peso').innerText = `${peso} kg`;
+        document.getElementById('form-avance').reset();
+        cargarAvances();
+      }
+    });
+
+    // ============================================================
+    // F. CHAT CON EL ENTRENADOR + INDICADOR DE NO LEÍDOS
+    // ============================================================
+    async function cargarChat() {
+      if (!coachProfile) {
+        document.getElementById('chat-messages').innerHTML = `<p class="text-xs text-white/40 text-center">Aún no tienes un entrenador asignado. Pídele a soporte que te asigne uno.</p>`;
+        return;
+      }
+
+      const { data: msgs } = await supabaseClient
+        .from('mensajes')
+        .select('*')
+        .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${coachProfile.id}),and(sender_id.eq.${coachProfile.id},receiver_id.eq.${currentUser.id})`)
+        .order('created_at', { ascending: true });
+
+      const chatBox = document.getElementById('chat-messages');
+
+      // Indicador de no leídos: mensajes que me envió el entrenador y aún no marco como leídos
+      const noLeidos = (msgs || []).filter(m => m.sender_id === coachProfile.id && m.leido === false);
+      document.getElementById('chat-unread-dot').classList.toggle('hidden', noLeidos.length === 0);
+      document.getElementById('kf-tab-chat-dot')?.classList.toggle('hidden', noLeidos.length === 0);
+
+      if (msgs && msgs.length > 0) {
+        chatBox.innerHTML = msgs.map(m => {
+          const isMe = m.sender_id === currentUser.id;
+          return `
+            <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+              <div class="max-w-[80%] p-2.5 rounded-xl text-xs ${isMe ? 'bg-[#3B82F6] text-[#05070D] font-semibold' : 'bg-[#0D1526] border border-[#3B82F6]/20 text-white'}">
+                ${m.mensaje}
+              </div>
+              <span class="text-[9px] text-white/40 mt-0.5">${new Date(m.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+            </div>
+          `;
+        }).join('');
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } else {
+        chatBox.innerHTML = `<p class="text-xs text-white/40 text-center">No hay mensajes previos. Escríbele a ${coachProfile.nombre || 'tu entrenador'}.</p>`;
+      }
+
+      // Marcar como leídos los mensajes del entrenador tras mostrarlos
+      if (noLeidos.length > 0) {
+        const ids = noLeidos.map(m => m.id);
+        await supabaseClient.from('mensajes').update({ leido: true }).in('id', ids);
+      }
+    }
+
+    document.getElementById('form-chat').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const mensaje = input.value.trim();
+      if (!mensaje || !coachProfile) return;
+
+      const { error } = await supabaseClient.from('mensajes').insert([{
+        sender_id: currentUser.id,
+        receiver_id: coachProfile.id,
+        mensaje: mensaje
+      }]);
+
+      if (!error) {
+        input.value = '';
+        cargarChat();
+      }
+    });
+
+    // ============================================================
+    // G. CARDIO (mapa en vivo con GPS del navegador)
+    // ------------------------------------------------------------
+    // Limitación real: el GPS del navegador se detiene si se bloquea la
+    // pantalla o se cambia de app. Para correr en segundo plano de verdad
+    // se necesitará la futura app nativa (Capacitor/React Native).
+    // ============================================================
+
+    // Distancia entre dos puntos GPS (fórmula de Haversine, resultado en km)
+    function haversineKm(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    function updateCardioTipoUI() {
+      document.querySelectorAll('.cardio-tipo-btn').forEach(btn => {
+        const activo = btn.dataset.tipo === cardioTipo;
+        btn.classList.toggle('bg-[#3B82F6]', activo);
+        btn.classList.toggle('text-[#05070D]', activo);
+        btn.classList.toggle('bg-[#05070D]', !activo);
+        btn.classList.toggle('text-white/60', !activo);
+      });
+    }
+    document.querySelectorAll('.cardio-tipo-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (cardioStartTimestamp || cardioPausado) return; // no cambiar tipo a media actividad
+        cardioTipo = btn.dataset.tipo;
+        updateCardioTipoUI();
+      });
+    });
+    updateCardioTipoUI();
+
+    function segundosTranscurridosCardio() {
+      if (!cardioStartTimestamp) return cardioElapsedAccum;
+      return cardioElapsedAccum + Math.floor((Date.now() - cardioStartTimestamp) / 1000);
+    }
+
+    function actualizarCardioUI() {
+      const seg = segundosTranscurridosCardio();
+      const mm = String(Math.floor(seg / 60)).padStart(2, '0');
+      const ss = String(seg % 60).padStart(2, '0');
+      document.getElementById('cardio-live-duracion').innerText = `${mm}:${ss}`;
+
+      if (cardioDistanciaKm > 0.02) {
+        const ritmoSegKm = seg / cardioDistanciaKm;
+        const rMin = Math.floor(ritmoSegKm / 60);
+        const rSeg = Math.round(ritmoSegKm % 60);
+        document.getElementById('cardio-live-ritmo').innerText = `${rMin}:${String(rSeg).padStart(2, '0')} /km`;
+      }
+
+      // Estimación de calorías en vivo (mismo criterio MET que al guardar la actividad)
+      const MET = cardioTipo === 'running' ? 9.8 : 3.8;
+      const caloriasVivo = Math.round((MET * 3.5 * miPeso / 200) * (seg / 60));
+      document.getElementById('cardio-live-calorias').innerText = caloriasVivo;
+    }
+
+    // Capas de mapa disponibles sin necesidad de una API key de pago:
+    // - "Calles": OpenStreetMap (igual que ya se usaba).
+    // - "Satélite": Esri World Imagery (imágenes satelitales/aéreas gratuitas,
+    //   el equivalente de uso libre a lo que Mapbox Satellite ofrece con Maxar).
+    function crearCapasCardio() {
+      return {
+        calles: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors',
+          maxZoom: 19
+        }),
+        satelite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
+          maxZoom: 19
+        })
+      };
+    }
+
+    function cambiarCapaCardio(capa) {
+      if (!cardioMap || !cardioTileLayers) return;
+      cardioCapaActual = capa;
+      Object.values(cardioTileLayers).forEach(layer => cardioMap.removeLayer(layer));
+      cardioTileLayers[capa].addTo(cardioMap);
+      document.getElementById('btn-capa-calles').classList.toggle('activa', capa === 'calles');
+      document.getElementById('btn-capa-satelite').classList.toggle('activa', capa === 'satelite');
+    }
+    document.getElementById('btn-capa-calles').addEventListener('click', () => cambiarCapaCardio('calles'));
+    document.getElementById('btn-capa-satelite').addEventListener('click', () => cambiarCapaCardio('satelite'));
+
+    document.getElementById('btn-recentrar-cardio').addEventListener('click', () => {
+      if (!cardioMap || !cardioUltimaPos) return;
+      cardioSeguirUbicacion = true;
+      cardioMap.setView([cardioUltimaPos.lat, cardioUltimaPos.lng], Math.max(cardioMap.getZoom(), 17));
+    });
+
+    // Ícono del punto de ubicación en vivo: el "puntito azul" del GPS, no del mapa
+    const cardioGpsIcon = L.divIcon({ className: '', html: '<div class="cardio-gps-dot"></div>', iconSize: [14, 14], iconAnchor: [7, 7] });
+
+    function setGpsStatus(texto, color) {
+      const el = document.getElementById('cardio-gps-status');
+      if (!el) return;
+      el.innerText = texto;
+      el.className = `absolute top-2 right-2 z-[400] bg-[#05070D]/90 backdrop-blur border rounded-lg px-2.5 py-1.5 text-[10px] font-bold shadow-lg ${color}`;
+    }
+
+    // El mapa se crea UNA vez al cargar el dashboard y vive siempre, corras o no.
+    // Así ves tu punto azul y puedes explorar el mapa antes de iniciar la actividad.
+    function initCardioMap() {
+      if (cardioMap) return;
+      const cont = document.getElementById('cardio-map');
+      if (!cont) return;
+
+      cardioMap = L.map('cardio-map', { zoomControl: false });
+      L.control.zoom({ position: 'bottomleft' }).addTo(cardioMap);
+      cardioTileLayers = crearCapasCardio();
+      cambiarCapaCardio(cardioCapaActual);
+      cardioMap.setView([20.6597, -103.3496], 13); // vista provisional hasta el primer fix GPS
+
+      // La ruta recorrida: se va dibujando punto por punto mientras corres
+      cardioPolyline = L.polyline([], { color: '#3B82F6', weight: 5, opacity: 0.95, lineJoin: 'round', lineCap: 'round' }).addTo(cardioMap);
+
+      // Si el usuario arrastra el mapa, dejamos de auto-centrar
+      cardioMap.on('dragstart', () => { cardioSeguirUbicacion = false; });
+
+      setTimeout(() => cardioMap.invalidateSize(), 200);
+      iniciarWatchGps();
+    }
+
+    // watchPosition permanente: alimenta el punto azul SIEMPRE. Solo acumula
+    // distancia y dibuja la ruta cuando hay una actividad corriendo.
+    //
+    // Dentro de la app nativa (Capacitor) usamos el plugin de geolocalización
+    // en segundo plano, que sigue funcionando aunque bloquees la pantalla o
+    // cambies de app. En el navegador (PWA) usamos la API estándar, que se
+    // pausa si bloqueas la pantalla — limitación normal de los navegadores.
+    let cardioBgWatcherId = null;
+
+    async function iniciarWatchGps() {
+      const bg = window.Capacitor?.Plugins?.BackgroundGeolocation;
+
+      if (bg) {
+        try {
+          cardioBgWatcherId = await bg.addWatcher(
+            {
+              backgroundMessage: 'Kratero Fit está registrando tu actividad.',
+              backgroundTitle: 'Cardio en curso',
+              requestPermissions: true,
+              stale: false,
+              distanceFilter: 3
+            },
+            (location, error) => {
+              if (error) { onCardioError(error); return; }
+              // El plugin entrega los datos "planos"; los adaptamos a la
+              // misma forma que usa el resto del código (pos.coords...).
+              onCardioPosicion({
+                coords: {
+                  latitude: location.latitude,
+                  longitude: location.longitude,
+                  accuracy: location.accuracy
+                }
+              });
+            }
+          );
+          setGpsStatus('📡 GPS activo (segundo plano)', 'border-[#3B82F6]/30 text-[#3B82F6]');
+          return;
+        } catch (e) {
+          console.warn('BackgroundGeolocation no disponible, usando GPS del navegador:', e);
+        }
+      }
+
+      // --- Alternativa: navegador / PWA ---
+      if (!navigator.geolocation) {
+        setGpsStatus('📡 GPS no disponible', 'border-red-500/30 text-red-400');
+        return;
+      }
+      if (cardioWatchId !== null) navigator.geolocation.clearWatch(cardioWatchId);
+      cardioWatchId = navigator.geolocation.watchPosition(onCardioPosicion, onCardioError, {
+        enableHighAccuracy: true,
+        maximumAge: 1000,
+        timeout: 20000
+      });
+    }
+
+    function onCardioPosicion(pos) {
+      const { latitude, longitude, accuracy } = pos.coords;
+      const punto = { lat: latitude, lng: longitude };
+      cardioUltimaPos = punto;
+
+      // Indicador de calidad de señal
+      if (accuracy <= 10)      setGpsStatus('📡 GPS excelente', 'border-green-500/30 text-green-400');
+      else if (accuracy <= 25) setGpsStatus('📡 GPS bueno', 'border-[#3B82F6]/25 text-[#3B82F6]');
+      else                     setGpsStatus('📡 GPS débil', 'border-yellow-500/30 text-yellow-400');
+
+      if (cardioMap) {
+        // Círculo de precisión (radio real del GPS en metros)
+        if (!cardioAccuracyCircle) {
+          cardioAccuracyCircle = L.circle([punto.lat, punto.lng], { radius: accuracy || 20, stroke: false, fillColor: '#3B82F6', fillOpacity: 0.15 }).addTo(cardioMap);
+        } else {
+          cardioAccuracyCircle.setLatLng([punto.lat, punto.lng]).setRadius(accuracy || 20);
+        }
+
+        // El "puntito azul" que te sigue
+        if (!cardioMarker) {
+          cardioMarker = L.marker([punto.lat, punto.lng], { icon: cardioGpsIcon, zIndexOffset: 1000 }).addTo(cardioMap);
+          cardioMap.setView([punto.lat, punto.lng], 17); // primer fix: centra de verdad
+        } else {
+          cardioMarker.setLatLng([punto.lat, punto.lng]);
+        }
+
+        if (cardioSeguirUbicacion) {
+          cardioMap.setView([punto.lat, punto.lng], Math.max(cardioMap.getZoom(), 16));
+        }
+      }
+
+      // --- A partir de aquí, solo si hay una actividad GRABANDO ---
+      if (!cardioGrabando) return;
+      if (accuracy && accuracy > 40) return; // descarta lecturas imprecisas para no inflar la distancia
+
+      if (cardioPuntos.length > 0) {
+        const anterior = cardioPuntos[cardioPuntos.length - 1];
+        const d = haversineKm(anterior.lat, anterior.lng, punto.lat, punto.lng);
+        if (d < 0.5 && d > 0.0015) {   // ignora saltos absurdos y "ruido" estando parado
+          cardioDistanciaKm += d;
+        } else if (d >= 0.5) {
+          return;
+        }
+      }
+      cardioPuntos.push(punto);
+
+      // Dibuja la ruta recorrida sobre el mapa
+      if (cardioPolyline) cardioPolyline.addLatLng([punto.lat, punto.lng]);
+
+      // Marcador verde de inicio de la ruta
+      if (cardioPuntos.length === 1 && cardioMap) {
+        cardioStartMarker = L.circleMarker([punto.lat, punto.lng], { radius: 6, color: '#fff', weight: 2, fillColor: '#22C55E', fillOpacity: 1 }).addTo(cardioMap);
+      }
+
+      document.getElementById('cardio-live-distancia').innerHTML = `${cardioDistanciaKm.toFixed(2)} <span class="text-lg font-bold">km</span>`;
+      actualizarCardioUI();
+    }
+
+    function iniciarCardio() {
+      if (!navigator.geolocation) {
+        alert('Tu navegador no soporta geolocalización.');
+        return;
+      }
+
+      cardioPuntos = [];
+      cardioDistanciaKm = 0;
+      cardioElapsedAccum = 0;
+      cardioPausado = false;
+      cardioGrabando = true;
+      cardioSeguirUbicacion = true;
+
+      // Limpia la ruta anterior del mapa, pero conserva el mapa y el punto azul
+      if (cardioPolyline) cardioPolyline.setLatLngs([]);
+      if (cardioStartMarker && cardioMap) { cardioMap.removeLayer(cardioStartMarker); cardioStartMarker = null; }
+
+      document.getElementById('cardio-start-panel').classList.add('hidden');
+      document.getElementById('cardio-live-panel').classList.remove('hidden');
+      // El aviso de "no bloquees la pantalla" solo aplica a la versión de navegador.
+      if (!window.Capacitor?.Plugins?.BackgroundGeolocation) {
+        document.getElementById('cardio-gps-warning').classList.remove('hidden');
+      }
+      document.getElementById('cardio-live-distancia').innerHTML = '0.00 <span class="text-lg font-bold">km</span>';
+      document.getElementById('cardio-live-duracion').innerText = '00:00';
+      document.getElementById('cardio-live-ritmo').innerText = '--:-- /km';
+      document.getElementById('cardio-live-calorias').innerText = '0';
+      document.getElementById('btn-pausar-cardio').innerText = 'Pausar';
+
+      if (cardioMap) setTimeout(() => cardioMap.invalidateSize(), 100);
+      if (cardioUltimaPos && cardioMap) cardioMap.setView([cardioUltimaPos.lat, cardioUltimaPos.lng], 17);
+
+      cardioStartTimestamp = Date.now();
+      cardioTimerInterval = setInterval(actualizarCardioUI, 1000);
+      iniciarWatchGps(); // asegura una señal fresca al arrancar
+    }
+
+    function onCardioError(err) {
+      console.error('Error de GPS:', err);
+      if (err.code === 1) {
+        setGpsStatus('📡 Permiso denegado', 'border-red-500/30 text-red-400');
+      } else {
+        setGpsStatus('📡 Sin señal GPS', 'border-yellow-500/30 text-yellow-400');
+      }
+    }
+
+    document.getElementById('btn-iniciar-cardio').addEventListener('click', iniciarCardio);
+
+    document.getElementById('btn-pausar-cardio').addEventListener('click', () => {
+      if (!cardioPausado) {
+        // Pausa: deja de acumular distancia y tiempo, pero el mapa y el punto
+        // azul siguen vivos para que veas dónde estás.
+        cardioElapsedAccum = segundosTranscurridosCardio();
+        cardioStartTimestamp = null;
+        cardioGrabando = false;
+        clearInterval(cardioTimerInterval);
+        cardioPausado = true;
+        document.getElementById('btn-pausar-cardio').innerText = 'Reanudar';
+      } else {
+        cardioStartTimestamp = Date.now();
+        cardioTimerInterval = setInterval(actualizarCardioUI, 1000);
+        cardioGrabando = true;
+        cardioSeguirUbicacion = true;
+        cardioPausado = false;
+        document.getElementById('btn-pausar-cardio').innerText = 'Pausar';
+      }
+    });
+
+    document.getElementById('btn-finalizar-cardio').addEventListener('click', finalizarCardio);
+
+    async function finalizarCardio() {
+      if (cardioPuntos.length < 2) {
+        if (!confirm('Aún no se registró suficiente recorrido. ¿Descartar esta actividad?')) return;
+      }
+
+      const segundosTotales = segundosTranscurridosCardio();
+      cardioGrabando = false;
+      clearInterval(cardioTimerInterval);
+
+      const distancia = cardioDistanciaKm;
+      const ritmoPromedioSegKm = distancia > 0.02 ? segundosTotales / distancia : null;
+
+      // Estimación de calorías por MET (aproximado, no es un dato clínico)
+      const MET = cardioTipo === 'running' ? 9.8 : 3.8;
+      const calorias = Math.round((MET * 3.5 * miPeso / 200) * (segundosTotales / 60));
+
+      const { error } = await supabaseClient.from('actividades_cardio').insert([{
+        user_id: currentUser.id,
+        tipo: cardioTipo,
+        distancia_km: Number(distancia.toFixed(3)),
+        duracion_segundos: segundosTotales,
+        ritmo_promedio_seg_km: ritmoPromedioSegKm ? Math.round(ritmoPromedioSegKm) : null,
+        calorias_estimadas: calorias,
+        ruta: cardioPuntos
+      }]);
+
+      if (error) {
+        alert('Error guardando la actividad: ' + error.message);
+        return;
+      }
+
+      // reset UI a estado inicial. OJO: el mapa NO se destruye — sigue vivo
+      // mostrando tu punto azul, listo para la siguiente actividad.
+      document.getElementById('cardio-live-panel').classList.add('hidden');
+      document.getElementById('cardio-start-panel').classList.remove('hidden');
+      document.getElementById('cardio-gps-warning').classList.add('hidden');
+      if (cardioPolyline) cardioPolyline.setLatLngs([]);
+      if (cardioStartMarker && cardioMap) { cardioMap.removeLayer(cardioStartMarker); cardioStartMarker = null; }
+      cardioStartTimestamp = null;
+      cardioElapsedAccum = 0;
+      cardioPausado = false;
+      cardioPuntos = [];
+      cardioDistanciaKm = 0;
+
+      cargarHistorialCardio();
+    }
+
+    async function cargarHistorialCardio() {
+      const { data: actividades, error } = await supabaseClient
+        .from('actividades_cardio')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      const cont = document.getElementById('cardio-historial');
+      if (error) {
+        cont.innerHTML = `<p class="text-xs text-red-400">No se pudo cargar tu historial de actividades.</p>`;
+        return;
+      }
+      if (!actividades || actividades.length === 0) {
+        cont.innerHTML = `<p class="text-xs text-white/40">Aún no has registrado actividades de cardio.</p>`;
+        return;
+      }
+
+      cont.innerHTML = actividades.map(a => {
+        const icono = a.tipo === 'running' ? '🏃' : '🚶';
+        const fecha = new Date(a.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+        const mm = Math.floor(a.duracion_segundos / 60), ss = a.duracion_segundos % 60;
+        const ritmoTxt = a.ritmo_promedio_seg_km
+          ? `${Math.floor(a.ritmo_promedio_seg_km / 60)}:${String(Math.round(a.ritmo_promedio_seg_km % 60)).padStart(2, '0')} /km`
+          : '--';
+        const mapId = `cardio-mini-map-${a.id}`;
+        return `
+          <div class="bg-[#05070D] border border-[#3B82F6]/10 rounded-xl overflow-hidden">
+            <div id="${mapId}" class="w-full h-32 bg-[#0D1526]"></div>
+            <div class="p-3 flex items-center gap-2">
+              <span class="text-lg">${icono}</span>
+              <div>
+                <p class="text-xs font-bold text-white">${a.tipo === 'running' ? 'Carrera' : 'Caminata'} · ${fecha}</p>
+                <p class="text-[10px] text-white/50">${a.distancia_km} km · ${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')} · ${ritmoTxt} · ~${a.calorias_estimadas || 0} kcal</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Los mini-mapas se inicializan DESPUÉS de insertar el HTML en el DOM
+      actividades.forEach(a => {
+        const mapId = `cardio-mini-map-${a.id}`;
+        const el = document.getElementById(mapId);
+        if (!el || !a.ruta || !Array.isArray(a.ruta) || a.ruta.length < 2) {
+          if (el) el.innerHTML = `<div class="w-full h-full flex items-center justify-center text-[10px] text-white/30">Sin datos de ruta</div>`;
+          return;
+        }
+        const miniMap = L.map(mapId, {
+          zoomControl: false, attributionControl: false, dragging: false,
+          scrollWheelZoom: false, doubleClickZoom: false, touchZoom: false,
+          boxZoom: false, keyboard: false, tap: false
+        });
+        // Vista satelital para las tarjetas del historial: se ve como una "foto" de la ruta
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(miniMap);
+        const latlngs = a.ruta.map(p => [p.lat, p.lng]);
+        const poly = L.polyline(latlngs, { color: '#3B82F6', weight: 3.5 }).addTo(miniMap);
+        L.circleMarker(latlngs[0], { radius: 4, color: '#fff', weight: 1.5, fillColor: '#22C55E', fillOpacity: 1 }).addTo(miniMap);
+        L.circleMarker(latlngs[latlngs.length - 1], { radius: 4, color: '#fff', weight: 1.5, fillColor: '#EF4444', fillOpacity: 1 }).addTo(miniMap);
+        miniMap.fitBounds(poly.getBounds(), { padding: [16, 16] });
+      });
+    }
+
+    // LOGOUT
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    initDashboard();
+    setInterval(() => { if (coachProfile) cargarChat(); }, 6000);
+  </script>
+
+  <!-- TAB BAR INFERIOR (móvil) -->
+  <nav id="kf-tabbar" class="fixed bottom-0 inset-x-0 z-50 bg-[#0D1526]/95 backdrop-blur border-t border-[#3B82F6]/15">
+    <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
+      <a href="#sec-inicio" data-anchor="sec-inicio" class="kf-tab"><span class="relative"><img src="icons/icon-inicio.png" class="kf-tab-icon-img" alt="Inicio"><span id="kf-tab-inicio-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-[#0D1526]"></span></span><span>Inicio</span></a>
+      <a href="#sec-habitos" data-anchor="sec-habitos" data-plan-req="avanzado" class="kf-tab"><img src="icons/icon-habitos.png" class="kf-tab-icon-img" alt="Hábitos"><span>Hábitos</span></a>
+      <a href="#sec-cardio" data-anchor="sec-cardio" data-plan-req="avanzado" class="kf-tab"><img src="icons/icon-cardio.png" class="kf-tab-icon-img" alt="Cardio"><span>Cardio</span></a>
+      <a href="#sec-rutina" data-anchor="sec-rutina" class="kf-tab"><img src="icons/icon-rutina.png" class="kf-tab-icon-img" alt="Rutina"><span>Rutina</span></a>
+      <a href="#sec-nutricion" data-anchor="sec-nutricion" class="kf-tab"><img src="icons/icon-nutricion.png" class="kf-tab-icon-img" alt="Nutrición"><span>Nutrición</span></a>
+      <a href="#sec-progreso" data-anchor="sec-progreso" data-plan-req="avanzado" class="kf-tab"><img src="icons/icon-progreso.png" class="kf-tab-icon-img" alt="Progreso"><span>Progreso</span></a>
+      <a href="#sec-chat" data-anchor="sec-chat" class="kf-tab relative"><span class="relative"><img src="icons/icon-chat.png" class="kf-tab-icon-img" alt="Chat"><span id="kf-tab-chat-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-[#0D1526]"></span></span><span>Chat</span></a>
+      <a href="perfil.html" class="kf-tab"><img src="icons/icon-perfil.png" class="kf-tab-icon-img" alt="Perfil"><span>Perfil</span></a>
+    </div>
+  </nav>
+  <script>
+    // Resalta el tab de la sección visible (scroll-spy) sin librerías externas
+    (function() {
+      const tabs = Array.from(document.querySelectorAll('#kf-tabbar .kf-tab[data-anchor]'));
+      const sections = tabs.map(t => document.getElementById(t.getAttribute('data-anchor'))).filter(Boolean);
+      if (!sections.length) return;
+
+      const setActive = (id) => {
+        tabs.forEach(t => t.classList.toggle('active', t.getAttribute('data-anchor') === id));
+      };
+      setActive('sec-inicio');
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+      sections.forEach(s => observer.observe(s));
+    })();
+  </script>
+
+  <script>
+    // --- Kratero Fit: modo claro / oscuro (persistente en este dispositivo) ---
+    (function () {
+      const KEY = 'kf-theme';
+      const root = document.documentElement;
+      const saved = localStorage.getItem(KEY) || 'dark';
+      if (saved === 'light') root.setAttribute('data-theme', 'light');
+
+      function actualizarIcono() {
+        const btn = document.getElementById('kf-theme-toggle');
+        if (!btn) return;
+        btn.textContent = root.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        actualizarIcono();
+        const btn = document.getElementById('kf-theme-toggle');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const esClaro = root.getAttribute('data-theme') === 'light';
+            if (esClaro) { root.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
+            else { root.setAttribute('data-theme', 'light'); localStorage.setItem(KEY, 'light'); }
+            actualizarIcono();
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

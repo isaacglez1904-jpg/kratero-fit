@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anuncios | Kratero Fit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(1100px 520px at 12% -12%, rgba(59,130,246,0.07), transparent 60%), radial-gradient(900px 480px at 105% 0%, rgba(59,130,246,0.05), transparent 55%), #05070D;
+      background-attachment: fixed;
+    }
+    .font-display { font-family: 'Fraunces', serif; }
+    [class*="bg-[#0D1526]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #05070D; }
+    ::-webkit-scrollbar-thumb { background: #24345c; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3B82F6; }
+
+    /* --- Kratero Fit: tab bar inferior (móvil) --- */
+    .kf-tabbar-scroll::-webkit-scrollbar { display: none; }
+    .kf-tabbar-scroll { -ms-overflow-style: none; scrollbar-width: none; scroll-behavior: smooth; }
+    .kf-tab {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; min-width: 60px; padding: 6px 6px; border-radius: 12px;
+      color: rgba(245,247,250,.45); font-size: 9px; font-weight: 800; letter-spacing: .01em;
+      white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
+    }
+    .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
+    .kf-tab.active { color: #3B82F6; background: rgba(59,130,246,.10); }
+    .kf-tab:active { background: rgba(59,130,246,.16); }
+    /* La tab bar es visible en TODOS los tamaños (móvil y escritorio) */
+    #kf-tabbar { padding-bottom: env(safe-area-inset-bottom); }
+    body.has-kf-tabbar { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+    @media (min-width: 768px) {
+      .kf-tab { min-width: 76px; font-size: 10px; padding: 8px 10px; }
+      .kf-tab .kf-tab-icon { font-size: 20px; }
+    }
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 84px; }
+  
+    /* --- Kratero Fit: modo claro / oscuro --- */
+    html { transition: filter .25s ease; }
+    html[data-theme="light"] {
+      filter: invert(1) hue-rotate(180deg);
+      background: #fff;
+    }
+    html[data-theme="light"] img,
+    html[data-theme="light"] svg,
+    html[data-theme="light"] video,
+    html[data-theme="light"] iframe {
+      filter: invert(1) hue-rotate(180deg);
+    }
+    #kf-theme-toggle {
+      position: fixed; z-index: 60; top: 14px; right: 14px;
+      width: 38px; height: 38px; border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.35);
+      color: #F5F7FA; font-size: 16px; cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+    #kf-theme-toggle:active { background: rgba(59,130,246,0.25); }
+  </style>
+</head>
+<body class="bg-[#05070D] text-[#F5F7FA] min-h-screen flex flex-col has-kf-tabbar">
+  <button id="kf-theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar modo claro/oscuro">🌙</button>
+
+
+  <nav class="bg-[#0D1526] border-b border-[#3B82F6]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+    <div class="flex items-center gap-2.5">
+      <img src="logo.png" alt="Kratero Fit" class="w-8 h-8 object-contain">
+      <div class="leading-none">
+        <span class="font-display text-base text-[#3B82F6]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
+        <span class="block text-[9px] font-bold tracking-wide text-white/40 mt-0.5">PANEL COACH / ADMIN</span>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-4 text-xs font-bold items-center">
+      <a href="admin-dashboard.html" class="hover:text-[#3B82F6]">📊 Resumen</a>
+      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#3B82F6]">👥 Coaches</a>
+      <a href="admin-monitoreo.html" class="hover:text-[#3B82F6]">📈 Monitoreo</a>
+      <a href="admin-rutinas.html" class="hover:text-[#3B82F6]">🏋️ Rutinas</a>
+      <a href="admin-nutricion.html" class="hover:text-[#3B82F6]">🥗 Nutrición</a>
+      <a href="admin-transformaciones.html" class="hover:text-[#3B82F6]">✨ Cambios</a>
+      <a href="admin-anuncios.html" class="text-[#3B82F6] underline">📢 Anuncios</a>
+      <a href="admin-mensajes.html" class="hover:text-[#3B82F6]">💬 Mensajes</a>
+      <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">Salir</button>
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto p-6 space-y-8 w-full flex-1">
+    <div>
+      <h1 class="text-2xl font-bold text-[#3B82F6]">📢 Anuncios Generales</h1>
+      <p class="text-xs text-white/50 mt-1">Estos avisos aparecen para todos los alumnos en su panel de inicio.</p>
+    </div>
+
+    <!-- FORMULARIO: solo visible/habilitado para el admin dueño -->
+    <div id="form-anuncio-wrap" class="bg-[#0D1526] p-6 rounded-3xl border border-[#3B82F6]/20 space-y-4">
+      <h2 class="text-sm font-bold text-white">Publicar nuevo anuncio</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-[1fr,160px] gap-3">
+        <input id="anuncio-titulo" type="text" placeholder="Título del aviso..." class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6] transition">
+        <select id="anuncio-categoria" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6] transition">
+          <option value="General">General</option>
+          <option value="Horarios">Horarios</option>
+          <option value="Promoción">Promoción</option>
+          <option value="Mantenimiento">Mantenimiento</option>
+          <option value="Evento">Evento</option>
+        </select>
+      </div>
+      <textarea id="anuncio-contenido" rows="4" placeholder="Contenido del comunicado..." class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6] transition"></textarea>
+      <button id="btn-publicar" class="w-full bg-[#3B82F6] text-[#05070D] font-bold text-xs py-3 rounded-xl hover:bg-[#2563eb] hover:shadow-[0_8px_24px_-8px_rgba(59,130,246,0.5)] transition">Publicar Anuncio</button>
+    </div>
+
+    <!-- Aviso para coaches: no pueden publicar, solo ven el listado -->
+    <div id="aviso-solo-lectura" class="hidden bg-[#0D1526] border border-[#3B82F6]/15 rounded-2xl p-4 text-xs text-white/50">
+      Solo el administrador dueño de la cuenta puede publicar o eliminar anuncios generales. Aquí puedes ver el historial.
+    </div>
+
+    <div class="space-y-3">
+      <h2 class="text-sm font-bold text-white">Historial de anuncios publicados</h2>
+      <div id="anuncios-lista" class="space-y-3">
+        <p class="text-xs text-white/40">Cargando anuncios...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseClient = supabase.createClient('https://etdfskwtaargtrzisvmj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0ZGZza3d0YWFyZ3Ryemlzdm1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNjQ4NjEsImV4cCI6MjEwNDc0MDg2MX0.5UlqtJfVORgsZXNvO-Mx12YKeP_kb_BrxqI2nXgyjcs', {
+      auth: {
+        persistSession: true,     // guarda la sesión en este dispositivo
+        autoRefreshToken: true,   // la renueva sola en segundo plano
+        detectSessionInUrl: true  // necesario para los links de recuperación de contraseña
+      }
+    });
+
+    let miRol = null;
+
+    // Igual que en el resto del panel: solo admin/coach entran, y solo el
+    // admin dueño puede publicar/eliminar (coincide con las políticas RLS).
+    async function verificarStaff() {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (!user) { window.location.href = 'login.html'; return false; }
+      const { data: profile } = await supabaseClient.from('profiles').select('rol').eq('id', user.id).single();
+      if (!profile || (profile.rol !== 'admin' && profile.rol !== 'coach')) {
+        window.location.href = 'dashboard.html';
+        return false;
+      }
+      miRol = profile.rol;
+      if (miRol === 'admin') {
+        document.getElementById('nav-coaches-link').classList.remove('hidden');
+        document.getElementById('kf-tab-coaches')?.classList.remove('hidden');
+      } else {
+        document.getElementById('form-anuncio-wrap').classList.add('hidden');
+        document.getElementById('aviso-solo-lectura').classList.remove('hidden');
+      }
+      return true;
+    }
+
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    async function cargarAnuncios() {
+      const cont = document.getElementById('anuncios-lista');
+      const { data: anuncios, error } = await supabaseClient
+        .from('anuncios')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        cont.innerHTML = `<p class="text-xs text-red-400">No se pudieron cargar los anuncios.</p>`;
+        return;
+      }
+      if (!anuncios || anuncios.length === 0) {
+        cont.innerHTML = `<p class="text-xs text-white/40">Aún no se ha publicado ningún anuncio.</p>`;
+        return;
+      }
+
+      cont.innerHTML = anuncios.map(a => {
+        const fecha = a.created_at ? new Date(a.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+        return `
+          <div class="bg-[#0D1526] border border-[#3B82F6]/15 rounded-2xl p-4 flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1">
+                <span class="text-[10px] font-bold bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20 px-2 py-0.5 rounded-full">${a.categoria || 'General'}</span>
+                <span class="text-[10px] text-white/40">${fecha}</span>
+              </div>
+              <p class="text-sm font-bold text-white">${a.titulo || ''}</p>
+              <p class="text-xs text-white/60 mt-1 whitespace-pre-wrap">${a.contenido || ''}</p>
+            </div>
+            ${miRol === 'admin' ? `<button data-borrar="${a.id}" class="shrink-0 text-[10px] font-bold text-red-400 border border-red-500/30 bg-red-500/10 px-2.5 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">Eliminar</button>` : ''}
+          </div>
+        `;
+      }).join('');
+
+      cont.querySelectorAll('[data-borrar]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('¿Eliminar este anuncio? Esta acción no se puede deshacer.')) return;
+          const id = btn.getAttribute('data-borrar');
+          const { error } = await supabaseClient.from('anuncios').delete().eq('id', id);
+          if (error) { alert('Error al eliminar: ' + error.message); return; }
+          cargarAnuncios();
+        });
+      });
+    }
+
+    document.getElementById('btn-publicar').addEventListener('click', async () => {
+      const titulo = document.getElementById('anuncio-titulo').value.trim();
+      const contenido = document.getElementById('anuncio-contenido').value.trim();
+      const categoria = document.getElementById('anuncio-categoria').value;
+      if (!titulo || !contenido) return alert('Completa el título y el contenido del anuncio.');
+
+      const btn = document.getElementById('btn-publicar');
+      btn.disabled = true;
+      btn.innerText = 'Publicando...';
+
+      const { error } = await supabaseClient.from('anuncios').insert([{ titulo, contenido, categoria }]);
+
+      btn.disabled = false;
+      btn.innerText = 'Publicar Anuncio';
+
+      if (error) {
+        alert('Error al publicar: ' + error.message);
+        return;
+      }
+      document.getElementById('anuncio-titulo').value = '';
+      document.getElementById('anuncio-contenido').value = '';
+      cargarAnuncios();
+    });
+
+    (async () => { if (await verificarStaff()) cargarAnuncios(); })();
+  </script>
+
+  <!-- TAB BAR INFERIOR (móvil) -->
+  <nav id="kf-tabbar" class="fixed bottom-0 inset-x-0 z-50 bg-[#0D1526]/95 backdrop-blur border-t border-[#3B82F6]/15">
+    <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
+          <a href="admin-dashboard.html" data-page="admin-dashboard.html" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Resumen</span></a>
+          <a href="admin-coaches.html" data-page="admin-coaches.html" id="kf-tab-coaches" class="kf-tab hidden"><span class="kf-tab-icon">👥</span><span>Coaches</span></a>
+          <a href="admin-monitoreo.html" data-page="admin-monitoreo.html" class="kf-tab"><span class="kf-tab-icon">📈</span><span>Monitoreo</span></a>
+          <a href="admin-rutinas.html" data-page="admin-rutinas.html" class="kf-tab"><span class="kf-tab-icon">🏋️</span><span>Rutinas</span></a>
+          <a href="admin-nutricion.html" data-page="admin-nutricion.html" class="kf-tab"><span class="kf-tab-icon">🥗</span><span>Nutrición</span></a>
+          <a href="admin-transformaciones.html" data-page="admin-transformaciones.html" class="kf-tab"><span class="kf-tab-icon">✨</span><span>Cambios</span></a>
+          <a href="admin-anuncios.html" data-page="admin-anuncios.html" class="kf-tab"><span class="kf-tab-icon">📢</span><span>Anuncios</span></a>
+          <a href="admin-mensajes.html" data-page="admin-mensajes.html" class="kf-tab"><span class="kf-tab-icon">💬</span><span>Mensajes</span></a>
+    </div>
+  </nav>
+  <script>
+    (function() {
+      const actual = location.pathname.split('/').pop() || 'admin-dashboard.html';
+      document.querySelectorAll('#kf-tabbar .kf-tab').forEach(a => {
+        if (a.getAttribute('data-page') === actual) a.classList.add('active');
+      });
+    })();
+  </script>
+
+  <script>
+    // --- Kratero Fit: modo claro / oscuro (persistente en este dispositivo) ---
+    (function () {
+      const KEY = 'kf-theme';
+      const root = document.documentElement;
+      const saved = localStorage.getItem(KEY) || 'dark';
+      if (saved === 'light') root.setAttribute('data-theme', 'light');
+
+      function actualizarIcono() {
+        const btn = document.getElementById('kf-theme-toggle');
+        if (!btn) return;
+        btn.textContent = root.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        actualizarIcono();
+        const btn = document.getElementById('kf-theme-toggle');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const esClaro = root.getAttribute('data-theme') === 'light';
+            if (esClaro) { root.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
+            else { root.setAttribute('data-theme', 'light'); localStorage.setItem(KEY, 'light'); }
+            actualizarIcono();
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
