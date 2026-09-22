@@ -12,10 +12,7 @@
     .leaflet-control-attribution { font-size: 8px !important; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background:
-        radial-gradient(1100px 520px at 12% -12%, rgba(59,130,246,0.07), transparent 60%),
-        radial-gradient(900px 480px at 105% 0%, rgba(59,130,246,0.05), transparent 55%),
-        #05070D;
+      background: #05070D;
       background-attachment: fixed;
     }
     .font-display { font-family: 'Fraunces', serif; }
@@ -145,6 +142,12 @@
           <span id="streak-badge" class="text-xs font-bold bg-orange-500/10 border border-orange-500/30 text-orange-400 px-3 py-1.5 rounded-full">🔥 0 días seguidos</span>
           <span id="today-date" class="text-xs text-white/60 font-semibold">--/--/----</span>
         </div>
+      </div>
+
+      <!-- Anillos de constancia semanal (estilo anillos de actividad) -->
+      <div class="flex flex-col sm:flex-row items-center gap-5 bg-[#05070D] border border-[#3B82F6]/10 rounded-2xl p-4">
+        <svg id="habit-rings-svg" viewBox="0 0 180 180" class="w-40 h-40 shrink-0"></svg>
+        <div id="habit-rings-legend" class="grid grid-cols-1 gap-1.5 w-full sm:w-auto"></div>
       </div>
 
       <!-- Filas por hábito: vista semanal + heatmap histórico -->
@@ -316,6 +319,27 @@
         <p class="text-xs text-white/50">Cargando rutinas...</p>
       </div>
     </section>
+
+    <!-- Barra flotante: temporizador de descanso entre series (estilo Hevy) -->
+    <div id="rest-timer-bar" class="hidden fixed left-1/2 -translate-x-1/2 bottom-20 md:bottom-6 z-[90] bg-[#0D1526] border border-[#3B82F6]/40 shadow-2xl rounded-2xl px-4 py-3 flex items-center gap-3">
+      <span class="text-xs font-bold text-white/70">💤 Descanso</span>
+      <span id="rest-timer-clock" class="text-xl font-black text-[#3B82F6] font-display tabular-nums">01:30</span>
+      <button id="rest-timer-minus" class="text-[10px] font-bold bg-white/10 text-white px-2 py-1 rounded-lg hover:bg-white/20 transition">-15s</button>
+      <button id="rest-timer-plus" class="text-[10px] font-bold bg-white/10 text-white px-2 py-1 rounded-lg hover:bg-white/20 transition">+15s</button>
+      <button id="rest-timer-cancel" class="text-[10px] font-bold text-red-400 hover:text-red-300 px-1">✕</button>
+    </div>
+
+    <!-- Modal: progreso de un ejercicio (gráfica de peso en el tiempo) -->
+    <div id="progreso-ejercicio-modal" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4">
+      <div class="bg-[#0D1526] border border-[#3B82F6]/30 rounded-2xl p-4 w-full max-w-md">
+        <div class="flex items-center justify-between mb-3">
+          <h3 id="progreso-ejercicio-titulo" class="font-bold text-white text-sm">Progreso</h3>
+          <button onclick="cerrarProgresoModal()" class="text-white/50 hover:text-white text-lg leading-none">✕</button>
+        </div>
+        <canvas id="chart-ejercicio" height="180"></canvas>
+        <p id="progreso-ejercicio-vacio" class="hidden text-xs text-white/40 text-center py-6">Aún no hay suficientes registros de peso para graficar este ejercicio (necesitas al menos 2).</p>
+      </div>
+    </div>
 
     <!-- 5. PLAN DE NUTRICIÓN -->
     <section id="sec-nutricion" class="bg-[#0D1526] border border-[#3B82F6]/20 p-6 rounded-2xl shadow-xl space-y-4">
@@ -552,8 +576,51 @@
       (data || []).forEach(row => { habitosMap[row.fecha] = row; });
 
       renderHabitRows();
+      renderHabitRings();
       renderCalendario();
       renderRacha();
+    }
+
+    // ============================================================
+    // Anillos de constancia (estilo "anillos de actividad"): un
+    // anillo por hábito, con el % de días cumplidos en los últimos 7.
+    // ============================================================
+    function renderHabitRings() {
+      const svg = document.getElementById('habit-rings-svg');
+      const legend = document.getElementById('habit-rings-legend');
+      const CX = 90, CY = 90;
+      const R_OUT = 80, R_STEP = 15, STROKE = 11;
+
+      const dias7 = [...Array(7)].map((_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        return fechaStr(d);
+      });
+
+      const datos = HABITS.map((h, i) => {
+        const cumplidos = dias7.filter(ds => habitosMap[ds] && habitosMap[ds][h.key]).length;
+        const pct = cumplidos / dias7.length;
+        return { ...h, pct, cumplidos, r: R_OUT - i * R_STEP };
+      });
+
+      svg.innerHTML = datos.map(h => {
+        const circ = 2 * Math.PI * h.r;
+        const dash = Math.max(h.pct * circ, h.pct > 0 ? 4 : 0); // que se note aunque sea 1/7
+        return `
+          <circle cx="${CX}" cy="${CY}" r="${h.r}" fill="none" stroke="${h.color}22" stroke-width="${STROKE}"></circle>
+          <circle cx="${CX}" cy="${CY}" r="${h.r}" fill="none" stroke="${h.color}" stroke-width="${STROKE}"
+            stroke-linecap="round" stroke-dasharray="${dash} ${circ}"
+            transform="rotate(-90 ${CX} ${CY})" style="transition: stroke-dasharray .5s ease;"></circle>
+        `;
+      }).join('');
+
+      legend.innerHTML = datos.map(h => `
+        <div class="flex items-center gap-2 text-xs">
+          <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${h.color}"></span>
+          <span class="text-white/70">${h.icon} ${h.label}</span>
+          <span class="ml-auto font-bold text-white">${Math.round(h.pct * 100)}%</span>
+        </div>
+      `).join('');
     }
 
     function countCompletos(row) {
@@ -635,6 +702,7 @@
       const nuevo = { ...base, [habitKey]: !base[habitKey] };
       habitosMap[todayStr] = nuevo;
       renderHabitRows();
+      renderHabitRings();
       renderCalendario();
       renderRacha();
 
@@ -762,6 +830,124 @@
       document.getElementById('video-modal-iframe').src = '';
     }
 
+    // ============================================================
+    // C.2 — Temporizador de descanso entre series (estilo Hevy)
+    // ============================================================
+    let restTimerInterval = null;
+    let restTimerSegundosRestantes = 0;
+
+    function pitido() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = 880;
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (e) { /* navegador sin soporte de audio, no pasa nada */ }
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    }
+
+    function actualizarRelojDescanso() {
+      const m = Math.floor(restTimerSegundosRestantes / 60).toString().padStart(2, '0');
+      const s = Math.floor(restTimerSegundosRestantes % 60).toString().padStart(2, '0');
+      document.getElementById('rest-timer-clock').innerText = `${m}:${s}`;
+    }
+
+    function iniciarDescanso(segundos) {
+      restTimerSegundosRestantes = segundos;
+      document.getElementById('rest-timer-bar').classList.remove('hidden');
+      actualizarRelojDescanso();
+      if (restTimerInterval) clearInterval(restTimerInterval);
+      restTimerInterval = setInterval(() => {
+        restTimerSegundosRestantes--;
+        actualizarRelojDescanso();
+        if (restTimerSegundosRestantes <= 0) {
+          clearInterval(restTimerInterval);
+          restTimerInterval = null;
+          pitido();
+          document.getElementById('rest-timer-bar').classList.add('hidden');
+        }
+      }, 1000);
+    }
+
+    function cancelarDescanso() {
+      if (restTimerInterval) clearInterval(restTimerInterval);
+      restTimerInterval = null;
+      document.getElementById('rest-timer-bar').classList.add('hidden');
+    }
+
+    document.getElementById('rest-timer-cancel').addEventListener('click', cancelarDescanso);
+    document.getElementById('rest-timer-plus').addEventListener('click', () => {
+      restTimerSegundosRestantes += 15;
+      actualizarRelojDescanso();
+    });
+    document.getElementById('rest-timer-minus').addEventListener('click', () => {
+      restTimerSegundosRestantes = Math.max(0, restTimerSegundosRestantes - 15);
+      actualizarRelojDescanso();
+    });
+
+    // ============================================================
+    // C.3 — Gráfica de progreso por ejercicio (peso a través del tiempo)
+    // ============================================================
+    let chartEjercicio = null;
+
+    async function abrirProgresoModal(rutinaId, titulo) {
+      document.getElementById('progreso-ejercicio-titulo').innerText = `📈 Progreso — ${titulo}`;
+      document.getElementById('progreso-ejercicio-modal').classList.remove('hidden');
+
+      const { data } = await supabaseClient
+        .from('registro_pesos')
+        .select('*')
+        .eq('rutina_id', rutinaId)
+        .order('created_at', { ascending: true });
+
+      const canvas = document.getElementById('chart-ejercicio');
+      const vacio = document.getElementById('progreso-ejercicio-vacio');
+
+      if (!data || data.length < 2) {
+        canvas.classList.add('hidden');
+        vacio.classList.remove('hidden');
+        return;
+      }
+      canvas.classList.remove('hidden');
+      vacio.classList.add('hidden');
+
+      const labels = data.map(p => new Date(p.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }));
+      const pesos = data.map(p => p.peso_kg);
+
+      if (chartEjercicio) chartEjercicio.destroy();
+      chartEjercicio = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Peso (kg)',
+            data: pesos,
+            borderColor: '#3B82F6',
+            backgroundColor: 'rgba(59,130,246,0.15)',
+            tension: 0.3,
+            fill: true,
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#F5F7FAAA', font: { size: 9 } }, grid: { color: '#ffffff10' } },
+            y: { ticks: { color: '#3B82F6', font: { size: 9 } }, grid: { color: '#ffffff10' } }
+          }
+        }
+      });
+    }
+
+    function cerrarProgresoModal() {
+      document.getElementById('progreso-ejercicio-modal').classList.add('hidden');
+    }
+
     async function cargarRutinas() {
       const { data: rutinas } = await supabaseClient.from('rutinas').select('*').eq('user_id', currentUser.id);
       const container = document.getElementById('rutinas-container');
@@ -778,8 +964,13 @@
         .eq('user_id', currentUser.id)
         .order('created_at', { ascending: false });
 
+      // Último registro y mejor peso histórico (PR) por ejercicio, para la insignia 🏆.
       const ultimoPorRutina = {};
-      (pesos || []).forEach(p => { if (!ultimoPorRutina[p.rutina_id]) ultimoPorRutina[p.rutina_id] = p; });
+      const maxPorRutina = {};
+      (pesos || []).forEach(p => {
+        if (!ultimoPorRutina[p.rutina_id]) ultimoPorRutina[p.rutina_id] = p;
+        if (!maxPorRutina[p.rutina_id] || p.peso_kg > maxPorRutina[p.rutina_id]) maxPorRutina[p.rutina_id] = p.peso_kg;
+      });
 
       function textoUltimo(r) {
         const u = ultimoPorRutina[r.id];
@@ -810,13 +1001,19 @@
           ${r.video_url ? `<button onclick="abrirVideoModal('${r.video_url.replace(/'/g, "\\'")}')" class="text-xs bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-[#3B82F6] font-bold mt-2 py-2 rounded-lg hover:bg-[#3B82F6] hover:text-[#05070D] transition">▶ Ver Demostración</button>` : ''}
           ${r.requiere_peso === false ? '' : `
           <div class="mt-1 pt-3 border-t border-[#3B82F6]/10 space-y-2">
-            <p class="text-[10px] font-bold text-white/50 uppercase tracking-wide">Registra lo de hoy</p>
+            <div class="flex items-center justify-between">
+              <p class="text-[10px] font-bold text-white/50 uppercase tracking-wide">Registra lo de hoy</p>
+              ${maxPorRutina[r.id] ? `<span class="text-[10px] font-bold text-yellow-400">🏆 PR: ${maxPorRutina[r.id]} kg</span>` : ''}
+            </div>
             <div class="grid grid-cols-3 gap-1.5">
               <input type="number" step="0.5" min="0" placeholder="Kg" data-peso-input="${r.id}" class="min-w-0 w-full bg-[#05070D] border border-[#3B82F6]/20 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
               <input type="text" placeholder="${r.repeticiones || 'Reps'}" data-reps-input="${r.id}" class="min-w-0 w-full bg-[#05070D] border border-[#3B82F6]/20 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
               <input type="number" min="0" max="30" placeholder="${r.series || 'Series'}" data-series-input="${r.id}" class="min-w-0 w-full bg-[#05070D] border border-[#3B82F6]/20 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
             </div>
-            <button data-guardar-peso="${r.id}" class="w-full text-[10px] font-bold bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-[#3B82F6] py-1.5 rounded-lg hover:bg-[#3B82F6] hover:text-[#05070D] transition">Guardar registro de hoy</button>
+            <div class="flex gap-1.5">
+              <button data-guardar-peso="${r.id}" class="flex-1 text-[10px] font-bold bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-[#3B82F6] py-1.5 rounded-lg hover:bg-[#3B82F6] hover:text-[#05070D] transition">Guardar registro de hoy</button>
+              <button data-ver-progreso="${r.id}" data-titulo-progreso="${r.titulo.replace(/"/g, '&quot;')}" title="Ver progreso" class="text-[10px] font-bold bg-white/5 border border-white/10 text-white/70 px-2.5 rounded-lg hover:bg-white/10 transition">📈</button>
+            </div>
             <p data-ultimo-peso="${r.id}" class="text-[10px] text-white/40">${textoUltimo(r)}</p>
           </div>`}
         </div>
@@ -860,10 +1057,25 @@
           const fecha = new Date(nuevo.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
           const repsTxt = nuevo.repeticiones_completadas ? ` × ${nuevo.repeticiones_completadas} reps` : '';
           const seriesTxt = nuevo.series_completadas ? ` (${nuevo.series_completadas} series)` : '';
-          nota.innerText = `Último registro: ${nuevo.peso_kg} kg${repsTxt}${seriesTxt} — ${fecha}`;
+
+          const prAnterior = maxPorRutina[rutinaId] || 0;
+          if (peso > prAnterior) {
+            maxPorRutina[rutinaId] = peso;
+            nota.innerHTML = `<span class="text-yellow-400 font-bold">🏆 ¡Nuevo récord personal! ${peso} kg${repsTxt}${seriesTxt}</span>`;
+          } else {
+            nota.innerText = `Último registro: ${nuevo.peso_kg} kg${repsTxt}${seriesTxt} — ${fecha}`;
+          }
           pesoInput.value = '';
           repsInput.value = '';
           seriesInput.value = '';
+
+          iniciarDescanso(90);
+        });
+      });
+
+      container.querySelectorAll('[data-ver-progreso]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          abrirProgresoModal(btn.getAttribute('data-ver-progreso'), btn.getAttribute('data-titulo-progreso'));
         });
       });
 
