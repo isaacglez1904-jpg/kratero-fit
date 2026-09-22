@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil | Kratero Fit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #05070D;
+      background-attachment: fixed;
+    }
+    .font-display { font-family: 'Fraunces', serif; }
+    [class*="bg-[#0D1526]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #05070D; }
+    ::-webkit-scrollbar-thumb { background: #24345c; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3B82F6; }
+  
+    /* --- Kratero Fit: modo claro / oscuro --- */
+    html { transition: filter .25s ease; }
+    html[data-theme="light"] {
+      filter: invert(1) hue-rotate(180deg);
+      background: #fff;
+    }
+    html[data-theme="light"] img,
+    html[data-theme="light"] svg,
+    html[data-theme="light"] video,
+    html[data-theme="light"] iframe {
+      filter: invert(1) hue-rotate(180deg);
+    }
+    #kf-theme-toggle {
+      position: fixed; z-index: 60; top: 14px; right: 14px;
+      width: 38px; height: 38px; border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.35);
+      color: #F5F7FA; font-size: 16px; cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+    #kf-theme-toggle:active { background: rgba(59,130,246,0.25); }
+  </style>
+</head>
+<body class="bg-[#05070D] text-[#F5F7FA] min-h-screen">
+  <button id="kf-theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar modo claro/oscuro">🌙</button>
+
+
+  <nav class="bg-[#0D1526] border-b border-[#3B82F6]/20 px-6 py-4 sticky top-0 z-50 shadow-md">
+    <div class="max-w-3xl mx-auto flex items-center justify-between">
+      <a href="dashboard.html" class="flex items-center gap-2 text-xs font-bold text-white/70 hover:text-[#3B82F6] transition">
+        <span aria-hidden="true">←</span> Volver al panel
+      </a>
+      <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition">Salir</button>
+    </div>
+  </nav>
+
+  <main class="max-w-3xl mx-auto p-4 md:p-8 space-y-8">
+
+    <!-- CABECERA -->
+    <section class="bg-[#0D1526] border border-[#3B82F6]/20 p-6 rounded-2xl shadow-xl flex items-center gap-4">
+      <div id="perfil-avatar" class="w-16 h-16 rounded-full bg-[#3B82F6]/15 border border-[#3B82F6]/30 flex items-center justify-center text-2xl font-black text-[#3B82F6] font-display shrink-0">?</div>
+      <div class="min-w-0">
+        <h1 id="perfil-nombre" class="font-display text-2xl text-[#3B82F6] truncate">Cargando...</h1>
+        <p id="perfil-email" class="text-xs text-white/50 truncate">—</p>
+        <span id="perfil-plan" class="inline-block mt-1 text-[10px] font-bold bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20 px-2.5 py-0.5 rounded-full">Plan</span>
+      </div>
+    </section>
+
+    <!-- COACH ASIGNADO -->
+    <section id="perfil-coach-card" class="hidden bg-[#0D1526] border border-[#3B82F6]/20 p-5 rounded-2xl shadow-xl flex items-center gap-3">
+      <span class="text-2xl">🧑‍🏫</span>
+      <div>
+        <p class="text-[10px] font-bold text-white/40 uppercase tracking-wide">Tu entrenador asignado</p>
+        <p id="perfil-coach-nombre" class="text-sm font-bold text-white">—</p>
+      </div>
+    </section>
+
+    <!-- DATOS FÍSICOS (editable) -->
+    <section class="bg-[#0D1526] border border-[#3B82F6]/20 p-6 rounded-2xl shadow-xl space-y-4">
+      <h2 class="text-lg font-bold text-[#3B82F6]">Ficha física</h2>
+      <form id="form-perfil" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-white mb-1">Nombre completo</label>
+          <input type="text" id="pf-nombre" required class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6] transition">
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-white mb-1">Edad</label>
+            <input type="number" id="pf-edad" min="10" max="100" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#3B82F6]">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-white mb-1">Peso (kg)</label>
+            <input type="number" step="0.1" id="pf-peso" min="25" max="300" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#3B82F6]">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-white mb-1">Estatura (cm)</label>
+            <input type="number" id="pf-estatura" min="100" max="230" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#3B82F6]">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-white mb-1">Nivel de actividad</label>
+          <select id="pf-actividad" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#3B82F6]">
+            <option value="Sedentario">Sedentario (Poco o ningún ejercicio)</option>
+            <option value="Ligero">Ligero (1-3 días/semana)</option>
+            <option value="Moderado">Moderado (3-5 días/semana)</option>
+            <option value="Muy Activo">Muy Activo (6-7 días/semana)</option>
+          </select>
+        </div>
+        <p id="perfil-error" class="hidden text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg p-2.5"></p>
+        <button type="submit" id="btn-guardar-perfil" class="w-full bg-[#3B82F6] text-[#05070D] font-bold py-3 rounded-xl text-sm hover:bg-[#2563eb] hover:shadow-[0_8px_24px_-8px_rgba(59,130,246,0.5)] transition">Guardar Cambios</button>
+        <p id="perfil-guardado-msg" class="hidden text-xs text-green-400 text-center font-bold">✓ Perfil actualizado correctamente</p>
+      </form>
+    </section>
+
+    <!-- SEGURIDAD -->
+    <section class="bg-[#0D1526] border border-[#3B82F6]/20 p-6 rounded-2xl shadow-xl space-y-4">
+      <h2 class="text-lg font-bold text-[#3B82F6]">Seguridad</h2>
+      <form id="form-password" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-white mb-1">Nueva contraseña</label>
+          <input type="password" id="pf-password" minlength="6" placeholder="Mínimo 6 caracteres" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#3B82F6]">
+        </div>
+        <button type="submit" class="w-full bg-white/10 text-white font-bold py-2.5 rounded-xl text-xs hover:bg-white/20 transition">Actualizar Contraseña</button>
+      </form>
+    </section>
+
+    <p class="text-center text-[10px] text-white/30 pb-4">
+      ¿Dudas sobre tus datos? Revisa nuestros <a href="terminos-privacidad.html" class="underline hover:text-[#3B82F6]">términos y aviso de privacidad</a>.
+    </p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseClient = supabase.createClient('https://etdfskwtaargtrzisvmj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0ZGZza3d0YWFyZ3Ryemlzdm1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNjQ4NjEsImV4cCI6MjEwNDc0MDg2MX0.5UlqtJfVORgsZXNvO-Mx12YKeP_kb_BrxqI2nXgyjcs', {
+      auth: {
+        persistSession: true,     // guarda la sesión en este dispositivo
+        autoRefreshToken: true,   // la renueva sola en segundo plano
+        detectSessionInUrl: true  // necesario para los links de recuperación de contraseña
+      }
+    });
+
+    let currentUser = null;
+
+    async function initPerfil() {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (!user) { window.location.href = 'login.html'; return; }
+      currentUser = user;
+
+      const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', user.id).maybeSingle();
+      if (!profile) return;
+
+      document.getElementById('perfil-nombre').innerText = profile.nombre || 'Atleta';
+      document.getElementById('perfil-avatar').innerText = (profile.nombre || 'A').trim().charAt(0).toUpperCase();
+      document.getElementById('perfil-email').innerText = profile.email || user.email;
+      document.getElementById('perfil-plan').innerText = profile.plan || 'Plan Básico';
+
+      document.getElementById('pf-nombre').value = profile.nombre || '';
+      document.getElementById('pf-edad').value = profile.edad || '';
+      document.getElementById('pf-peso').value = profile.peso || '';
+      document.getElementById('pf-estatura').value = profile.estatura || '';
+      document.getElementById('pf-actividad').value = profile.nivel_actividad || 'Moderado';
+
+      if (profile.coach_id) {
+        const { data: coach } = await supabaseClient.from('profiles').select('nombre').eq('id', profile.coach_id).maybeSingle();
+        if (coach) {
+          document.getElementById('perfil-coach-nombre').innerText = coach.nombre;
+          document.getElementById('perfil-coach-card').classList.remove('hidden');
+        }
+      }
+    }
+
+    document.getElementById('form-perfil').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const errBox = document.getElementById('perfil-error');
+      errBox.classList.add('hidden');
+
+      const nombre = document.getElementById('pf-nombre').value.trim();
+      const edadVal = document.getElementById('pf-edad').value;
+      const pesoVal = document.getElementById('pf-peso').value;
+      const estaturaVal = document.getElementById('pf-estatura').value;
+
+      // --- Validaciones reales (los campos son opcionales, pero si se llenan deben tener sentido) ---
+      if (nombre.length < 3) {
+        errBox.innerText = 'Escribe tu nombre completo (mínimo 3 caracteres).';
+        errBox.classList.remove('hidden');
+        return;
+      }
+      const edad = edadVal ? parseInt(edadVal) : null;
+      if (edad !== null && (!Number.isFinite(edad) || edad < 10 || edad > 100)) {
+        errBox.innerText = 'La edad debe ser un número entre 10 y 100 años.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+      const peso = pesoVal ? parseFloat(pesoVal) : null;
+      if (peso !== null && (!Number.isFinite(peso) || peso < 25 || peso > 300)) {
+        errBox.innerText = 'El peso debe ser un número entre 25 y 300 kg.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+      const estatura = estaturaVal ? parseFloat(estaturaVal) : null;
+      if (estatura !== null && (!Number.isFinite(estatura) || estatura < 100 || estatura > 230)) {
+        errBox.innerText = 'La estatura debe ser un número entre 100 y 230 cm.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      const btn = document.getElementById('btn-guardar-perfil');
+      btn.disabled = true;
+      btn.innerText = 'Guardando...';
+
+      const { error } = await supabaseClient.from('profiles').update({
+        nombre: nombre,
+        edad: edad,
+        peso: peso,
+        estatura: estatura,
+        nivel_actividad: document.getElementById('pf-actividad').value
+      }).eq('id', currentUser.id);
+
+      btn.disabled = false;
+      btn.innerText = 'Guardar Cambios';
+
+      if (error) {
+        errBox.innerText = 'Error al guardar: ' + error.message;
+        errBox.classList.remove('hidden');
+        return;
+      }
+      const msg = document.getElementById('perfil-guardado-msg');
+      msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 2500);
+      initPerfil();
+    });
+
+    document.getElementById('form-password').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nueva = document.getElementById('pf-password').value;
+      if (!nueva || nueva.length < 6) return alert('La contraseña debe tener al menos 6 caracteres.');
+      if (!/[a-zA-Z]/.test(nueva) || !/[0-9]/.test(nueva)) {
+        return alert('Usa una contraseña más segura: combina letras y números.');
+      }
+
+      const { error } = await supabaseClient.auth.updateUser({ password: nueva });
+      if (error) {
+        alert('Error al actualizar la contraseña: ' + error.message);
+        return;
+      }
+      alert('Contraseña actualizada correctamente.');
+      document.getElementById('pf-password').value = '';
+    });
+
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    initPerfil();
+  </script>
+
+  <script>
+    // --- Kratero Fit: modo claro / oscuro (persistente en este dispositivo) ---
+    (function () {
+      const KEY = 'kf-theme';
+      const root = document.documentElement;
+      const saved = localStorage.getItem(KEY) || 'dark';
+      if (saved === 'light') root.setAttribute('data-theme', 'light');
+
+      function actualizarIcono() {
+        const btn = document.getElementById('kf-theme-toggle');
+        if (!btn) return;
+        btn.textContent = root.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        actualizarIcono();
+        const btn = document.getElementById('kf-theme-toggle');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const esClaro = root.getAttribute('data-theme') === 'light';
+            if (esClaro) { root.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
+            else { root.setAttribute('data-theme', 'light'); localStorage.setItem(KEY, 'light'); }
+            actualizarIcono();
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

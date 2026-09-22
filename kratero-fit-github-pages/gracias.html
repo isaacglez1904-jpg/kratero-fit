@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Cuenta creada! | Kratero Fit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #05070D;
+      background-attachment: fixed;
+    }
+    .font-display { font-family: 'Fraunces', serif; }
+  
+    /* --- Kratero Fit: modo claro / oscuro --- */
+    html { transition: filter .25s ease; }
+    html[data-theme="light"] {
+      filter: invert(1) hue-rotate(180deg);
+      background: #fff;
+    }
+    html[data-theme="light"] img,
+    html[data-theme="light"] svg,
+    html[data-theme="light"] video,
+    html[data-theme="light"] iframe {
+      filter: invert(1) hue-rotate(180deg);
+    }
+    #kf-theme-toggle {
+      position: fixed; z-index: 60; top: 14px; right: 14px;
+      width: 38px; height: 38px; border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.35);
+      color: #F5F7FA; font-size: 16px; cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+    #kf-theme-toggle:active { background: rgba(59,130,246,0.25); }
+  </style>
+</head>
+<body class="bg-[#05070D] text-[#F5F7FA] min-h-screen flex items-center justify-center p-4">
+  <button id="kf-theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar modo claro/oscuro">🌙</button>
+
+
+  <div class="bg-[#0D1526] border border-[#3B82F6]/20 p-8 rounded-3xl w-full max-w-md text-center space-y-5 shadow-2xl">
+    <div class="w-16 h-16 mx-auto rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/30 flex items-center justify-center text-3xl">
+      🎉
+    </div>
+    <div>
+      <h1 class="font-display text-2xl text-[#3B82F6]">¡Cuenta creada con éxito!</h1>
+      <p id="gracias-texto" class="text-sm text-white/60 mt-2">
+        Ya puedes iniciar sesión con tu correo y contraseña para acceder a tu panel de entrenamiento.
+      </p>
+    </div>
+
+    <div id="aviso-confirmacion" class="hidden bg-[#05070D] border border-[#3B82F6]/15 rounded-xl p-3 text-xs text-white/60">
+      📩 Si tu correo requiere confirmación, revisa tu bandeja de entrada (y la carpeta de spam) antes de iniciar sesión.
+    </div>
+
+    <a href="login.html" class="block w-full bg-[#3B82F6] text-[#05070D] font-bold text-sm py-3.5 rounded-xl hover:bg-[#2563eb] transition">Ir a Iniciar Sesión</a>
+    <a href="index.html" class="block text-xs text-white/40 hover:text-[#3B82F6] transition">Volver al inicio</a>
+    <p class="text-[10px] text-white/30"><a href="terminos-privacidad.html" class="hover:text-[#3B82F6] underline">Términos y aviso de privacidad</a></p>
+  </div>
+
+  <script>
+    // Si el registro quedó pendiente de confirmación por correo (no había sesión
+    // activa al momento del signUp), mostramos el aviso adicional.
+    if (new URLSearchParams(location.search).get('confirmar') === '1') {
+      document.getElementById('aviso-confirmacion').classList.remove('hidden');
+      document.getElementById('gracias-texto').innerText = 'Te enviamos un correo de confirmación. Confírmalo y después inicia sesión para acceder a tu panel.';
+    }
+  </script>
+
+  <script>
+    // --- Kratero Fit: modo claro / oscuro (persistente en este dispositivo) ---
+    (function () {
+      const KEY = 'kf-theme';
+      const root = document.documentElement;
+      const saved = localStorage.getItem(KEY) || 'dark';
+      if (saved === 'light') root.setAttribute('data-theme', 'light');
+
+      function actualizarIcono() {
+        const btn = document.getElementById('kf-theme-toggle');
+        if (!btn) return;
+        btn.textContent = root.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        actualizarIcono();
+        const btn = document.getElementById('kf-theme-toggle');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const esClaro = root.getAttribute('data-theme') === 'light';
+            if (esClaro) { root.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
+            else { root.setAttribute('data-theme', 'light'); localStorage.setItem(KEY, 'light'); }
+            actualizarIcono();
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

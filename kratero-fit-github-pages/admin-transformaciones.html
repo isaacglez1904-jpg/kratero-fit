@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transformaciones | Kratero Fit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #05070D;
+      background-attachment: fixed;
+    }
+    .font-display { font-family: 'Fraunces', serif; }
+    [class*="bg-[#0D1526]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #05070D; }
+    ::-webkit-scrollbar-thumb { background: #24345c; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3B82F6; }
+
+    /* --- Kratero Fit: tab bar inferior --- */
+    .kf-tabbar-scroll::-webkit-scrollbar { display: none; }
+    .kf-tabbar-scroll { -ms-overflow-style: none; scrollbar-width: none; scroll-behavior: smooth; }
+    .kf-tab {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; min-width: 60px; padding: 6px 6px; border-radius: 12px;
+      color: rgba(245,247,250,.45); font-size: 9px; font-weight: 800; letter-spacing: .01em;
+      white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
+    }
+    .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
+    .kf-tab.active { color: #3B82F6; background: rgba(59,130,246,.10); }
+    .kf-tab:active { background: rgba(59,130,246,.16); }
+    /* La tab bar es visible en TODOS los tamaños (móvil y escritorio) */
+    #kf-tabbar { padding-bottom: env(safe-area-inset-bottom); }
+    body.has-kf-tabbar { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+    @media (min-width: 768px) {
+      .kf-tab { min-width: 76px; font-size: 10px; padding: 8px 10px; }
+      .kf-tab .kf-tab-icon { font-size: 20px; }
+    }
+  
+    /* --- Kratero Fit: modo claro / oscuro --- */
+    html { transition: filter .25s ease; }
+    html[data-theme="light"] {
+      filter: invert(1) hue-rotate(180deg);
+      background: #fff;
+    }
+    html[data-theme="light"] img,
+    html[data-theme="light"] svg,
+    html[data-theme="light"] video,
+    html[data-theme="light"] iframe {
+      filter: invert(1) hue-rotate(180deg);
+    }
+    #kf-theme-toggle {
+      position: fixed; z-index: 60; top: 14px; right: 14px;
+      width: 38px; height: 38px; border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.35);
+      color: #F5F7FA; font-size: 16px; cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+    #kf-theme-toggle:active { background: rgba(59,130,246,0.25); }
+  </style>
+</head>
+<body class="bg-[#05070D] text-[#F5F7FA] min-h-screen has-kf-tabbar">
+  <button id="kf-theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar modo claro/oscuro">🌙</button>
+
+
+  <nav class="bg-[#0D1526] border-b border-[#3B82F6]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+    <div class="flex items-center gap-2.5">
+      <img src="logo.png" alt="Kratero Fit" class="w-8 h-8 object-contain">
+      <div class="leading-none">
+        <span class="font-display text-base text-[#3B82F6]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
+        <span class="block text-[9px] font-bold tracking-wide text-white/40 mt-0.5">PANEL COACH / ADMIN</span>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-4 text-xs font-bold items-center">
+      <a href="admin-dashboard.html" class="hover:text-[#3B82F6]">📊 Resumen</a>
+      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#3B82F6]">👥 Coaches</a>
+      <a href="admin-monitoreo.html" class="hover:text-[#3B82F6]">📈 Monitoreo</a>
+      <a href="admin-rutinas.html" class="hover:text-[#3B82F6]">🏋️ Rutinas</a>
+      <a href="admin-nutricion.html" class="hover:text-[#3B82F6]">🥗 Nutrición</a>
+      <a href="admin-transformaciones.html" class="text-[#3B82F6] underline">✨ Cambios</a>
+      <a href="admin-anuncios.html" class="hover:text-[#3B82F6]">📢 Anuncios</a>
+      <a href="admin-mensajes.html" class="hover:text-[#3B82F6]">💬 Mensajes</a>
+      <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">Salir</button>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto p-6 space-y-8">
+    <div>
+      <h1 class="text-2xl font-bold text-[#3B82F6]">✨ Transformaciones</h1>
+      <p class="text-xs text-white/50 mt-1">Estas fotos de antes y después aparecen en la página de inicio pública. Solo se muestran las marcadas como publicadas.</p>
+    </div>
+
+    <!-- FORMULARIO -->
+    <div class="bg-[#0D1526] p-6 rounded-3xl border border-[#3B82F6]/20 space-y-4">
+      <h2 class="text-sm font-bold text-white">Agregar transformación</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-[#3B82F6] mb-1.5">Foto ANTES</label>
+          <input type="file" id="tr-file-antes" accept="image/*" class="w-full text-[11px] text-white/60 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-[#3B82F6] file:text-[#05070D] hover:file:bg-[#2563eb] file:cursor-pointer">
+          <img id="tr-prev-antes" class="hidden mt-2 w-full h-40 object-cover rounded-xl border border-[#3B82F6]/20">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#3B82F6] mb-1.5">Foto DESPUÉS</label>
+          <input type="file" id="tr-file-despues" accept="image/*" class="w-full text-[11px] text-white/60 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-[#3B82F6] file:text-[#05070D] hover:file:bg-[#2563eb] file:cursor-pointer">
+          <img id="tr-prev-despues" class="hidden mt-2 w-full h-40 object-cover rounded-xl border border-[#3B82F6]/20">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold text-[#3B82F6] mb-1">Nombre o alias</label>
+          <input type="text" id="tr-nombre" placeholder="Ej. Carlos M." class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#3B82F6] mb-1">Duración (meses)</label>
+          <input type="number" id="tr-meses" min="1" max="120" placeholder="6" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold text-[#3B82F6] mb-1">Peso inicial (kg)</label>
+          <input type="number" step="0.1" id="tr-peso-ini" placeholder="95" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#3B82F6] mb-1">Peso final (kg)</label>
+          <input type="number" step="0.1" id="tr-peso-fin" placeholder="78" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-[#3B82F6] mb-1">Testimonio (opcional)</label>
+        <textarea id="tr-testimonio" rows="2" placeholder="Ej. Bajé 17 kg sin dejar de comer lo que me gusta." class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]"></textarea>
+      </div>
+
+      <label class="flex items-center gap-2 text-xs text-white/70">
+        <input type="checkbox" id="tr-publicado" checked class="accent-[#3B82F6] rounded">
+        Publicar de inmediato en la página de inicio
+      </label>
+
+      <p class="text-[10px] text-white/40">⚠️ Asegúrate de tener el permiso de la persona antes de publicar sus fotos.</p>
+
+      <button id="btn-guardar-tr" class="w-full bg-[#3B82F6] text-[#05070D] font-bold text-xs py-3 rounded-xl hover:bg-[#2563eb] transition">Guardar Transformación</button>
+      <p id="tr-msg" class="hidden text-xs text-center font-bold"></p>
+    </div>
+
+    <!-- LISTADO -->
+    <div class="space-y-3">
+      <h2 class="text-sm font-bold text-white">Transformaciones registradas</h2>
+      <div id="tr-lista" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <p class="text-xs text-white/40">Cargando...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseClient = supabase.createClient('https://etdfskwtaargtrzisvmj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0ZGZza3d0YWFyZ3Ryemlzdm1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNjQ4NjEsImV4cCI6MjEwNDc0MDg2MX0.5UlqtJfVORgsZXNvO-Mx12YKeP_kb_BrxqI2nXgyjcs', {
+      auth: {
+        persistSession: true,     // guarda la sesión en este dispositivo
+        autoRefreshToken: true,   // la renueva sola en segundo plano
+        detectSessionInUrl: true  // necesario para los links de recuperación de contraseña
+      }
+    });
+
+    const BUCKET = 'transformaciones';
+
+    // Solo el admin dueño administra la portada pública.
+    async function verificarAdminDueno() {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (!user) { window.location.href = 'login.html'; return false; }
+      const { data: profile } = await supabaseClient.from('profiles').select('rol').eq('id', user.id).single();
+      if (!profile || profile.rol !== 'admin') { window.location.href = 'dashboard.html'; return false; }
+      document.getElementById('nav-coaches-link').classList.remove('hidden');
+      document.getElementById('kf-tab-coaches')?.classList.remove('hidden');
+      return true;
+    }
+
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    // Vista previa local antes de subir
+    function conectarPreview(inputId, imgId) {
+      document.getElementById(inputId).addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const img = document.getElementById(imgId);
+        if (!file) { img.classList.add('hidden'); return; }
+        img.src = URL.createObjectURL(file);
+        img.classList.remove('hidden');
+      });
+    }
+    conectarPreview('tr-file-antes', 'tr-prev-antes');
+    conectarPreview('tr-file-despues', 'tr-prev-despues');
+
+    function mostrarMsg(texto, ok) {
+      const el = document.getElementById('tr-msg');
+      el.innerText = texto;
+      el.className = `text-xs text-center font-bold ${ok ? 'text-green-400' : 'text-red-400'}`;
+      el.classList.remove('hidden');
+      if (ok) setTimeout(() => el.classList.add('hidden'), 3000);
+    }
+
+    async function subirFoto(file, etiqueta) {
+      if (!file) return null;
+      const ext = file.name.split('.').pop().toLowerCase();
+      const ruta = `${etiqueta}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+      const { error } = await supabaseClient.storage.from(BUCKET).upload(ruta, file, { cacheControl: '3600', upsert: false });
+      if (error) throw new Error(`No se pudo subir la foto "${etiqueta}": ${error.message}`);
+      const { data } = supabaseClient.storage.from(BUCKET).getPublicUrl(ruta);
+      return data.publicUrl;
+    }
+
+    document.getElementById('btn-guardar-tr').addEventListener('click', async () => {
+      const nombre = document.getElementById('tr-nombre').value.trim();
+      if (!nombre) return mostrarMsg('Escribe al menos el nombre o alias.', false);
+
+      const btn = document.getElementById('btn-guardar-tr');
+      btn.disabled = true;
+      btn.innerText = 'Subiendo fotos...';
+
+      try {
+        const fAntes = document.getElementById('tr-file-antes').files[0];
+        const fDespues = document.getElementById('tr-file-despues').files[0];
+
+        const [urlAntes, urlDespues] = await Promise.all([
+          subirFoto(fAntes, 'antes'),
+          subirFoto(fDespues, 'despues')
+        ]);
+
+        btn.innerText = 'Guardando...';
+
+        const { error } = await supabaseClient.from('transformaciones').insert([{
+          nombre,
+          foto_antes: urlAntes,
+          foto_despues: urlDespues,
+          peso_inicial: parseFloat(document.getElementById('tr-peso-ini').value) || null,
+          peso_final: parseFloat(document.getElementById('tr-peso-fin').value) || null,
+          meses: parseInt(document.getElementById('tr-meses').value) || null,
+          testimonio: document.getElementById('tr-testimonio').value.trim() || null,
+          publicado: document.getElementById('tr-publicado').checked
+        }]);
+
+        if (error) throw new Error(error.message);
+
+        mostrarMsg('✓ Transformación guardada', true);
+        ['tr-nombre','tr-meses','tr-peso-ini','tr-peso-fin','tr-testimonio','tr-file-antes','tr-file-despues'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('tr-prev-antes').classList.add('hidden');
+        document.getElementById('tr-prev-despues').classList.add('hidden');
+        cargarTransformaciones();
+      } catch (e) {
+        mostrarMsg(e.message, false);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Guardar Transformación';
+      }
+    });
+
+    async function cargarTransformaciones() {
+      const cont = document.getElementById('tr-lista');
+      const { data, error } = await supabaseClient
+        .from('transformaciones')
+        .select('*')
+        .order('orden', { ascending: true })
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        cont.innerHTML = `<p class="text-xs text-red-400 col-span-full">No se pudieron cargar: ${error.message}<br>¿Ya corriste el bloque "PARTE D" del SQL en Supabase?</p>`;
+        return;
+      }
+      if (!data || data.length === 0) {
+        cont.innerHTML = `<p class="text-xs text-white/40 col-span-full">Aún no hay transformaciones registradas.</p>`;
+        return;
+      }
+
+      cont.innerHTML = data.map(t => `
+        <div class="bg-[#0D1526] border border-[#3B82F6]/15 rounded-2xl overflow-hidden">
+          <div class="grid grid-cols-2 gap-0.5 bg-[#3B82F6]/10">
+            <img src="${t.foto_antes || ''}" class="w-full h-32 object-cover bg-[#05070D]" alt="Antes">
+            <img src="${t.foto_despues || ''}" class="w-full h-32 object-cover bg-[#05070D]" alt="Después">
+          </div>
+          <div class="p-3 space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-sm font-bold text-white">${t.nombre}</p>
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded-full ${t.publicado ? 'bg-green-500/10 text-green-400 border border-green-500/30' : 'bg-white/10 text-white/50'}">${t.publicado ? 'PUBLICADO' : 'OCULTO'}</span>
+            </div>
+            <p class="text-[10px] text-white/50">
+              ${t.peso_inicial && t.peso_final ? `${t.peso_inicial} kg → ${t.peso_final} kg · ` : ''}${t.meses ? `${t.meses} meses` : ''}
+            </p>
+            <div class="flex gap-2 pt-1">
+              <button data-toggle="${t.id}" data-estado="${t.publicado}" class="flex-1 text-[10px] font-bold bg-white/10 text-white px-2 py-1.5 rounded-lg hover:bg-white/20 transition">${t.publicado ? 'Ocultar' : 'Publicar'}</button>
+              <button data-borrar="${t.id}" class="text-[10px] font-bold text-red-400 border border-red-500/30 bg-red-500/10 px-2.5 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      cont.querySelectorAll('[data-toggle]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const nuevo = btn.dataset.estado !== 'true';
+          const { error } = await supabaseClient.from('transformaciones').update({ publicado: nuevo }).eq('id', btn.dataset.toggle);
+          if (error) return alert('Error: ' + error.message);
+          cargarTransformaciones();
+        });
+      });
+
+      cont.querySelectorAll('[data-borrar]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('¿Eliminar esta transformación?')) return;
+          const { error } = await supabaseClient.from('transformaciones').delete().eq('id', btn.dataset.borrar);
+          if (error) return alert('Error: ' + error.message);
+          cargarTransformaciones();
+        });
+      });
+    }
+
+    (async () => { if (await verificarAdminDueno()) cargarTransformaciones(); })();
+  </script>
+
+  <!-- TAB BAR INFERIOR -->
+  <nav id="kf-tabbar" class="fixed bottom-0 inset-x-0 z-50 bg-[#0D1526]/95 backdrop-blur border-t border-[#3B82F6]/15">
+    <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
+      <a href="admin-dashboard.html" data-page="admin-dashboard.html" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Resumen</span></a>
+      <a href="admin-coaches.html" data-page="admin-coaches.html" id="kf-tab-coaches" class="kf-tab hidden"><span class="kf-tab-icon">👥</span><span>Coaches</span></a>
+      <a href="admin-monitoreo.html" data-page="admin-monitoreo.html" class="kf-tab"><span class="kf-tab-icon">📈</span><span>Monitoreo</span></a>
+      <a href="admin-rutinas.html" data-page="admin-rutinas.html" class="kf-tab"><span class="kf-tab-icon">🏋️</span><span>Rutinas</span></a>
+      <a href="admin-nutricion.html" data-page="admin-nutricion.html" class="kf-tab"><span class="kf-tab-icon">🥗</span><span>Nutrición</span></a>
+      <a href="admin-transformaciones.html" data-page="admin-transformaciones.html" class="kf-tab"><span class="kf-tab-icon">✨</span><span>Cambios</span></a>
+      <a href="admin-anuncios.html" data-page="admin-anuncios.html" class="kf-tab"><span class="kf-tab-icon">📢</span><span>Anuncios</span></a>
+      <a href="admin-mensajes.html" data-page="admin-mensajes.html" class="kf-tab"><span class="kf-tab-icon">💬</span><span>Mensajes</span></a>
+    </div>
+  </nav>
+  <script>
+    (function() {
+      const actual = location.pathname.split('/').pop() || 'admin-dashboard.html';
+      document.querySelectorAll('#kf-tabbar .kf-tab').forEach(a => {
+        if (a.getAttribute('data-page') === actual) a.classList.add('active');
+      });
+    })();
+  </script>
+
+  <script>
+    // --- Kratero Fit: modo claro / oscuro (persistente en este dispositivo) ---
+    (function () {
+      const KEY = 'kf-theme';
+      const root = document.documentElement;
+      const saved = localStorage.getItem(KEY) || 'dark';
+      if (saved === 'light') root.setAttribute('data-theme', 'light');
+
+      function actualizarIcono() {
+        const btn = document.getElementById('kf-theme-toggle');
+        if (!btn) return;
+        btn.textContent = root.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        actualizarIcono();
+        const btn = document.getElementById('kf-theme-toggle');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const esClaro = root.getAttribute('data-theme') === 'light';
+            if (esClaro) { root.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
+            else { root.setAttribute('data-theme', 'light'); localStorage.setItem(KEY, 'light'); }
+            actualizarIcono();
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

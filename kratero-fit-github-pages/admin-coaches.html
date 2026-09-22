@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Coaches | Kratero Fit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #05070D;
+      background-attachment: fixed;
+    }
+    .font-display { font-family: 'Fraunces', serif; }
+    [class*="bg-[#0D1526]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #05070D; }
+    ::-webkit-scrollbar-thumb { background: #24345c; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3B82F6; }
+  
+    /* --- Kratero Fit: tab bar inferior (móvil) --- */
+    .kf-tabbar-scroll::-webkit-scrollbar { display: none; }
+    .kf-tabbar-scroll { -ms-overflow-style: none; scrollbar-width: none; scroll-behavior: smooth; }
+    .kf-tab {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; min-width: 60px; padding: 6px 6px; border-radius: 12px;
+      color: rgba(245,247,250,.45); font-size: 9px; font-weight: 800; letter-spacing: .01em;
+      white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
+    }
+    .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
+    .kf-tab.active { color: #3B82F6; background: rgba(59,130,246,.10); }
+    .kf-tab:active { background: rgba(59,130,246,.16); }
+    /* La tab bar es visible en TODOS los tamaños (móvil y escritorio) */
+    #kf-tabbar { padding-bottom: env(safe-area-inset-bottom); }
+    body.has-kf-tabbar { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+    @media (min-width: 768px) {
+      .kf-tab { min-width: 76px; font-size: 10px; padding: 8px 10px; }
+      .kf-tab .kf-tab-icon { font-size: 20px; }
+    }
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 84px; }
+  
+    /* --- Kratero Fit: modo claro / oscuro --- */
+    html { transition: filter .25s ease; }
+    html[data-theme="light"] {
+      filter: invert(1) hue-rotate(180deg);
+      background: #fff;
+    }
+    html[data-theme="light"] img,
+    html[data-theme="light"] svg,
+    html[data-theme="light"] video,
+    html[data-theme="light"] iframe {
+      filter: invert(1) hue-rotate(180deg);
+    }
+    #kf-theme-toggle {
+      position: fixed; z-index: 60; top: 14px; right: 14px;
+      width: 38px; height: 38px; border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.35);
+      color: #F5F7FA; font-size: 16px; cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+    #kf-theme-toggle:active { background: rgba(59,130,246,0.25); }
+  </style>
+</head>
+<body class="bg-[#05070D] text-[#F5F7FA] min-h-screen has-kf-tabbar">
+  <button id="kf-theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar modo claro/oscuro">🌙</button>
+
+
+  <nav class="bg-[#0D1526] border-b border-[#3B82F6]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+    <div class="flex items-center gap-2.5">
+      <img src="logo.png" alt="Kratero Fit" class="w-8 h-8 object-contain">
+      <div class="leading-none">
+        <span class="font-display text-base text-[#3B82F6]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
+        <span class="block text-[9px] font-bold tracking-wide text-white/40 mt-0.5">PANEL ADMIN (DUEÑO)</span>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-4 text-xs font-bold">
+      <a href="admin-dashboard.html" class="hover:text-[#3B82F6]">📊 Resumen</a>
+      <a href="admin-coaches.html" class="text-[#3B82F6] underline">👥 Coaches</a>
+      <a href="admin-monitoreo.html" class="hover:text-[#3B82F6]">📈 Monitoreo</a>
+      <a href="admin-rutinas.html" class="hover:text-[#3B82F6]">🏋️ Rutinas</a>
+      <a href="admin-nutricion.html" class="hover:text-[#3B82F6]">🥗 Nutrición</a>
+      <a href="admin-transformaciones.html" class="hover:text-[#3B82F6]">✨ Cambios</a>
+      <a href="admin-anuncios.html" class="hover:text-[#3B82F6]">📢 Anuncios</a>
+      <a href="admin-mensajes.html" class="hover:text-[#3B82F6]">💬 Mensajes</a>
+      <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">Salir</button>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto p-6 space-y-8">
+    <div>
+      <h1 class="text-2xl font-bold text-[#3B82F6]">👥 Gestión de Coaches</h1>
+      <p class="text-xs text-white/50 mt-1">Esta página solo es visible para tu cuenta de administrador dueño.</p>
+    </div>
+
+    <!-- NOTA IMPORTANTE SOBRE CREAR CUENTAS NUEVAS -->
+    <div class="bg-yellow-500/5 border border-yellow-500/30 text-yellow-200 text-xs p-4 rounded-2xl leading-relaxed">
+      <strong>Cómo dar de alta a un coach nuevo:</strong> por seguridad, un sitio con solo la "anon key" de Supabase (como este) no puede crear cuentas de otras personas directamente — eso requeriría exponer una llave maestra en el navegador, lo cual es riesgoso. El flujo correcto es: (1) la persona se registra normalmente en <code>registro.html</code> como cualquier alumno, (2) aquí abajo la "asciendes" a coach con un clic. Si más adelante quieres que esto sea un solo paso (tú capturas su correo y se crea todo automático), se puede lograr con una función de servidor (Supabase Edge Function) — puedo construirla cuando quieras.
+    </div>
+
+    <!-- LISTA DE COACHES ACTUALES -->
+    <div class="bg-[#0D1526] p-6 rounded-3xl border border-[#3B82F6]/20 space-y-4">
+      <h2 class="text-lg font-bold text-white">Coaches Activos</h2>
+      <div id="lista-coaches" class="space-y-3">
+        <p class="text-xs text-white/40">Cargando coaches...</p>
+      </div>
+    </div>
+
+    <!-- ASCENDER USUARIO A COACH -->
+    <div class="bg-[#0D1526] p-6 rounded-3xl border border-[#3B82F6]/20 space-y-4">
+      <h2 class="text-lg font-bold text-white">Convertir un Usuario en Coach</h2>
+      <div class="flex flex-col md:flex-row gap-3">
+        <select id="select-promover" class="flex-1 bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none"></select>
+        <button id="btn-promover" class="bg-[#3B82F6] text-[#05070D] font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#2563eb] transition">Convertir en Coach</button>
+      </div>
+    </div>
+
+    <!-- REASIGNAR ALUMNOS -->
+    <div class="bg-[#0D1526] p-6 rounded-3xl border border-[#3B82F6]/20 space-y-4">
+      <h2 class="text-lg font-bold text-white">Alumnos y su Coach Asignado</h2>
+      <div id="lista-alumnos" class="space-y-3">
+        <p class="text-xs text-white/40">Cargando alumnos...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseClient = supabase.createClient('https://etdfskwtaargtrzisvmj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0ZGZza3d0YWFyZ3Ryemlzdm1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNjQ4NjEsImV4cCI6MjEwNDc0MDg2MX0.5UlqtJfVORgsZXNvO-Mx12YKeP_kb_BrxqI2nXgyjcs', {
+      auth: {
+        persistSession: true,     // guarda la sesión en este dispositivo
+        autoRefreshToken: true,   // la renueva sola en segundo plano
+        detectSessionInUrl: true  // necesario para los links de recuperación de contraseña
+      }
+    });
+
+    // Esta página es EXCLUSIVA del admin dueño (no de coaches).
+    async function verificarAdminDueno() {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (!user) { window.location.href = 'login.html'; return false; }
+      const { data: profile } = await supabaseClient.from('profiles').select('rol').eq('id', user.id).single();
+      if (!profile || profile.rol !== 'admin') { window.location.href = 'dashboard.html'; return false; }
+      document.getElementById('kf-tab-coaches')?.classList.remove('hidden');
+      return true;
+    }
+
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    async function cargarCoaches() {
+      const { data: coaches } = await supabaseClient.from('profiles').select('*').eq('rol', 'coach');
+      const { data: alumnos } = await supabaseClient.from('profiles').select('id, coach_id').eq('rol', 'usuario');
+
+      const cont = document.getElementById('lista-coaches');
+      if (!coaches || coaches.length === 0) {
+        cont.innerHTML = '<p class="text-xs text-white/40">Aún no tienes coaches dados de alta.</p>';
+      } else {
+        cont.innerHTML = coaches.map(c => {
+          const numAlumnos = (alumnos || []).filter(a => a.coach_id === c.id).length;
+          return `
+            <div class="bg-[#05070D] p-4 rounded-2xl border border-[#3B82F6]/10 flex justify-between items-center">
+              <div>
+                <p class="text-sm font-bold text-[#3B82F6]">${c.nombre || '(sin nombre)'}</p>
+                <p class="text-xs text-white/60">${c.email}</p>
+              </div>
+              <span class="text-xs bg-[#3B82F6]/10 text-[#3B82F6] px-3 py-1 rounded-full font-bold">${numAlumnos} alumno${numAlumnos === 1 ? '' : 's'}</span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      return coaches || [];
+    }
+
+    async function cargarSelectPromover() {
+      const { data: usuarios } = await supabaseClient.from('profiles').select('id, nombre, email').eq('rol', 'usuario');
+      const sel = document.getElementById('select-promover');
+      if (!usuarios || usuarios.length === 0) {
+        sel.innerHTML = '<option value="">No hay usuarios disponibles</option>';
+        return;
+      }
+      sel.innerHTML = usuarios.map(u => `<option value="${u.id}">${u.nombre} (${u.email})</option>`).join('');
+    }
+
+    document.getElementById('btn-promover').addEventListener('click', async () => {
+      const id = document.getElementById('select-promover').value;
+      if (!id) return;
+      if (!confirm('¿Convertir a este usuario en coach? Podrá ver y gestionar a los alumnos que le asignes.')) return;
+
+      const { error } = await supabaseClient.from('profiles').update({ rol: 'coach', coach_id: null }).eq('id', id);
+      if (error) { alert('Error: ' + error.message); return; }
+      alert('¡Listo! Ahora es coach.');
+      await cargarTodo();
+    });
+
+    async function cargarAlumnos(coaches) {
+      const { data: alumnos } = await supabaseClient.from('profiles').select('*').eq('rol', 'usuario').order('nombre');
+      const cont = document.getElementById('lista-alumnos');
+
+      if (!alumnos || alumnos.length === 0) {
+        cont.innerHTML = '<p class="text-xs text-white/40">No hay alumnos registrados.</p>';
+        return;
+      }
+
+      const opcionesCoach = ['<option value="">Sin asignar</option>']
+        .concat(coaches.map(c => `<option value="${c.id}">${c.nombre}</option>`)).join('');
+
+      cont.innerHTML = alumnos.map(a => `
+        <div class="bg-[#05070D] p-3 rounded-2xl border border-[#3B82F6]/10 flex flex-col md:flex-row md:items-center justify-between gap-2">
+          <div>
+            <p class="text-sm font-bold text-white">${a.nombre}</p>
+            <p class="text-xs text-white/50">${a.email}</p>
+          </div>
+          <div class="flex gap-2">
+            <select data-alumno="${a.id}" class="bg-[#0D1526] border border-[#3B82F6]/30 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none">
+              ${opcionesCoach}
+            </select>
+            <button data-guardar-alumno="${a.id}" class="text-xs bg-[#3B82F6] text-[#05070D] font-bold px-3 py-1.5 rounded-lg hover:bg-[#2563eb] transition">Guardar</button>
+          </div>
+        </div>
+      `).join('');
+
+      // Preseleccionar el coach actual de cada alumno
+      alumnos.forEach(a => {
+        const sel = cont.querySelector(`select[data-alumno="${a.id}"]`);
+        if (sel && a.coach_id) sel.value = a.coach_id;
+      });
+
+      cont.querySelectorAll('[data-guardar-alumno]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.getAttribute('data-guardar-alumno');
+          const sel = cont.querySelector(`select[data-alumno="${id}"]`);
+          const coachId = sel.value || null;
+
+          btn.disabled = true; btn.innerText = '...';
+          const { error } = await supabaseClient.from('profiles').update({ coach_id: coachId }).eq('id', id);
+          btn.disabled = false; btn.innerText = 'Guardar';
+
+          if (error) { alert('Error: ' + error.message); return; }
+          cargarCoaches(); // refresca contador de alumnos por coach
+        });
+      });
+    }
+
+    async function cargarTodo() {
+      const coaches = await cargarCoaches();
+      await cargarSelectPromover();
+      await cargarAlumnos(coaches);
+    }
+
+    (async () => { if (await verificarAdminDueno()) cargarTodo(); })();
+  </script>
+
+  <!-- TAB BAR INFERIOR (móvil) -->
+  <nav id="kf-tabbar" class="fixed bottom-0 inset-x-0 z-50 bg-[#0D1526]/95 backdrop-blur border-t border-[#3B82F6]/15">
+    <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
+          <a href="admin-dashboard.html" data-page="admin-dashboard.html" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Resumen</span></a>
+          <a href="admin-coaches.html" data-page="admin-coaches.html" id="kf-tab-coaches" class="kf-tab hidden"><span class="kf-tab-icon">👥</span><span>Coaches</span></a>
+          <a href="admin-monitoreo.html" data-page="admin-monitoreo.html" class="kf-tab"><span class="kf-tab-icon">📈</span><span>Monitoreo</span></a>
+          <a href="admin-rutinas.html" data-page="admin-rutinas.html" class="kf-tab"><span class="kf-tab-icon">🏋️</span><span>Rutinas</span></a>
+          <a href="admin-nutricion.html" data-page="admin-nutricion.html" class="kf-tab"><span class="kf-tab-icon">🥗</span><span>Nutrición</span></a>
+          <a href="admin-transformaciones.html" data-page="admin-transformaciones.html" class="kf-tab"><span class="kf-tab-icon">✨</span><span>Cambios</span></a>
+          <a href="admin-anuncios.html" data-page="admin-anuncios.html" class="kf-tab"><span class="kf-tab-icon">📢</span><span>Anuncios</span></a>
+          <a href="admin-mensajes.html" data-page="admin-mensajes.html" class="kf-tab"><span class="kf-tab-icon">💬</span><span>Mensajes</span></a>
+    </div>
+  </nav>
+  <script>
+    // Resalta el tab activo según el archivo actual
+    (function() {
+      const actual = location.pathname.split('/').pop() || 'admin-dashboard.html';
+      document.querySelectorAll('#kf-tabbar .kf-tab').forEach(a => {
+        if (a.getAttribute('data-page') === actual) a.classList.add('active');
+      });
+    })();
+  </script>
+
+  <script>
+    // --- Kratero Fit: modo claro / oscuro (persistente en este dispositivo) ---
+    (function () {
+      const KEY = 'kf-theme';
+      const root = document.documentElement;
+      const saved = localStorage.getItem(KEY) || 'dark';
+      if (saved === 'light') root.setAttribute('data-theme', 'light');
+
+      function actualizarIcono() {
+        const btn = document.getElementById('kf-theme-toggle');
+        if (!btn) return;
+        btn.textContent = root.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        actualizarIcono();
+        const btn = document.getElementById('kf-theme-toggle');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const esClaro = root.getAttribute('data-theme') === 'light';
+            if (esClaro) { root.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
+            else { root.setAttribute('data-theme', 'light'); localStorage.setItem(KEY, 'light'); }
+            actualizarIcono();
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

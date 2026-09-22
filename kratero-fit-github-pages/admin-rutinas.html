@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rutinas | Kratero Fit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #05070D;
+      background-attachment: fixed;
+    }
+    .font-display { font-family: 'Fraunces', serif; }
+  
+    /* --- Kratero Fit: tab bar inferior (móvil) --- */
+    .kf-tabbar-scroll::-webkit-scrollbar { display: none; }
+    .kf-tabbar-scroll { -ms-overflow-style: none; scrollbar-width: none; scroll-behavior: smooth; }
+    .kf-tab {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; min-width: 60px; padding: 6px 6px; border-radius: 12px;
+      color: rgba(245,247,250,.45); font-size: 9px; font-weight: 800; letter-spacing: .01em;
+      white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
+    }
+    .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
+    .kf-tab.active { color: #3B82F6; background: rgba(59,130,246,.10); }
+    .kf-tab:active { background: rgba(59,130,246,.16); }
+    /* La tab bar es visible en TODOS los tamaños (móvil y escritorio) */
+    #kf-tabbar { padding-bottom: env(safe-area-inset-bottom); }
+    body.has-kf-tabbar { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+    @media (min-width: 768px) {
+      .kf-tab { min-width: 76px; font-size: 10px; padding: 8px 10px; }
+      .kf-tab .kf-tab-icon { font-size: 20px; }
+    }
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 84px; }
+  
+    /* --- Kratero Fit: modo claro / oscuro --- */
+    html { transition: filter .25s ease; }
+    html[data-theme="light"] {
+      filter: invert(1) hue-rotate(180deg);
+      background: #fff;
+    }
+    html[data-theme="light"] img,
+    html[data-theme="light"] svg,
+    html[data-theme="light"] video,
+    html[data-theme="light"] iframe {
+      filter: invert(1) hue-rotate(180deg);
+    }
+    #kf-theme-toggle {
+      position: fixed; z-index: 60; top: 14px; right: 14px;
+      width: 38px; height: 38px; border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.35);
+      color: #F5F7FA; font-size: 16px; cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+    #kf-theme-toggle:active { background: rgba(59,130,246,0.25); }
+  </style>
+</head>
+<body class="bg-[#05070D] text-[#F5F7FA] min-h-screen has-kf-tabbar">
+  <button id="kf-theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar modo claro/oscuro">🌙</button>
+
+
+  <nav class="bg-[#0D1526] border-b border-[#3B82F6]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+    <div class="flex items-center gap-2.5">
+      <img src="logo.png" alt="Kratero Fit" class="w-8 h-8 object-contain">
+      <div class="leading-none">
+        <span class="font-display text-base text-[#3B82F6]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
+        <span class="block text-[9px] font-bold tracking-wide text-white/40 mt-0.5">PANEL COACH / ADMIN</span>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-4 text-xs font-bold">
+      <a href="admin-dashboard.html" class="hover:text-[#3B82F6]">📊 Resumen</a>
+      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#3B82F6]">👥 Coaches</a>
+      <a href="admin-monitoreo.html" class="hover:text-[#3B82F6]">📈 Monitoreo</a>
+      <a href="admin-rutinas.html" class="text-[#3B82F6] underline">🏋️ Rutinas</a>
+      <a href="admin-nutricion.html" class="hover:text-[#3B82F6]">🥗 Nutrición</a>
+      <a href="admin-transformaciones.html" class="hover:text-[#3B82F6]">✨ Cambios</a>
+      <a href="admin-anuncios.html" class="hover:text-[#3B82F6]">📢 Anuncios</a>
+      <a href="admin-mensajes.html" class="hover:text-[#3B82F6]">💬 Mensajes</a>
+      <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">Salir</button>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto p-6 space-y-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-[#3B82F6]">Gestión de Rutinas</h1>
+        <p class="text-xs text-white/50">Asigna y diseña programas de entrenamiento personalizados.</p>
+      </div>
+
+      <div class="w-full md:w-72">
+        <label class="block text-xs text-white/60 mb-1 font-semibold">Seleccionar Alumno:</label>
+        <select id="select-alumno" class="w-full bg-[#0D1526] border border-[#3B82F6]/30 text-xs rounded-xl p-3 text-white focus:outline-none focus:border-[#3B82F6]">
+          <option value="">Cargando alumnos...</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="panel-rutinas" class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
+      <!-- Rutinas Existentes del Alumno -->
+      <div class="lg:col-span-1 bg-[#0D1526] p-6 rounded-3xl border border-[#3B82F6]/20 space-y-4">
+        <h2 class="text-lg font-bold text-white">Rutinas Asignadas</h2>
+        <div id="lista-rutinas" class="space-y-3">
+          <p class="text-xs text-white/40">Sin rutinas cargadas.</p>
+        </div>
+      </div>
+
+      <!-- Formulario para Crear / Asignar Nueva Rutina -->
+      <div class="lg:col-span-2 bg-[#0D1526] p-6 rounded-3xl border border-[#3B82F6]/20 space-y-5">
+        <h2 class="text-lg font-bold text-white">Agregar Ejercicio a la Rutina</h2>
+        <p class="text-xs text-white/50 -mt-3">Cada ejercicio se guarda como una tarjeta que el alumno verá en su panel, agrupada por día.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-white/60 mb-1">Día de la semana</label>
+            <select id="rutina-dia" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+              <option value="Lunes">Lunes</option>
+              <option value="Martes">Martes</option>
+              <option value="Miércoles">Miércoles</option>
+              <option value="Jueves">Jueves</option>
+              <option value="Viernes">Viernes</option>
+              <option value="Sábado">Sábado</option>
+              <option value="Domingo">Domingo</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-white/60 mb-1">Título del ejercicio</label>
+            <input id="rutina-titulo" type="text" placeholder="Ej. Press de Banca" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-white/60 mb-1">Series</label>
+            <input id="rutina-series" type="number" min="1" max="20" value="4" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+          </div>
+          <div>
+            <label class="block text-xs text-white/60 mb-1">Repeticiones (rango)</label>
+            <input id="rutina-reps" type="text" placeholder="10-12" value="10-12" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+          </div>
+        </div>
+
+        <label class="flex items-center gap-2.5 bg-[#05070D] border border-[#3B82F6]/20 rounded-xl p-3 cursor-pointer">
+          <input id="rutina-requiere-peso" type="checkbox" checked class="w-4 h-4 accent-[#3B82F6] rounded shrink-0">
+          <span class="text-xs text-white/80">Este ejercicio se hace con pesas — dejar que el alumno registre el peso que usó</span>
+        </label>
+        <p class="text-[10px] text-white/40 -mt-3 px-1">Desactívalo para ejercicios de peso corporal, cardio, estiramiento, etc. donde registrar kilos no aplica.</p>
+
+        <div>
+          <label class="block text-xs text-white/60 mb-1">Indicaciones / Descripción</label>
+          <textarea id="rutina-descripcion" rows="3" placeholder="Ej. Descanso de 90s entre series. Baja controlado 3 segundos." class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs text-white/60 mb-1">Video de demostración (opcional)</label>
+          <input id="rutina-video" type="url" placeholder="https://www.youtube.com/embed/..." class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+          <p class="text-[10px] text-white/40 mt-1">Usa el enlace de tipo <span class="text-[#3B82F6]">embed</span> de YouTube para que se vea dentro de la app.</p>
+        </div>
+
+        <button id="btn-guardar-rutina" class="w-full bg-[#3B82F6] text-[#05070D] font-bold text-xs py-3.5 rounded-xl hover:bg-[#2563eb] transition">Guardar Ejercicio</button>
+        <p id="rutina-msg" class="hidden text-xs text-center font-bold"></p>
+      </div>
+    </div>
+
+    <div id="sin-seleccion" class="bg-[#0D1526] p-12 rounded-3xl border border-[#3B82F6]/20 text-center text-white/40 text-xs">
+      Selecciona un alumno para administrar sus rutinas.
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseClient = supabase.createClient('https://etdfskwtaargtrzisvmj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0ZGZza3d0YWFyZ3Ryemlzdm1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNjQ4NjEsImV4cCI6MjEwNDc0MDg2MX0.5UlqtJfVORgsZXNvO-Mx12YKeP_kb_BrxqI2nXgyjcs', {
+      auth: {
+        persistSession: true,     // guarda la sesión en este dispositivo
+        autoRefreshToken: true,   // la renueva sola en segundo plano
+        detectSessionInUrl: true  // necesario para los links de recuperación de contraseña
+      }
+    });
+
+    let miPropioId = null, miRol = null;
+
+    async function verificarStaff() {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (!user) { window.location.href = 'login.html'; return false; }
+      miPropioId = user.id;
+      const { data: profile } = await supabaseClient.from('profiles').select('rol').eq('id', user.id).single();
+      if (!profile || (profile.rol !== 'admin' && profile.rol !== 'coach')) { window.location.href = 'dashboard.html'; return false; }
+      miRol = profile.rol;
+      if (miRol === 'admin') {
+        document.getElementById('nav-coaches-link')?.classList.remove('hidden');
+        document.getElementById('kf-tab-coaches')?.classList.remove('hidden');
+      }
+      return true;
+    }
+
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    async function cargarAlumnos() {
+      let query = supabaseClient.from('profiles').select('id, nombre, email').eq('rol', 'usuario');
+      if (miRol === 'coach') query = query.eq('coach_id', miPropioId);
+      const { data: alumnos, error } = await query;
+
+      const sel = document.getElementById('select-alumno');
+      sel.innerHTML = '<option value="">-- Seleccionar Alumno --</option>';
+      if (error) { alert('No se pudieron cargar los alumnos: ' + error.message); return; }
+      if (!alumnos || alumnos.length === 0) {
+        sel.innerHTML = '<option value="">No tienes alumnos asignados</option>';
+        return;
+      }
+      alumnos.forEach(a => sel.innerHTML += `<option value="${a.id}">${a.nombre || a.email}</option>`);
+    }
+
+    const ORDEN_DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+
+    async function cargarRutinasAlumno(user_id) {
+      const lista = document.getElementById('lista-rutinas');
+      const { data: rutinas, error } = await supabaseClient
+        .from('rutinas').select('*').eq('user_id', user_id);
+
+      if (error) {
+        lista.innerHTML = `<p class="text-xs text-red-400">Error al cargar: ${error.message}</p>`;
+        return;
+      }
+      if (!rutinas || rutinas.length === 0) {
+        lista.innerHTML = '<p class="text-xs text-white/40">No hay ejercicios asignados aún.</p>';
+        return;
+      }
+
+      // Agrupar por día para que el coach vea la rutina como la ve el alumno
+      const porDia = {};
+      rutinas.forEach(r => {
+        const d = r.dia_semana || 'Sin día';
+        (porDia[d] = porDia[d] || []).push(r);
+      });
+
+      const dias = Object.keys(porDia).sort((a, b) => {
+        const ia = ORDEN_DIAS.indexOf(a), ib = ORDEN_DIAS.indexOf(b);
+        return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+      });
+
+      lista.innerHTML = dias.map(dia => `
+        <div class="space-y-2">
+          <p class="text-[10px] font-bold text-[#3B82F6] uppercase tracking-wide border-b border-[#3B82F6]/10 pb-1">${dia}</p>
+          ${porDia[dia].map(r => `
+            <div class="bg-[#05070D] p-3 rounded-xl border border-[#3B82F6]/10">
+              <div class="flex justify-between items-start gap-2">
+                <div class="min-w-0">
+                  <p class="text-xs font-bold text-white">${r.titulo || '(sin título)'}</p>
+                  <p class="text-[10px] text-white/50">${r.series || '?'} series × ${r.repeticiones || '?'} reps</p>
+                  ${r.descripcion ? `<p class="text-[10px] text-white/40 mt-1 whitespace-pre-line">${r.descripcion}</p>` : ''}
+                  <div class="flex items-center gap-2 mt-1 flex-wrap">
+                    ${r.video_url ? `<span class="text-[10px] text-[#3B82F6]">▶ con video</span>` : ''}
+                    ${r.requiere_peso === false
+                      ? `<span class="text-[9px] font-bold text-white/40 bg-white/5 px-1.5 py-0.5 rounded">Sin registro de peso</span>`
+                      : `<span class="text-[9px] font-bold text-[#3B82F6] bg-[#3B82F6]/10 px-1.5 py-0.5 rounded">🏋️ Con peso</span>`}
+                  </div>
+                </div>
+                <button data-borrar="${r.id}" class="shrink-0 text-[10px] text-red-400 hover:underline">Eliminar</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+
+      lista.querySelectorAll('[data-borrar]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('¿Eliminar este ejercicio de la rutina?')) return;
+          const { error } = await supabaseClient.from('rutinas').delete().eq('id', btn.dataset.borrar);
+          if (error) return alert('Error al eliminar: ' + error.message);
+          cargarRutinasAlumno(document.getElementById('select-alumno').value);
+        });
+      });
+    }
+
+    document.getElementById('select-alumno').addEventListener('change', (e) => {
+      const id = e.target.value;
+      if (!id) {
+        document.getElementById('panel-rutinas').classList.add('hidden');
+        document.getElementById('sin-seleccion').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('panel-rutinas').classList.remove('hidden');
+      document.getElementById('sin-seleccion').classList.add('hidden');
+      cargarRutinasAlumno(id);
+    });
+
+    function mostrarMsgRutina(texto, ok) {
+      const el = document.getElementById('rutina-msg');
+      el.innerText = texto;
+      el.className = `text-xs text-center font-bold ${ok ? 'text-green-400' : 'text-red-400'}`;
+      el.classList.remove('hidden');
+      if (ok) setTimeout(() => el.classList.add('hidden'), 2500);
+    }
+
+    document.getElementById('btn-guardar-rutina').addEventListener('click', async () => {
+      const user_id = document.getElementById('select-alumno').value;
+      const titulo = document.getElementById('rutina-titulo').value.trim();
+
+      if (!user_id) return mostrarMsgRutina('Selecciona un alumno primero.', false);
+      if (!titulo) return mostrarMsgRutina('Escribe el título del ejercicio.', false);
+
+      const btn = document.getElementById('btn-guardar-rutina');
+      btn.disabled = true;
+      btn.innerText = 'Guardando...';
+
+      // Se guarda con los MISMOS nombres de columna que lee el panel del alumno:
+      // dia_semana, titulo, descripcion, series, repeticiones, video_url.
+      const { error } = await supabaseClient.from('rutinas').insert([{
+        user_id,
+        dia_semana: document.getElementById('rutina-dia').value,
+        titulo,
+        descripcion: document.getElementById('rutina-descripcion').value.trim() || null,
+        series: parseInt(document.getElementById('rutina-series').value) || null,
+        repeticiones: document.getElementById('rutina-reps').value.trim() || null,
+        video_url: document.getElementById('rutina-video').value.trim() || null,
+        requiere_peso: document.getElementById('rutina-requiere-peso').checked
+      }]);
+
+      btn.disabled = false;
+      btn.innerText = 'Guardar Ejercicio';
+
+      if (error) {
+        mostrarMsgRutina('Error al guardar: ' + error.message, false);
+        return;
+      }
+
+      mostrarMsgRutina('✓ Ejercicio guardado', true);
+      document.getElementById('rutina-titulo').value = '';
+      document.getElementById('rutina-descripcion').value = '';
+      document.getElementById('rutina-video').value = '';
+      document.getElementById('rutina-requiere-peso').checked = true;
+      cargarRutinasAlumno(user_id);
+    });
+
+    (async () => { if (await verificarStaff()) cargarAlumnos(); })();
+  </script>
+
+  <!-- TAB BAR INFERIOR (móvil) -->
+  <nav id="kf-tabbar" class="fixed bottom-0 inset-x-0 z-50 bg-[#0D1526]/95 backdrop-blur border-t border-[#3B82F6]/15">
+    <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
+          <a href="admin-dashboard.html" data-page="admin-dashboard.html" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Resumen</span></a>
+          <a href="admin-coaches.html" data-page="admin-coaches.html" id="kf-tab-coaches" class="kf-tab hidden"><span class="kf-tab-icon">👥</span><span>Coaches</span></a>
+          <a href="admin-monitoreo.html" data-page="admin-monitoreo.html" class="kf-tab"><span class="kf-tab-icon">📈</span><span>Monitoreo</span></a>
+          <a href="admin-rutinas.html" data-page="admin-rutinas.html" class="kf-tab"><span class="kf-tab-icon">🏋️</span><span>Rutinas</span></a>
+          <a href="admin-nutricion.html" data-page="admin-nutricion.html" class="kf-tab"><span class="kf-tab-icon">🥗</span><span>Nutrición</span></a>
+          <a href="admin-transformaciones.html" data-page="admin-transformaciones.html" class="kf-tab"><span class="kf-tab-icon">✨</span><span>Cambios</span></a>
+          <a href="admin-anuncios.html" data-page="admin-anuncios.html" class="kf-tab"><span class="kf-tab-icon">📢</span><span>Anuncios</span></a>
+          <a href="admin-mensajes.html" data-page="admin-mensajes.html" class="kf-tab"><span class="kf-tab-icon">💬</span><span>Mensajes</span></a>
+    </div>
+  </nav>
+  <script>
+    // Resalta el tab activo según el archivo actual
+    (function() {
+      const actual = location.pathname.split('/').pop() || 'admin-dashboard.html';
+      document.querySelectorAll('#kf-tabbar .kf-tab').forEach(a => {
+        if (a.getAttribute('data-page') === actual) a.classList.add('active');
+      });
+    })();
+  </script>
+
+  <script>
+    // --- Kratero Fit: modo claro / oscuro (persistente en este dispositivo) ---
+    (function () {
+      const KEY = 'kf-theme';
+      const root = document.documentElement;
+      const saved = localStorage.getItem(KEY) || 'dark';
+      if (saved === 'light') root.setAttribute('data-theme', 'light');
+
+      function actualizarIcono() {
+        const btn = document.getElementById('kf-theme-toggle');
+        if (!btn) return;
+        btn.textContent = root.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        actualizarIcono();
+        const btn = document.getElementById('kf-theme-toggle');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const esClaro = root.getAttribute('data-theme') === 'light';
+            if (esClaro) { root.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
+            else { root.setAttribute('data-theme', 'light'); localStorage.setItem(KEY, 'light'); }
+            actualizarIcono();
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
