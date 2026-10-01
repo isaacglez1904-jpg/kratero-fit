@@ -37,11 +37,20 @@
     .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
     .kf-tab.active { color: #E5C39E; background: rgba(229,195,158,.10); }
     .kf-tab:active { background: rgba(229,195,158,.16); }
-    /* La tab bar es visible en TODOS los tamaños (móvil y escritorio) */
-    #kf-tabbar { padding-bottom: env(safe-area-inset-bottom); }
-    body.has-kf-tabbar { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+    /* Tab bar FLOTANTE tipo píldora (estilo kits de fitness modernos) */
+    #kf-tabbar {
+      left: 50%; right: auto; transform: translateX(-50%);
+      bottom: calc(14px + env(safe-area-inset-bottom));
+      width: calc(100% - 24px); max-width: 640px;
+      border-radius: 28px; border: 1px solid rgba(229,195,158,0.18);
+      box-shadow: 0 16px 40px -12px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset;
+    }
+    body.has-kf-tabbar { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
+    .kf-tab { border-radius: 20px; }
+    .kf-tab.active { box-shadow: 0 0 0 1px rgba(229,195,158,0.25) inset; }
     @media (min-width: 768px) {
-      .kf-tab { min-width: 76px; font-size: 10px; padding: 8px 10px; }
+      #kf-tabbar { max-width: 720px; }
+      .kf-tab { min-width: 76px; font-size: 10px; padding: 9px 12px; }
       .kf-tab .kf-tab-icon { font-size: 20px; }
     }
     html { scroll-behavior: smooth; }
@@ -78,38 +87,80 @@
   <!-- CONTENIDO PRINCIPAL -->
   <main id="sec-inicio" class="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
 
-    <!-- 1. RESUMEN DE MI PERFIL FÍSICO Y PLAN -->
-    <section class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-2xl shadow-xl space-y-4">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E5C39E]/10 pb-4">
-        <div>
-          <h2 class="font-display text-3xl text-[#E5C39E]" id="welcome-title">¡Bienvenido!</h2>
-          <p class="text-xs text-white/60 mt-1">Resumen de tu ficha corporal y plan activo</p>
+    <!-- 1. HERO: perfil + anillo de progreso de hábitos, estilo kit de fitness -->
+    <section class="bg-gradient-to-br from-[#131E3A] to-[#0A1128] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div class="flex items-center gap-4 min-w-0">
+          <div id="hero-avatar" class="w-14 h-14 rounded-full bg-[#E5C39E]/15 border-2 border-[#E5C39E]/40 flex items-center justify-center text-xl font-black text-[#E5C39E] font-display shrink-0">?</div>
+          <div class="min-w-0">
+            <h2 class="font-display text-2xl text-white truncate" id="welcome-title">¡Bienvenido!</h2>
+            <span id="user-plan-badge" class="inline-block mt-1 bg-gradient-to-r from-[#E5C39E]/15 to-[#E5C39E]/5 border border-[#E5C39E]/40 text-[#E5C39E] px-3 py-1 rounded-full text-[10px] font-bold">Plan Básico</span>
+          </div>
         </div>
-        <span id="user-plan-badge" class="self-start md:self-auto bg-gradient-to-r from-[#E5C39E]/15 to-[#E5C39E]/5 border border-[#E5C39E]/40 text-[#E5C39E] px-4 py-1.5 rounded-full text-xs font-bold">Plan Básico</span>
+
+        <!-- Anillo de progreso: hábitos cumplidos hoy -->
+        <div class="flex items-center gap-3 bg-[#0A1128]/70 border border-[#E5C39E]/15 rounded-2xl px-4 py-3 shrink-0">
+          <div class="relative w-14 h-14 shrink-0">
+            <svg viewBox="0 0 56 56" class="w-14 h-14 -rotate-90">
+              <circle cx="28" cy="28" r="23" fill="none" stroke="#1b2a52" stroke-width="6"/>
+              <circle id="ring-habitos" cx="28" cy="28" r="23" fill="none" stroke="#E5C39E" stroke-width="6" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="144.5" style="transition: stroke-dashoffset .6s ease"/>
+            </svg>
+            <span id="ring-habitos-label" class="absolute inset-0 flex items-center justify-center text-[11px] font-black text-white">0/5</span>
+          </div>
+          <div>
+            <p class="text-[9px] text-white/50 font-bold uppercase tracking-wide">Hábitos hoy</p>
+            <p id="ring-habitos-texto" class="text-xs font-bold text-[#E5C39E]">Sin registrar</p>
+          </div>
+        </div>
       </div>
 
+      <!-- Ficha física -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div class="bg-[#0A1128] p-3 rounded-xl border border-[#E5C39E]/15 text-center">
+        <div class="bg-[#0A1128]/70 p-3 rounded-2xl border border-[#E5C39E]/15 text-center">
           <span class="block text-[10px] text-white/50 uppercase font-bold">Edad</span>
           <span id="stat-edad" class="text-base font-bold text-[#E5C39E]">- años</span>
         </div>
-        <div class="bg-[#0A1128] p-3 rounded-xl border border-[#E5C39E]/15 text-center">
+        <div class="bg-[#0A1128]/70 p-3 rounded-2xl border border-[#E5C39E]/15 text-center">
           <span class="block text-[10px] text-white/50 uppercase font-bold">Peso Actual</span>
           <span id="stat-peso" class="text-base font-bold text-[#E5C39E]">- kg</span>
         </div>
-        <div class="bg-[#0A1128] p-3 rounded-xl border border-[#E5C39E]/15 text-center">
+        <div class="bg-[#0A1128]/70 p-3 rounded-2xl border border-[#E5C39E]/15 text-center">
           <span class="block text-[10px] text-white/50 uppercase font-bold">Estatura</span>
           <span id="stat-estatura" class="text-base font-bold text-[#E5C39E]">- cm</span>
         </div>
-        <div class="bg-[#0A1128] p-3 rounded-xl border border-[#E5C39E]/15 text-center">
+        <div class="bg-[#0A1128]/70 p-3 rounded-2xl border border-[#E5C39E]/15 text-center">
           <span class="block text-[10px] text-white/50 uppercase font-bold">Actividad</span>
           <span id="stat-actividad" class="text-base font-bold text-white">-</span>
         </div>
       </div>
     </section>
 
+    <!-- Accesos rápidos tipo tarjeta, con datos en vivo -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <a href="#sec-cardio" class="bg-[#131E3A] border border-[#E5C39E]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#E5C39E]/40 hover:-translate-y-0.5 transition">
+        <span class="text-xl">🏃</span>
+        <span id="qc-cardio-km" class="text-lg font-black text-white">0.0 km</span>
+        <span class="text-[10px] text-white/50 font-bold uppercase">Esta semana</span>
+      </a>
+      <a href="#sec-rutina" class="bg-[#131E3A] border border-[#E5C39E]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#E5C39E]/40 hover:-translate-y-0.5 transition">
+        <span class="text-xl">💪</span>
+        <span id="qc-rutina-hoy" class="text-lg font-black text-white">-</span>
+        <span class="text-[10px] text-white/50 font-bold uppercase">Ejercicios hoy</span>
+      </a>
+      <a href="#sec-nutricion" class="bg-[#131E3A] border border-[#E5C39E]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#E5C39E]/40 hover:-translate-y-0.5 transition">
+        <span class="text-xl">🥗</span>
+        <span id="qc-nutricion-kcal" class="text-lg font-black text-white">-</span>
+        <span class="text-[10px] text-white/50 font-bold uppercase">Kcal objetivo</span>
+      </a>
+      <a href="#sec-progreso" class="bg-[#131E3A] border border-[#E5C39E]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#E5C39E]/40 hover:-translate-y-0.5 transition">
+        <span class="text-xl">📊</span>
+        <span id="qc-progreso-peso" class="text-lg font-black text-white">-</span>
+        <span class="text-[10px] text-white/50 font-bold uppercase">Último peso</span>
+      </a>
+    </div>
+
     <!-- 2. HABIT TRACKER VISUAL -->
-    <section id="sec-habitos" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-2xl shadow-xl space-y-6">
+    <section id="sec-habitos" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <h2 class="text-lg font-bold text-[#E5C39E]">📅 Hábitos y Constancia</h2>
         <div class="flex items-center gap-3">
@@ -143,7 +194,7 @@
     </section>
 
     <!-- 2.5. CARDIO ESTILO STRAVA (running / caminata con mapa en vivo) -->
-    <section id="sec-cardio" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-2xl shadow-xl space-y-4">
+    <section id="sec-cardio" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <h2 class="text-lg font-bold text-[#E5C39E]">🏃 Cardio</h2>
         <div id="cardio-tipo-selector" class="flex gap-2">
@@ -233,7 +284,7 @@
     </section>
 
     <!-- 5. PLAN DE NUTRICIÓN -->
-    <section id="sec-nutricion" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-2xl shadow-xl space-y-4">
+    <section id="sec-nutricion" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl space-y-4">
       <h2 class="text-lg font-bold text-[#E5C39E]">🥗 Mi Plan Nutricional</h2>
       <div id="nutricion-container" class="space-y-4">
         <p class="text-xs text-white/50">Cargando plan de nutrición...</p>
@@ -244,7 +295,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
       <!-- REGISTRO DE AVANCES + GRÁFICA -->
-      <section id="sec-progreso" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-2xl shadow-xl space-y-4">
+      <section id="sec-progreso" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl space-y-4">
         <h2 class="text-lg font-bold text-[#E5C39E]">📊 Mi Progreso Corporal</h2>
 
         <div class="bg-[#0A1128] border border-[#E5C39E]/10 rounded-xl p-3">
@@ -277,7 +328,7 @@
       </section>
 
       <!-- CHAT DIRECTO CON ENTRENADOR -->
-      <section id="sec-chat" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-2xl shadow-xl flex flex-col h-[400px]">
+      <section id="sec-chat" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl flex flex-col h-[400px]">
         <h2 class="text-lg font-bold text-[#E5C39E] mb-2 flex items-center gap-2">
           💬 Mensajes con <span id="chat-coach-name">Tu Entrenador</span>
           <span id="chat-unread-dot" class="hidden w-2.5 h-2.5 bg-red-500 rounded-full"></span>
@@ -377,6 +428,7 @@
       if (profile) {
         document.getElementById('user-display-name').innerText = profile.nombre || profile.email;
         document.getElementById('welcome-title').innerText = `¡Bienvenido, ${profile.nombre || 'Atleta'}!`;
+        document.getElementById('hero-avatar').innerText = (profile.nombre || 'A').trim().charAt(0).toUpperCase();
         document.getElementById('user-plan-badge').innerText = profile.plan || 'Plan Básico';
         document.getElementById('stat-edad').innerText = profile.edad ? `${profile.edad} años` : '-';
         document.getElementById('stat-peso').innerText = profile.peso ? `${profile.peso} kg` : '-';
@@ -516,6 +568,18 @@
           </div>
         `;
       }).join('');
+
+      // Anillo de progreso del hero: hábitos cumplidos hoy (de 5)
+      const hoyCompletos = countCompletos(habitosMap[todayStr]);
+      const CIRCUNFERENCIA = 144.5;
+      const ring = document.getElementById('ring-habitos');
+      if (ring) ring.setAttribute('stroke-dashoffset', CIRCUNFERENCIA - (CIRCUNFERENCIA * hoyCompletos / HABITS.length));
+      const ringLabel = document.getElementById('ring-habitos-label');
+      if (ringLabel) ringLabel.innerText = `${hoyCompletos}/${HABITS.length}`;
+      const ringTexto = document.getElementById('ring-habitos-texto');
+      if (ringTexto) {
+        ringTexto.innerText = hoyCompletos === 0 ? 'Sin registrar' : hoyCompletos === HABITS.length ? '¡Día perfecto!' : 'Vas bien, sigue así';
+      }
     }
 
     async function toggleHabit(habitKey) {
@@ -643,16 +707,28 @@
       const { data: rutinas } = await supabaseClient.from('rutinas').select('*').eq('user_id', currentUser.id);
       const container = document.getElementById('rutinas-container');
 
+      // Tarjeta de acceso rápido: cuántos ejercicios tienes asignados para HOY
+      const diasEs = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+      const hoyNombre = diasEs[new Date().getDay()];
+      const ejerciciosHoy = (rutinas || []).filter(r => r.dia_semana === hoyNombre).length;
+      document.getElementById('qc-rutina-hoy').innerText = ejerciciosHoy > 0 ? `${ejerciciosHoy}` : 'Descanso';
+
       if (rutinas && rutinas.length > 0) {
         container.innerHTML = rutinas.map(r => `
-          <div class="bg-[#131E3A] border border-[#E5C39E]/20 p-4 rounded-xl space-y-2 flex flex-col justify-between">
-            <div>
-              <span class="text-[10px] bg-[#E5C39E]/10 text-[#E5C39E] px-2 py-0.5 rounded font-bold uppercase">${r.dia_semana}</span>
-              <h3 class="font-bold text-white text-base mt-1">${r.titulo}</h3>
-              <p class="text-xs text-white/70 whitespace-pre-line mt-1">${r.descripcion || ''}</p>
-              ${r.series ? `<p class="text-[10px] text-white/50 mt-1">${r.series} series x ${r.repeticiones || ''} reps</p>` : ''}
+          <div class="bg-[#131E3A] border border-[#E5C39E]/20 p-4 rounded-[22px] space-y-3 flex flex-col justify-between hover:border-[#E5C39E]/40 transition">
+            <div class="flex items-start gap-3">
+              <div class="w-11 h-11 rounded-2xl bg-[#E5C39E]/10 border border-[#E5C39E]/25 flex items-center justify-center text-lg shrink-0">💪</div>
+              <div class="min-w-0">
+                <span class="text-[9px] bg-[#E5C39E]/10 text-[#E5C39E] px-2 py-0.5 rounded-full font-bold uppercase">${r.dia_semana}</span>
+                <h3 class="font-bold text-white text-sm mt-1 truncate">${r.titulo}</h3>
+              </div>
             </div>
-            ${r.video_url ? `<button onclick="abrirVideoModal('${r.video_url.replace(/'/g, "\\'")}')" class="text-xs bg-[#E5C39E]/10 border border-[#E5C39E]/30 text-[#E5C39E] font-bold mt-2 py-2 rounded-lg hover:bg-[#E5C39E] hover:text-[#0A1128] transition">▶ Ver Demostración</button>` : ''}
+            <p class="text-xs text-white/60 whitespace-pre-line">${r.descripcion || ''}</p>
+            <div class="flex flex-wrap gap-1.5">
+              ${r.series ? `<span class="text-[10px] font-bold bg-[#0A1128] border border-[#E5C39E]/15 text-[#E5C39E] px-2.5 py-1 rounded-full">${r.series} series</span>` : ''}
+              ${r.repeticiones ? `<span class="text-[10px] font-bold bg-[#0A1128] border border-[#E5C39E]/15 text-[#E5C39E] px-2.5 py-1 rounded-full">${r.repeticiones} reps</span>` : ''}
+            </div>
+            ${r.video_url ? `<button onclick="abrirVideoModal('${r.video_url.replace(/'/g, "\\'")}')" class="text-xs bg-[#E5C39E]/10 border border-[#E5C39E]/30 text-[#E5C39E] font-bold py-2.5 rounded-xl hover:bg-[#E5C39E] hover:text-[#0A1128] transition">▶ Ver Demostración</button>` : ''}
           </div>
         `).join('');
       } else {
@@ -678,6 +754,7 @@
       }
       if (!nut) {
         container.innerHTML = `<p class="text-xs text-white/40">Tu entrenador aún no te ha asignado un plan de nutrición.</p>`;
+        document.getElementById('qc-nutricion-kcal').innerText = '-';
         return;
       }
 
@@ -691,34 +768,29 @@
       const pCarb = Math.round((kcalCarb / totalKcalMacros) * 100);
       const pGras = Math.max(0, 100 - pProt - pCarb);
 
+      document.getElementById('qc-nutricion-kcal').innerText = nut.calorias ? `${nut.calorias}` : '-';
+
       container.innerHTML = `
-        <h3 class="font-bold text-base text-[#E5C39E]">${nut.titulo}</h3>
-
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
-          <div class="bg-[#0A1128] p-2.5 rounded-xl border border-[#E5C39E]/10"><span class="block font-bold text-[#E5C39E] text-sm">${nut.calorias || 0}</span> Calorías</div>
-          <div class="bg-[#0A1128] p-2.5 rounded-xl border border-blue-400/20"><span class="block font-bold text-blue-400 text-sm">${prot}g</span> Proteínas</div>
-          <div class="bg-[#0A1128] p-2.5 rounded-xl border border-green-400/20"><span class="block font-bold text-green-400 text-sm">${carb}g</span> Carbohidratos</div>
-          <div class="bg-[#0A1128] p-2.5 rounded-xl border border-orange-400/20"><span class="block font-bold text-orange-400 text-sm">${gras}g</span> Grasas</div>
-        </div>
-
-        <div>
-          <div class="flex justify-between text-[10px] text-white/50 mb-1">
-            <span>Distribución de Macronutrientes</span>
-            <span>${pProt}% / ${pCarb}% / ${pGras}%</span>
+        <div class="flex flex-col sm:flex-row items-center gap-5">
+          <!-- Anillo de macros estilo kit de fitness: segmentos por color, kcal al centro -->
+          <div class="relative w-28 h-28 shrink-0 rounded-full" style="background: conic-gradient(#60a5fa 0% ${pProt}%, #4ade80 ${pProt}% ${pProt + pCarb}%, #fb923c ${pProt + pCarb}% 100%);">
+            <div class="absolute inset-[9px] rounded-full bg-[#131E3A] flex flex-col items-center justify-center">
+              <span class="text-xl font-black text-white">${nut.calorias || 0}</span>
+              <span class="text-[9px] text-white/40 font-bold tracking-wide">KCAL / DÍA</span>
+            </div>
           </div>
-          <div class="w-full h-3 rounded-full overflow-hidden flex bg-[#0A1128]">
-            <div style="width:${pProt}%" class="bg-blue-400"></div>
-            <div style="width:${pCarb}%" class="bg-green-400"></div>
-            <div style="width:${pGras}%" class="bg-orange-400"></div>
-          </div>
-          <div class="flex gap-4 mt-1.5 text-[10px] text-white/50">
-            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-400 inline-block"></span>Proteína</span>
-            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span>Carbos</span>
-            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span>Grasa</span>
+          <div class="flex-1 w-full space-y-2">
+            <h3 class="font-bold text-base text-[#E5C39E]">${nut.titulo}</h3>
+            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+              <div class="bg-[#0A1128] p-2 rounded-xl border border-blue-400/20"><span class="block font-bold text-blue-400 text-sm">${prot}g</span>Proteína</div>
+              <div class="bg-[#0A1128] p-2 rounded-xl border border-green-400/20"><span class="block font-bold text-green-400 text-sm">${carb}g</span>Carbos</div>
+              <div class="bg-[#0A1128] p-2 rounded-xl border border-orange-400/20"><span class="block font-bold text-orange-400 text-sm">${gras}g</span>Grasa</div>
+            </div>
+            <p class="text-[10px] text-white/40">${pProt}% proteína · ${pCarb}% carbohidratos · ${pGras}% grasa</p>
           </div>
         </div>
 
-        <p class="text-xs text-white/80 whitespace-pre-line bg-[#0A1128] p-3 rounded-xl border border-[#E5C39E]/10">${nut.detalles || ''}</p>
+        <p class="text-xs text-white/80 whitespace-pre-line bg-[#0A1128] p-3 rounded-xl border border-[#E5C39E]/10 mt-4">${nut.detalles || ''}</p>
       `;
     }
 
@@ -728,6 +800,8 @@
     async function cargarAvances() {
       const { data: avances } = await supabaseClient.from('avances').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
       const container = document.getElementById('historial-avances');
+
+      document.getElementById('qc-progreso-peso').innerText = (avances && avances[0]?.peso) ? `${avances[0].peso} kg` : '-';
 
       if (avances && avances.length > 0) {
         container.innerHTML = avances.map(a => `
@@ -1214,8 +1288,16 @@
       }
       if (!actividades || actividades.length === 0) {
         cont.innerHTML = `<p class="text-xs text-white/40">Aún no has registrado actividades de cardio.</p>`;
+        document.getElementById('qc-cardio-km').innerText = '0.0 km';
         return;
       }
+
+      // Tarjeta de acceso rápido: suma de km corridos/caminados en los últimos 7 días
+      const haceSieteDias = Date.now() - 7 * 24 * 60 * 60 * 1000;
+      const kmSemana = actividades
+        .filter(a => new Date(a.created_at).getTime() >= haceSieteDias)
+        .reduce((acc, a) => acc + (parseFloat(a.distancia_km) || 0), 0);
+      document.getElementById('qc-cardio-km').innerText = `${kmSemana.toFixed(1)} km`;
 
       cont.innerHTML = actividades.map(a => {
         const icono = a.tipo === 'running' ? '🏃' : '🚶';
@@ -1273,7 +1355,7 @@
   </script>
 
   <!-- TAB BAR INFERIOR (móvil) -->
-  <nav id="kf-tabbar" class="fixed bottom-0 inset-x-0 z-50 bg-[#131E3A]/95 backdrop-blur border-t border-[#E5C39E]/15">
+  <nav id="kf-tabbar" class="fixed z-50 bg-[#131E3A]/95 backdrop-blur">
     <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
       <a href="#sec-inicio" data-anchor="sec-inicio" class="kf-tab"><span class="kf-tab-icon">🏠</span><span>Inicio</span></a>
       <a href="#sec-habitos" data-anchor="sec-habitos" class="kf-tab"><span class="kf-tab-icon">📅</span><span>Hábitos</span></a>

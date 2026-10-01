@@ -1,0 +1,18 @@
+# Dependencias de Node (si luego agregas Capacitor)
+node_modules/
+
+# Carpetas nativas generadas por Capacitor (se regeneran con "npx cap add android")
+android/app/build/
+android/.gradle/
+android/local.properties
+ios/App/Pods/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# NUNCA subas tu Service Role Key de Supabase si algún día la usas en un script.
+# La "anon key" que ya está en login.html/registro.html SÍ es segura de subir:
+# está diseñada para ser pública y queda protegida por las políticas RLS.
+*.env
+.env.local

@@ -30,11 +30,20 @@
     .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
     .kf-tab.active { color: #E5C39E; background: rgba(229,195,158,.10); }
     .kf-tab:active { background: rgba(229,195,158,.16); }
-    /* La tab bar es visible en TODOS los tamaños (móvil y escritorio) */
-    #kf-tabbar { padding-bottom: env(safe-area-inset-bottom); }
-    body.has-kf-tabbar { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+    /* Tab bar FLOTANTE tipo píldora (estilo kits de fitness modernos) */
+    #kf-tabbar {
+      left: 50%; right: auto; transform: translateX(-50%);
+      bottom: calc(14px + env(safe-area-inset-bottom));
+      width: calc(100% - 24px); max-width: 640px;
+      border-radius: 28px; border: 1px solid rgba(229,195,158,0.18);
+      box-shadow: 0 16px 40px -12px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset;
+    }
+    body.has-kf-tabbar { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
+    .kf-tab { border-radius: 20px; }
+    .kf-tab.active { box-shadow: 0 0 0 1px rgba(229,195,158,0.25) inset; }
     @media (min-width: 768px) {
-      .kf-tab { min-width: 76px; font-size: 10px; padding: 8px 10px; }
+      #kf-tabbar { max-width: 720px; }
+      .kf-tab { min-width: 76px; font-size: 10px; padding: 9px 12px; }
       .kf-tab .kf-tab-icon { font-size: 20px; }
     }
     html { scroll-behavior: smooth; }
@@ -249,7 +258,7 @@
   </script>
 
   <!-- TAB BAR INFERIOR (móvil) -->
-  <nav id="kf-tabbar" class="fixed bottom-0 inset-x-0 z-50 bg-[#131E3A]/95 backdrop-blur border-t border-[#E5C39E]/15">
+  <nav id="kf-tabbar" class="fixed z-50 bg-[#131E3A]/95 backdrop-blur">
     <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
           <a href="admin-dashboard.html" data-page="admin-dashboard.html" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Resumen</span></a>
           <a href="admin-coaches.html" data-page="admin-coaches.html" id="kf-tab-coaches" class="kf-tab hidden"><span class="kf-tab-icon">👥</span><span>Coaches</span></a>
