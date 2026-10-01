@@ -10,7 +10,10 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #05070D;
+            background: radial-gradient(1200px 560px at 10% -15%, rgba(37,99,235,0.16), transparent 60%),
+        radial-gradient(1000px 520px at 108% 0%, rgba(14,165,233,0.10), transparent 55%),
+        radial-gradient(900px 700px at 50% 120%, rgba(30,58,138,0.18), transparent 60%),
+        linear-gradient(180deg, #060A1A 0%, #0A1128 45%, #050814 100%);
       background-attachment: fixed;
     }
     .font-display { font-family: 'Fraunces', serif; }
@@ -21,12 +24,12 @@
     .kf-tab {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 2px; min-width: 60px; padding: 6px 6px; border-radius: 12px;
-      color: rgba(245,247,250,.45); font-size: 9px; font-weight: 800; letter-spacing: .01em;
+      color: rgba(249,246,240,.45); font-size: 9px; font-weight: 800; letter-spacing: .01em;
       white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
     }
     .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
-    .kf-tab.active { color: #3B82F6; background: rgba(59,130,246,.10); }
-    .kf-tab:active { background: rgba(59,130,246,.16); }
+    .kf-tab.active { color: #E5C39E; background: rgba(229,195,158,.10); }
+    .kf-tab:active { background: rgba(229,195,158,.16); }
     /* La tab bar es visible en TODOS los tamaños (móvil y escritorio) */
     #kf-tabbar { padding-bottom: env(safe-area-inset-bottom); }
     body.has-kf-tabbar { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
@@ -36,51 +39,27 @@
     }
     html { scroll-behavior: smooth; }
     section[id] { scroll-margin-top: 84px; }
-  
-    /* --- Kratero Fit: modo claro / oscuro --- */
-    html { transition: filter .25s ease; }
-    html[data-theme="light"] {
-      filter: invert(1) hue-rotate(180deg);
-      background: #fff;
-    }
-    html[data-theme="light"] img,
-    html[data-theme="light"] svg,
-    html[data-theme="light"] video,
-    html[data-theme="light"] iframe {
-      filter: invert(1) hue-rotate(180deg);
-    }
-    #kf-theme-toggle {
-      position: fixed; z-index: 60; top: 14px; right: 14px;
-      width: 38px; height: 38px; border-radius: 999px;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.35);
-      color: #F5F7FA; font-size: 16px; cursor: pointer;
-      backdrop-filter: blur(6px);
-    }
-    #kf-theme-toggle:active { background: rgba(59,130,246,0.25); }
   </style>
 </head>
-<body class="bg-[#05070D] text-[#F5F7FA] min-h-screen has-kf-tabbar">
-  <button id="kf-theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar modo claro/oscuro">🌙</button>
+<body class="bg-[#0A1128] text-[#F9F6F0] min-h-screen has-kf-tabbar">
 
-
-  <nav class="bg-[#0D1526] border-b border-[#3B82F6]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+  <nav class="bg-[#131E3A] border-b border-[#E5C39E]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
     <div class="flex items-center gap-2.5">
       <img src="logo.png" alt="Kratero Fit" class="w-8 h-8 object-contain">
       <div class="leading-none">
-        <span class="font-display text-base text-[#3B82F6]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
+        <span class="font-display text-base text-[#E5C39E]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
         <span class="block text-[9px] font-bold tracking-wide text-white/40 mt-0.5">PANEL COACH / ADMIN</span>
       </div>
     </div>
     <div class="flex flex-wrap gap-4 text-xs font-bold">
-      <a href="admin-dashboard.html" class="hover:text-[#3B82F6]">📊 Resumen</a>
-      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#3B82F6]">👥 Coaches</a>
-      <a href="admin-monitoreo.html" class="hover:text-[#3B82F6]">📈 Monitoreo</a>
-      <a href="admin-rutinas.html" class="hover:text-[#3B82F6]">🏋️ Rutinas</a>
-      <a href="admin-nutricion.html" class="text-[#3B82F6] underline">🥗 Nutrición</a>
-      <a href="admin-transformaciones.html" class="hover:text-[#3B82F6]">✨ Cambios</a>
-      <a href="admin-anuncios.html" class="hover:text-[#3B82F6]">📢 Anuncios</a>
-      <a href="admin-mensajes.html" class="hover:text-[#3B82F6]">💬 Mensajes</a>
+      <a href="admin-dashboard.html" class="hover:text-[#E5C39E]">📊 Resumen</a>
+      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#E5C39E]">👥 Coaches</a>
+      <a href="admin-monitoreo.html" class="hover:text-[#E5C39E]">📈 Monitoreo</a>
+      <a href="admin-rutinas.html" class="hover:text-[#E5C39E]">🏋️ Rutinas</a>
+      <a href="admin-nutricion.html" class="text-[#E5C39E] underline">🥗 Nutrición</a>
+      <a href="admin-transformaciones.html" class="hover:text-[#E5C39E]">✨ Cambios</a>
+      <a href="admin-anuncios.html" class="hover:text-[#E5C39E]">📢 Anuncios</a>
+      <a href="admin-mensajes.html" class="hover:text-[#E5C39E]">💬 Mensajes</a>
       <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">Salir</button>
     </div>
   </nav>
@@ -88,13 +67,13 @@
   <main class="max-w-6xl mx-auto p-6 space-y-8">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-[#3B82F6]">Planes de Nutrición</h1>
+        <h1 class="text-2xl font-bold text-[#E5C39E]">Planes de Nutrición</h1>
         <p class="text-xs text-white/50">Establece objetivos de macronutrientes y esquemas de alimentación.</p>
       </div>
 
       <div class="w-full md:w-72">
         <label class="block text-xs text-white/60 mb-1 font-semibold">Seleccionar Alumno:</label>
-        <select id="select-alumno" class="w-full bg-[#0D1526] border border-[#3B82F6]/30 text-xs rounded-xl p-3 text-white focus:outline-none focus:border-[#3B82F6]">
+        <select id="select-alumno" class="w-full bg-[#131E3A] border border-[#E5C39E]/30 text-xs rounded-xl p-3 text-white focus:outline-none focus:border-[#E5C39E]">
           <option value="">Cargando alumnos...</option>
         </select>
       </div>
@@ -102,22 +81,22 @@
 
     <div id="panel-nutricion" class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
       <!-- Resumen de Macros -->
-      <div class="lg:col-span-1 bg-[#0D1526] p-6 rounded-3xl border border-[#3B82F6]/20 space-y-4">
+      <div class="lg:col-span-1 bg-[#131E3A] p-6 rounded-3xl border border-[#E5C39E]/20 space-y-4">
         <h2 class="text-lg font-bold text-white">Objetivo Actual</h2>
         <div id="macro-resumen" class="space-y-3">
-          <div class="bg-[#05070D] p-4 rounded-xl border border-[#3B82F6]/10 flex justify-between items-center">
+          <div class="bg-[#0A1128] p-4 rounded-xl border border-[#E5C39E]/10 flex justify-between items-center">
             <span class="text-xs text-white/60">Calorías Totales</span>
-            <span id="m-cal" class="text-sm font-bold text-[#3B82F6]">-- kcal</span>
+            <span id="m-cal" class="text-sm font-bold text-[#E5C39E]">-- kcal</span>
           </div>
-          <div class="bg-[#05070D] p-4 rounded-xl border border-[#3B82F6]/10 flex justify-between items-center">
+          <div class="bg-[#0A1128] p-4 rounded-xl border border-[#E5C39E]/10 flex justify-between items-center">
             <span class="text-xs text-white/60">Proteínas</span>
             <span id="m-prot" class="text-sm font-bold text-white">-- g</span>
           </div>
-          <div class="bg-[#05070D] p-4 rounded-xl border border-[#3B82F6]/10 flex justify-between items-center">
+          <div class="bg-[#0A1128] p-4 rounded-xl border border-[#E5C39E]/10 flex justify-between items-center">
             <span class="text-xs text-white/60">Carbohidratos</span>
             <span id="m-carb" class="text-sm font-bold text-white">-- g</span>
           </div>
-          <div class="bg-[#05070D] p-4 rounded-xl border border-[#3B82F6]/10 flex justify-between items-center">
+          <div class="bg-[#0A1128] p-4 rounded-xl border border-[#E5C39E]/10 flex justify-between items-center">
             <span class="text-xs text-white/60">Grasas</span>
             <span id="m-gras" class="text-sm font-bold text-white">-- g</span>
           </div>
@@ -125,56 +104,50 @@
       </div>
 
       <!-- Configuración del Plan Nutricional -->
-      <div class="lg:col-span-2 bg-[#0D1526] p-6 rounded-3xl border border-[#3B82F6]/20 space-y-6">
+      <div class="lg:col-span-2 bg-[#131E3A] p-6 rounded-3xl border border-[#E5C39E]/20 space-y-6">
         <h2 class="text-lg font-bold text-white">Actualizar Plan Nutricional</h2>
         
         <div>
           <label class="block text-xs text-white/60 mb-1">Título del plan</label>
-          <input id="inp-titulo" type="text" placeholder="Ej. Plan de Definición — Fase 1" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#3B82F6]">
+          <input id="inp-titulo" type="text" placeholder="Ej. Plan de Definición — Fase 1" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#E5C39E]">
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div>
             <label class="block text-xs text-white/60 mb-1">Calorías</label>
-            <input id="inp-cal" type="number" placeholder="2200" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white text-center">
+            <input id="inp-cal" type="number" placeholder="2200" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-2.5 text-xs text-white text-center">
           </div>
           <div>
             <label class="block text-xs text-white/60 mb-1">Proteínas (g)</label>
-            <input id="inp-prot" type="number" placeholder="160" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white text-center">
+            <input id="inp-prot" type="number" placeholder="160" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-2.5 text-xs text-white text-center">
           </div>
           <div>
             <label class="block text-xs text-white/60 mb-1">Carbs (g)</label>
-            <input id="inp-carb" type="number" placeholder="250" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white text-center">
+            <input id="inp-carb" type="number" placeholder="250" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-2.5 text-xs text-white text-center">
           </div>
           <div>
             <label class="block text-xs text-white/60 mb-1">Grasas (g)</label>
-            <input id="inp-gras" type="number" placeholder="60" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-2.5 text-xs text-white text-center">
+            <input id="inp-gras" type="number" placeholder="60" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-2.5 text-xs text-white text-center">
           </div>
         </div>
 
         <div>
           <label class="block text-xs text-white/60 mb-1">Estructura de Comidas / Menú</label>
-          <textarea id="inp-comidas" rows="6" placeholder="Desayuno: 3 huevos + 80g avena...&#10;Almuerzo: 200g pechuga de pollo + 150g arroz...&#10;Cena: 200g salmón + ensalada verde..." class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-xs text-white focus:outline-none"></textarea>
+          <textarea id="inp-comidas" rows="6" placeholder="Desayuno: 3 huevos + 80g avena...&#10;Almuerzo: 200g pechuga de pollo + 150g arroz...&#10;Cena: 200g salmón + ensalada verde..." class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none"></textarea>
         </div>
 
-        <button id="btn-guardar-nutricion" class="w-full bg-[#3B82F6] text-[#05070D] font-bold text-xs py-3.5 rounded-xl hover:bg-[#2563eb] transition">Guardar Plan de Nutrición</button>
+        <button id="btn-guardar-nutricion" class="w-full bg-[#E5C39E] text-[#0A1128] font-bold text-xs py-3.5 rounded-xl hover:bg-[#d4b08b] transition">Guardar Plan de Nutrición</button>
       </div>
     </div>
 
-    <div id="sin-seleccion" class="bg-[#0D1526] p-12 rounded-3xl border border-[#3B82F6]/20 text-center text-white/40 text-xs">
+    <div id="sin-seleccion" class="bg-[#131E3A] p-12 rounded-3xl border border-[#E5C39E]/20 text-center text-white/40 text-xs">
       Selecciona un alumno para revisar o editar su plan nutricional.
     </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const supabaseClient = supabase.createClient('https://etdfskwtaargtrzisvmj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0ZGZza3d0YWFyZ3Ryemlzdm1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNjQ4NjEsImV4cCI6MjEwNDc0MDg2MX0.5UlqtJfVORgsZXNvO-Mx12YKeP_kb_BrxqI2nXgyjcs', {
-      auth: {
-        persistSession: true,     // guarda la sesión en este dispositivo
-        autoRefreshToken: true,   // la renueva sola en segundo plano
-        detectSessionInUrl: true  // necesario para los links de recuperación de contraseña
-      }
-    });
+    const supabaseClient = supabase.createClient('https://etdfskwtaargtrzisvmj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0ZGZza3d0YWFyZ3Ryemlzdm1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNjQ4NjEsImV4cCI6MjEwNDc0MDg2MX0.5UlqtJfVORgsZXNvO-Mx12YKeP_kb_BrxqI2nXgyjcs');
 
     let miPropioId = null, miRol = null;
 
@@ -276,7 +249,7 @@
   </script>
 
   <!-- TAB BAR INFERIOR (móvil) -->
-  <nav id="kf-tabbar" class="fixed bottom-0 inset-x-0 z-50 bg-[#0D1526]/95 backdrop-blur border-t border-[#3B82F6]/15">
+  <nav id="kf-tabbar" class="fixed bottom-0 inset-x-0 z-50 bg-[#131E3A]/95 backdrop-blur border-t border-[#E5C39E]/15">
     <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
           <a href="admin-dashboard.html" data-page="admin-dashboard.html" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Resumen</span></a>
           <a href="admin-coaches.html" data-page="admin-coaches.html" id="kf-tab-coaches" class="kf-tab hidden"><span class="kf-tab-icon">👥</span><span>Coaches</span></a>
@@ -294,35 +267,6 @@
       const actual = location.pathname.split('/').pop() || 'admin-dashboard.html';
       document.querySelectorAll('#kf-tabbar .kf-tab').forEach(a => {
         if (a.getAttribute('data-page') === actual) a.classList.add('active');
-      });
-    })();
-  </script>
-
-  <script>
-    // --- Kratero Fit: modo claro / oscuro (persistente en este dispositivo) ---
-    (function () {
-      const KEY = 'kf-theme';
-      const root = document.documentElement;
-      const saved = localStorage.getItem(KEY) || 'dark';
-      if (saved === 'light') root.setAttribute('data-theme', 'light');
-
-      function actualizarIcono() {
-        const btn = document.getElementById('kf-theme-toggle');
-        if (!btn) return;
-        btn.textContent = root.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
-      }
-
-      document.addEventListener('DOMContentLoaded', () => {
-        actualizarIcono();
-        const btn = document.getElementById('kf-theme-toggle');
-        if (btn) {
-          btn.addEventListener('click', () => {
-            const esClaro = root.getAttribute('data-theme') === 'light';
-            if (esClaro) { root.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
-            else { root.setAttribute('data-theme', 'light'); localStorage.setItem(KEY, 'light'); }
-            actualizarIcono();
-          });
-        }
       });
     })();
   </script>

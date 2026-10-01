@@ -10,93 +10,72 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #05070D;
+            background: radial-gradient(1200px 560px at 10% -15%, rgba(37,99,235,0.16), transparent 60%),
+        radial-gradient(1000px 520px at 108% 0%, rgba(14,165,233,0.10), transparent 55%),
+        radial-gradient(900px 700px at 50% 120%, rgba(30,58,138,0.18), transparent 60%),
+        linear-gradient(180deg, #060A1A 0%, #0A1128 45%, #050814 100%);
       background-attachment: fixed;
     }
     .font-display { font-family: 'Fraunces', serif; }
-    [class*="bg-[#0D1526]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
+    [class*="bg-[#131E3A]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #05070D; }
+    ::-webkit-scrollbar-track { background: #0A1128; }
     ::-webkit-scrollbar-thumb { background: #24345c; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3B82F6; }
-  
-    /* --- Kratero Fit: modo claro / oscuro --- */
-    html { transition: filter .25s ease; }
-    html[data-theme="light"] {
-      filter: invert(1) hue-rotate(180deg);
-      background: #fff;
-    }
-    html[data-theme="light"] img,
-    html[data-theme="light"] svg,
-    html[data-theme="light"] video,
-    html[data-theme="light"] iframe {
-      filter: invert(1) hue-rotate(180deg);
-    }
-    #kf-theme-toggle {
-      position: fixed; z-index: 60; top: 14px; right: 14px;
-      width: 38px; height: 38px; border-radius: 999px;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.35);
-      color: #F5F7FA; font-size: 16px; cursor: pointer;
-      backdrop-filter: blur(6px);
-    }
-    #kf-theme-toggle:active { background: rgba(59,130,246,0.25); }
+    ::-webkit-scrollbar-thumb:hover { background: #E5C39E; }
   </style>
 </head>
-<body class="bg-[#05070D] text-[#F5F7FA] flex items-center justify-center min-h-screen p-4 py-8">
-  <button id="kf-theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar modo claro/oscuro">🌙</button>
+<body class="bg-[#0A1128] text-[#F9F6F0] flex items-center justify-center min-h-screen p-4 py-8">
 
-
-  <div class="bg-[#0D1526] border border-[#3B82F6]/20 rounded-2xl p-8 max-w-lg w-full shadow-2xl space-y-6">
+  <div class="bg-[#131E3A] border border-[#E5C39E]/20 rounded-2xl p-8 max-w-lg w-full shadow-2xl space-y-6">
     <div class="text-center space-y-3">
-      <img src="logo.png" alt="Kratero Fit" class="w-14 h-14 mx-auto object-contain drop-shadow-[0_0_14px_rgba(59,130,246,0.3)]">
+      <img src="logo.png" alt="Kratero Fit" class="w-14 h-14 mx-auto object-contain drop-shadow-[0_0_14px_rgba(229,195,158,0.3)]">
       <div>
-        <h1 class="font-display text-3xl text-[#3B82F6]">Crear cuenta</h1>
-        <p class="text-xs text-[#F5F7FA]/60 mt-1">Ingresa tus datos para personalizar tu entrenamiento</p>
+        <h1 class="font-display text-3xl text-[#E5C39E]">Crear cuenta</h1>
+        <p class="text-xs text-[#F9F6F0]/60 mt-1">Ingresa tus datos para personalizar tu entrenamiento</p>
       </div>
     </div>
 
     <form id="register-form" class="space-y-5">
       <div class="space-y-4">
-        <p class="text-[11px] font-bold text-[#3B82F6]/70 uppercase tracking-wide border-b border-[#3B82F6]/10 pb-1.5">Datos de acceso</p>
+        <p class="text-[11px] font-bold text-[#E5C39E]/70 uppercase tracking-wide border-b border-[#E5C39E]/10 pb-1.5">Datos de acceso</p>
         <div>
-          <label class="block text-xs font-bold text-[#3B82F6] mb-1">Nombre Completo</label>
-          <input type="text" id="reg-nombre" required placeholder="Ej. Isaac González" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6] transition">
+          <label class="block text-xs font-bold text-[#E5C39E] mb-1">Nombre Completo</label>
+          <input type="text" id="reg-nombre" required placeholder="Ej. Isaac González" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#E5C39E]/40 focus:border-[#E5C39E] transition">
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold text-[#3B82F6] mb-1">Correo Electrónico</label>
-            <input type="email" id="reg-email" required placeholder="tu@correo.com" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6] transition">
+            <label class="block text-xs font-bold text-[#E5C39E] mb-1">Correo Electrónico</label>
+            <input type="email" id="reg-email" required placeholder="tu@correo.com" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#E5C39E]/40 focus:border-[#E5C39E] transition">
           </div>
           <div>
-            <label class="block text-xs font-bold text-[#3B82F6] mb-1">Contraseña</label>
-            <input type="password" id="reg-password" minlength="6" required placeholder="••••••••" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6] transition">
+            <label class="block text-xs font-bold text-[#E5C39E] mb-1">Contraseña</label>
+            <input type="password" id="reg-password" minlength="6" required placeholder="••••••••" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#E5C39E]/40 focus:border-[#E5C39E] transition">
           </div>
         </div>
       </div>
 
       <!-- Datos Físicos -->
       <div class="space-y-4">
-        <p class="text-[11px] font-bold text-[#3B82F6]/70 uppercase tracking-wide border-b border-[#3B82F6]/10 pb-1.5">Ficha física</p>
+        <p class="text-[11px] font-bold text-[#E5C39E]/70 uppercase tracking-wide border-b border-[#E5C39E]/10 pb-1.5">Ficha física</p>
       <div class="grid grid-cols-3 gap-3">
         <div>
-          <label class="block text-xs font-bold text-[#3B82F6] mb-1">Edad</label>
-          <input type="number" id="reg-edad" required placeholder="25" min="10" max="100" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6] transition">
+          <label class="block text-xs font-bold text-[#E5C39E] mb-1">Edad</label>
+          <input type="number" id="reg-edad" required placeholder="25" min="10" max="100" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#E5C39E]/40 focus:border-[#E5C39E] transition">
         </div>
         <div>
-          <label class="block text-xs font-bold text-[#3B82F6] mb-1">Peso (kg)</label>
-          <input type="number" step="0.1" id="reg-peso" required placeholder="70.5" min="25" max="300" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6] transition">
+          <label class="block text-xs font-bold text-[#E5C39E] mb-1">Peso (kg)</label>
+          <input type="number" step="0.1" id="reg-peso" required placeholder="70.5" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#E5C39E]/40 focus:border-[#E5C39E] transition">
         </div>
         <div>
-          <label class="block text-xs font-bold text-[#3B82F6] mb-1">Estatura (cm)</label>
-          <input type="number" id="reg-estatura" required placeholder="175" min="100" max="230" class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6] transition">
+          <label class="block text-xs font-bold text-[#E5C39E] mb-1">Estatura (cm)</label>
+          <input type="number" id="reg-estatura" required placeholder="175" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#E5C39E]/40 focus:border-[#E5C39E] transition">
         </div>
       </div>
 
       <div>
-        <label class="block text-xs font-bold text-[#3B82F6] mb-1">Nivel de Actividad</label>
-        <select id="reg-actividad" required class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6] transition">
+        <label class="block text-xs font-bold text-[#E5C39E] mb-1">Nivel de Actividad</label>
+        <select id="reg-actividad" required class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#E5C39E]/40 focus:border-[#E5C39E] transition">
           <option value="" disabled selected>Selecciona una opción</option>
           <option value="Sedentario">Sedentario (Poco o ningún ejercicio)</option>
           <option value="Ligero">Ligero (1-3 días/semana)</option>
@@ -107,39 +86,31 @@
       </div>
 
       <div class="space-y-4">
-        <p class="text-[11px] font-bold text-[#3B82F6]/70 uppercase tracking-wide border-b border-[#3B82F6]/10 pb-1.5">Entrenador y condiciones</p>
+        <p class="text-[11px] font-bold text-[#E5C39E]/70 uppercase tracking-wide border-b border-[#E5C39E]/10 pb-1.5">Entrenador y condiciones</p>
         <div>
-          <label class="block text-xs font-bold text-[#3B82F6] mb-1">Elige tu Entrenador</label>
-          <select id="reg-coach" required class="w-full bg-[#05070D] border border-[#3B82F6]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6] transition">
+          <label class="block text-xs font-bold text-[#E5C39E] mb-1">Elige tu Entrenador</label>
+          <select id="reg-coach" required class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#E5C39E]/40 focus:border-[#E5C39E] transition">
             <option value="" disabled selected>Cargando entrenadores...</option>
           </select>
         </div>
 
         <div class="flex items-center gap-2">
-          <input type="checkbox" id="reg-terms" required class="accent-[#3B82F6] rounded">
-          <label for="reg-terms" class="text-xs text-[#F5F7FA]/80">Acepto los <a href="terminos-privacidad.html" target="_blank" class="text-[#3B82F6] underline hover:text-[#2563eb]">términos y aviso de privacidad</a></label>
+          <input type="checkbox" id="reg-terms" required class="accent-[#E5C39E] rounded">
+          <label for="reg-terms" class="text-xs text-[#F9F6F0]/80">Acepto los <a href="terminos-privacidad.html" target="_blank" class="text-[#E5C39E] underline hover:text-[#d4b08b]">términos y aviso de privacidad</a></label>
         </div>
 
-        <p id="reg-error" class="hidden text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg p-2.5"></p>
-
-        <button type="submit" id="btn-register" class="w-full bg-[#3B82F6] text-[#05070D] font-bold py-3 rounded-xl hover:bg-[#2563eb] hover:shadow-[0_8px_24px_-8px_rgba(59,130,246,0.5)] transition">Registrarme Ahora</button>
+        <button type="submit" id="btn-register" class="w-full bg-[#E5C39E] text-[#0A1128] font-bold py-3 rounded-xl hover:bg-[#d4b08b] hover:shadow-[0_8px_24px_-8px_rgba(229,195,158,0.5)] transition">Registrarme Ahora</button>
       </div>
     </form>
 
-    <div class="text-center text-xs text-[#F5F7FA]/60">
-      ¿Ya tienes cuenta? <a href="login.html" class="text-[#3B82F6] font-bold hover:underline">Inicia Sesión</a>
+    <div class="text-center text-xs text-[#F9F6F0]/60">
+      ¿Ya tienes cuenta? <a href="login.html" class="text-[#E5C39E] font-bold hover:underline">Inicia Sesión</a>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const supabaseClient = supabase.createClient('https://etdfskwtaargtrzisvmj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0ZGZza3d0YWFyZ3Ryemlzdm1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNjQ4NjEsImV4cCI6MjEwNDc0MDg2MX0.5UlqtJfVORgsZXNvO-Mx12YKeP_kb_BrxqI2nXgyjcs', {
-      auth: {
-        persistSession: true,     // guarda la sesión en este dispositivo
-        autoRefreshToken: true,   // la renueva sola en segundo plano
-        detectSessionInUrl: true  // necesario para los links de recuperación de contraseña
-      }
-    });
+    const supabaseClient = supabase.createClient('https://etdfskwtaargtrzisvmj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0ZGZza3d0YWFyZ3Ryemlzdm1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNjQ4NjEsImV4cCI6MjEwNDc0MDg2MX0.5UlqtJfVORgsZXNvO-Mx12YKeP_kb_BrxqI2nXgyjcs');
 
     // Carga la lista de coaches activos para el selector.
     async function cargarCoaches() {
@@ -156,57 +127,17 @@
     }
     cargarCoaches();
 
-    function mostrarErrorRegistro(msg) {
-      const err = document.getElementById('reg-error');
-      err.innerText = msg;
-      err.classList.remove('hidden');
-      err.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const errBox = document.getElementById('reg-error');
-      errBox.classList.add('hidden');
-
-      const nombre = document.getElementById('reg-nombre').value.trim();
-      const email = document.getElementById('reg-email').value.trim();
+      
+      const nombre = document.getElementById('reg-nombre').value;
+      const email = document.getElementById('reg-email').value;
       const password = document.getElementById('reg-password').value;
       const edad = parseInt(document.getElementById('reg-edad').value);
       const peso = parseFloat(document.getElementById('reg-peso').value);
       const estatura = parseFloat(document.getElementById('reg-estatura').value);
       const actividad = document.getElementById('reg-actividad').value;
       const coachId = document.getElementById('reg-coach').value || null;
-
-      // --- Validaciones reales antes de mandar nada a Supabase ---
-      if (nombre.length < 3) {
-        return mostrarErrorRegistro('Escribe tu nombre completo (mínimo 3 caracteres).');
-      }
-      const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      if (!emailValido) {
-        return mostrarErrorRegistro('Escribe un correo electrónico válido.');
-      }
-      if (password.length < 6) {
-        return mostrarErrorRegistro('La contraseña debe tener al menos 6 caracteres.');
-      }
-      if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
-        return mostrarErrorRegistro('Usa una contraseña más segura: combina letras y números.');
-      }
-      if (!Number.isFinite(edad) || edad < 10 || edad > 100) {
-        return mostrarErrorRegistro('La edad debe ser un número entre 10 y 100 años.');
-      }
-      if (!Number.isFinite(peso) || peso < 25 || peso > 300) {
-        return mostrarErrorRegistro('El peso debe ser un número entre 25 y 300 kg.');
-      }
-      if (!Number.isFinite(estatura) || estatura < 100 || estatura > 230) {
-        return mostrarErrorRegistro('La estatura debe ser un número entre 100 y 230 cm.');
-      }
-      if (!actividad) {
-        return mostrarErrorRegistro('Selecciona tu nivel de actividad.');
-      }
-      if (!document.getElementById('reg-terms').checked) {
-        return mostrarErrorRegistro('Debes aceptar los términos y aviso de privacidad.');
-      }
 
       const btn = document.getElementById('btn-register');
       btn.innerText = 'Creando cuenta...';
@@ -263,35 +194,6 @@
         window.location.href = 'gracias.html';
       }
     });
-  </script>
-
-  <script>
-    // --- Kratero Fit: modo claro / oscuro (persistente en este dispositivo) ---
-    (function () {
-      const KEY = 'kf-theme';
-      const root = document.documentElement;
-      const saved = localStorage.getItem(KEY) || 'dark';
-      if (saved === 'light') root.setAttribute('data-theme', 'light');
-
-      function actualizarIcono() {
-        const btn = document.getElementById('kf-theme-toggle');
-        if (!btn) return;
-        btn.textContent = root.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
-      }
-
-      document.addEventListener('DOMContentLoaded', () => {
-        actualizarIcono();
-        const btn = document.getElementById('kf-theme-toggle');
-        if (btn) {
-          btn.addEventListener('click', () => {
-            const esClaro = root.getAttribute('data-theme') === 'light';
-            if (esClaro) { root.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
-            else { root.setAttribute('data-theme', 'light'); localStorage.setItem(KEY, 'light'); }
-            actualizarIcono();
-          });
-        }
-      });
-    })();
   </script>
 </body>
 </html>
