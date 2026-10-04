@@ -10,6 +10,10 @@
   <link rel="icon" type="image/png" href="logo.png">
   <style>
     .leaflet-control-attribution { font-size: 8px !important; }
+    /* El contenedor del mapa conserva una altura real aunque el dashboard cambie de layout. */
+    #cardio-map { height: 18rem !important; min-height: 18rem; width: 100%; position: relative; z-index: 1; }
+    #cardio-map.leaflet-container { height: 18rem !important; min-height: 18rem; width: 100% !important; }
+    .leaflet-container { font-family: 'Plus Jakarta Sans', sans-serif; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
             background: radial-gradient(1200px 560px at 10% -15%, rgba(142,182,155,0.14), transparent 60%),
@@ -34,7 +38,8 @@
       color: rgba(249,246,240,.45); font-size: 9px; font-weight: 800; letter-spacing: .01em;
       white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
     }
-    .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
+    .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; width:24px; height:24px; display:flex; align-items:center; justify-content:center; }
+    .kf-tab .kf-tab-icon img { width:23px; height:23px; object-fit:contain; display:block; }
     .kf-tab.active { color: #DAF1DE; background: rgba(218,241,222,.10); }
     .kf-tab:active { background: rgba(218,241,222,.16); }
     /* Tab bar FLOTANTE tipo píldora (estilo kits de fitness modernos) */
@@ -52,6 +57,7 @@
       #kf-tabbar { max-width: 720px; }
       .kf-tab { min-width: 76px; font-size: 10px; padding: 9px 12px; }
       .kf-tab .kf-tab-icon { font-size: 20px; }
+      .kf-tab .kf-tab-icon img { width:25px; height:25px; }
     }
     html { scroll-behavior: smooth; }
     section[id], main[id] { scroll-margin-top: 92px; }
@@ -560,6 +566,10 @@
 
       document.getElementById('today-date').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
 
+      // El mapa no depende de las consultas de datos: debe aparecer aunque alguna
+      // consulta de Supabase tarde, falle o no devuelva información.
+      initCardioMap();
+
       const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', user.id).maybeSingle();
       if (profile) {
         document.getElementById('user-display-name').innerText = profile.nombre || profile.email;
@@ -594,9 +604,13 @@
         cargarHistorialCardio()
       ]);
 
-      // El mapa de cardio arranca junto con el dashboard: así el punto azul
-      // del GPS ya está listo antes de que le des a "Iniciar Actividad".
+      // Recalcula el tamaño después de pintar las secciones y los datos.
+      // Leaflet necesita este invalidateSize cuando cambia el layout alrededor del mapa.
       initCardioMap();
+      if (cardioMap) {
+        setTimeout(() => cardioMap.invalidateSize(true), 100);
+        setTimeout(() => cardioMap.invalidateSize(true), 500);
+      }
     }
 
     // ============================================================
@@ -1493,14 +1507,14 @@
   <!-- TAB BAR INFERIOR (móvil) -->
   <nav id="kf-tabbar" class="fixed z-50 bg-[#0B2B26]/95 backdrop-blur">
     <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
-      <a href="#sec-inicio" data-anchor="sec-inicio" class="kf-tab"><span class="kf-tab-icon">🏠</span><span>Inicio</span></a>
+      <a href="#sec-inicio" data-anchor="sec-inicio" class="kf-tab"><span class="kf-tab-icon"><img src="assets/icons/icon-inicio.png" alt="" aria-hidden="true"></span><span>Inicio</span></a>
       <a href="#sec-habitos" data-anchor="sec-habitos" class="kf-tab"><span class="kf-tab-icon">📅</span><span>Hábitos</span></a>
       <a href="#sec-cardio" data-anchor="sec-cardio" class="kf-tab"><span class="kf-tab-icon">🏃</span><span>Cardio</span></a>
       <a href="#sec-rutina" data-anchor="sec-rutina" class="kf-tab"><span class="kf-tab-icon">💪</span><span>Rutina</span></a>
-      <a href="#sec-nutricion" data-anchor="sec-nutricion" class="kf-tab"><span class="kf-tab-icon">🥗</span><span>Nutrición</span></a>
-      <a href="#sec-progreso" data-anchor="sec-progreso" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Progreso</span></a>
-      <a href="#sec-chat" data-anchor="sec-chat" class="kf-tab relative"><span class="relative"><span class="kf-tab-icon">💬</span><span id="kf-tab-chat-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-[#0B2B26]"></span></span><span>Chat</span></a>
-      <a href="perfil.html" class="kf-tab"><span class="kf-tab-icon">👤</span><span>Perfil</span></a>
+      <a href="#sec-nutricion" data-anchor="sec-nutricion" class="kf-tab"><span class="kf-tab-icon"><img src="assets/icons/icon-nutricion.png" alt="" aria-hidden="true"></span><span>Nutrición</span></a>
+      <a href="#sec-progreso" data-anchor="sec-progreso" class="kf-tab"><span class="kf-tab-icon"><img src="assets/icons/icon-progreso.png" alt="" aria-hidden="true"></span><span>Progreso</span></a>
+      <a href="#sec-chat" data-anchor="sec-chat" class="kf-tab relative"><span class="relative"><span class="kf-tab-icon"><img src="assets/icons/icon-chat.png" alt="" aria-hidden="true"></span><span id="kf-tab-chat-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-[#0B2B26]"></span></span><span>Chat</span></a>
+      <a href="perfil.html" class="kf-tab"><span class="kf-tab-icon"><img src="assets/icons/icon-perfil.png" alt="" aria-hidden="true"></span><span>Perfil</span></a>
     </div>
   </nav>
   <script>
