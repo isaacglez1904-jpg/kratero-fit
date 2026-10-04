@@ -10,18 +10,18 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(1200px 560px at 10% -15%, rgba(37,99,235,0.16), transparent 60%),
-        radial-gradient(1000px 520px at 108% 0%, rgba(14,165,233,0.10), transparent 55%),
-        radial-gradient(900px 700px at 50% 120%, rgba(30,58,138,0.18), transparent 60%),
-        linear-gradient(180deg, #060A1A 0%, #0A1128 45%, #050814 100%);
+            background: radial-gradient(1200px 560px at 10% -15%, rgba(142,182,155,0.14), transparent 60%),
+        radial-gradient(1000px 520px at 108% 0%, rgba(218,241,222,0.07), transparent 55%),
+        radial-gradient(900px 700px at 50% 120%, rgba(22,56,50,0.35), transparent 60%),
+        linear-gradient(180deg, #0B2B26 0%, #051F20 45%, #051F20 100%);
       background-attachment: fixed;
     }
     .font-display { font-family: 'Fraunces', serif; }
-    [class*="bg-[#131E3A]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
+    [class*="bg-[#0B2B26]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0A1128; }
-    ::-webkit-scrollbar-thumb { background: #24345c; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #E5C39E; }
+    ::-webkit-scrollbar-track { background: #051F20; }
+    ::-webkit-scrollbar-thumb { background: #235347; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #DAF1DE; }
 
     /* --- Kratero Fit: tab bar inferior (móvil) --- */
     .kf-tabbar-scroll::-webkit-scrollbar { display: none; }
@@ -33,19 +33,19 @@
       white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
     }
     .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
-    .kf-tab.active { color: #E5C39E; background: rgba(229,195,158,.10); }
-    .kf-tab:active { background: rgba(229,195,158,.16); }
+    .kf-tab.active { color: #DAF1DE; background: rgba(218,241,222,.10); }
+    .kf-tab:active { background: rgba(218,241,222,.16); }
     /* Tab bar FLOTANTE tipo píldora (estilo kits de fitness modernos) */
     #kf-tabbar {
       left: 50%; right: auto; transform: translateX(-50%);
       bottom: calc(14px + env(safe-area-inset-bottom));
       width: calc(100% - 24px); max-width: 640px;
-      border-radius: 28px; border: 1px solid rgba(229,195,158,0.18);
+      border-radius: 28px; border: 1px solid rgba(218,241,222,0.18);
       box-shadow: 0 16px 40px -12px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset;
     }
     body.has-kf-tabbar { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
     .kf-tab { border-radius: 20px; }
-    .kf-tab.active { box-shadow: 0 0 0 1px rgba(229,195,158,0.25) inset; }
+    .kf-tab.active { box-shadow: 0 0 0 1px rgba(218,241,222,0.25) inset; }
     @media (min-width: 768px) {
       #kf-tabbar { max-width: 720px; }
       .kf-tab { min-width: 76px; font-size: 10px; padding: 9px 12px; }
@@ -55,41 +55,41 @@
     section[id] { scroll-margin-top: 84px; }
   </style>
 </head>
-<body class="bg-[#0A1128] text-[#F9F6F0] min-h-screen flex flex-col has-kf-tabbar">
+<body class="bg-[#051F20] text-[#F9F6F0] min-h-screen flex flex-col has-kf-tabbar">
 
-  <nav class="bg-[#131E3A] border-b border-[#E5C39E]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+  <nav class="bg-[#0B2B26] border-b border-[#DAF1DE]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
     <div class="flex items-center gap-2.5">
       <img src="logo.png" alt="Kratero Fit" class="w-8 h-8 object-contain">
       <div class="leading-none">
-        <span class="font-display text-base text-[#E5C39E]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
+        <span class="font-display text-base text-[#DAF1DE]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
         <span class="block text-[9px] font-bold tracking-wide text-white/40 mt-0.5">PANEL COACH / ADMIN</span>
       </div>
     </div>
     <div class="flex flex-wrap gap-4 text-xs font-bold items-center">
-      <a href="admin-dashboard.html" class="hover:text-[#E5C39E]">📊 Resumen</a>
-      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#E5C39E]">👥 Coaches</a>
-      <a href="admin-monitoreo.html" class="hover:text-[#E5C39E]">📈 Monitoreo</a>
-      <a href="admin-rutinas.html" class="hover:text-[#E5C39E]">🏋️ Rutinas</a>
-      <a href="admin-nutricion.html" class="hover:text-[#E5C39E]">🥗 Nutrición</a>
-      <a href="admin-transformaciones.html" class="hover:text-[#E5C39E]">✨ Cambios</a>
-      <a href="admin-anuncios.html" class="text-[#E5C39E] underline">📢 Anuncios</a>
-      <a href="admin-mensajes.html" class="hover:text-[#E5C39E]">💬 Mensajes</a>
+      <a href="admin-dashboard.html" class="hover:text-[#DAF1DE]">📊 Resumen</a>
+      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#DAF1DE]">👥 Coaches</a>
+      <a href="admin-monitoreo.html" class="hover:text-[#DAF1DE]">📈 Monitoreo</a>
+      <a href="admin-rutinas.html" class="hover:text-[#DAF1DE]">🏋️ Rutinas</a>
+      <a href="admin-nutricion.html" class="hover:text-[#DAF1DE]">🥗 Nutrición</a>
+      <a href="admin-transformaciones.html" class="hover:text-[#DAF1DE]">✨ Cambios</a>
+      <a href="admin-anuncios.html" class="text-[#DAF1DE] underline">📢 Anuncios</a>
+      <a href="admin-mensajes.html" class="hover:text-[#DAF1DE]">💬 Mensajes</a>
       <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">Salir</button>
     </div>
   </nav>
 
   <main class="max-w-4xl mx-auto p-6 space-y-8 w-full flex-1">
     <div>
-      <h1 class="text-2xl font-bold text-[#E5C39E]">📢 Anuncios Generales</h1>
+      <h1 class="text-2xl font-bold text-[#DAF1DE]">📢 Anuncios Generales</h1>
       <p class="text-xs text-white/50 mt-1">Estos avisos aparecen para todos los alumnos en su panel de inicio.</p>
     </div>
 
     <!-- FORMULARIO: solo visible/habilitado para el admin dueño -->
-    <div id="form-anuncio-wrap" class="bg-[#131E3A] p-6 rounded-3xl border border-[#E5C39E]/20 space-y-4">
+    <div id="form-anuncio-wrap" class="bg-[#0B2B26] p-6 rounded-3xl border border-[#DAF1DE]/20 space-y-4">
       <h2 class="text-sm font-bold text-white">Publicar nuevo anuncio</h2>
       <div class="grid grid-cols-1 sm:grid-cols-[1fr,160px] gap-3">
-        <input id="anuncio-titulo" type="text" placeholder="Título del aviso..." class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#E5C39E]/40 focus:border-[#E5C39E] transition">
-        <select id="anuncio-categoria" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#E5C39E] transition">
+        <input id="anuncio-titulo" type="text" placeholder="Título del aviso..." class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#DAF1DE]/40 focus:border-[#DAF1DE] transition">
+        <select id="anuncio-categoria" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#DAF1DE] transition">
           <option value="General">General</option>
           <option value="Horarios">Horarios</option>
           <option value="Promoción">Promoción</option>
@@ -97,12 +97,12 @@
           <option value="Evento">Evento</option>
         </select>
       </div>
-      <textarea id="anuncio-contenido" rows="4" placeholder="Contenido del comunicado..." class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#E5C39E]/40 focus:border-[#E5C39E] transition"></textarea>
-      <button id="btn-publicar" class="w-full bg-[#E5C39E] text-[#0A1128] font-bold text-xs py-3 rounded-xl hover:bg-[#d4b08b] hover:shadow-[0_8px_24px_-8px_rgba(229,195,158,0.5)] transition">Publicar Anuncio</button>
+      <textarea id="anuncio-contenido" rows="4" placeholder="Contenido del comunicado..." class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#DAF1DE]/40 focus:border-[#DAF1DE] transition"></textarea>
+      <button id="btn-publicar" class="w-full bg-[#DAF1DE] text-[#051F20] font-bold text-xs py-3 rounded-xl hover:bg-[#8EB69B] hover:shadow-[0_8px_24px_-8px_rgba(218,241,222,0.5)] transition">Publicar Anuncio</button>
     </div>
 
     <!-- Aviso para coaches: no pueden publicar, solo ven el listado -->
-    <div id="aviso-solo-lectura" class="hidden bg-[#131E3A] border border-[#E5C39E]/15 rounded-2xl p-4 text-xs text-white/50">
+    <div id="aviso-solo-lectura" class="hidden bg-[#0B2B26] border border-[#DAF1DE]/15 rounded-2xl p-4 text-xs text-white/50">
       Solo el administrador dueño de la cuenta puede publicar o eliminar anuncios generales. Aquí puedes ver el historial.
     </div>
 
@@ -165,10 +165,10 @@
       cont.innerHTML = anuncios.map(a => {
         const fecha = a.created_at ? new Date(a.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
         return `
-          <div class="bg-[#131E3A] border border-[#E5C39E]/15 rounded-2xl p-4 flex items-start justify-between gap-3">
+          <div class="bg-[#0B2B26] border border-[#DAF1DE]/15 rounded-2xl p-4 flex items-start justify-between gap-3">
             <div class="min-w-0">
               <div class="flex items-center gap-2 flex-wrap mb-1">
-                <span class="text-[10px] font-bold bg-[#E5C39E]/10 text-[#E5C39E] border border-[#E5C39E]/20 px-2 py-0.5 rounded-full">${a.categoria || 'General'}</span>
+                <span class="text-[10px] font-bold bg-[#DAF1DE]/10 text-[#DAF1DE] border border-[#DAF1DE]/20 px-2 py-0.5 rounded-full">${a.categoria || 'General'}</span>
                 <span class="text-[10px] text-white/40">${fecha}</span>
               </div>
               <p class="text-sm font-bold text-white">${a.titulo || ''}</p>
@@ -218,7 +218,7 @@
   </script>
 
   <!-- TAB BAR INFERIOR (móvil) -->
-  <nav id="kf-tabbar" class="fixed z-50 bg-[#131E3A]/95 backdrop-blur">
+  <nav id="kf-tabbar" class="fixed z-50 bg-[#0B2B26]/95 backdrop-blur">
     <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
           <a href="admin-dashboard.html" data-page="admin-dashboard.html" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Resumen</span></a>
           <a href="admin-coaches.html" data-page="admin-coaches.html" id="kf-tab-coaches" class="kf-tab hidden"><span class="kf-tab-icon">👥</span><span>Coaches</span></a>

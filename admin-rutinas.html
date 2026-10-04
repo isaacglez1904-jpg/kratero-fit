@@ -10,10 +10,10 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(1200px 560px at 10% -15%, rgba(37,99,235,0.16), transparent 60%),
-        radial-gradient(1000px 520px at 108% 0%, rgba(14,165,233,0.10), transparent 55%),
-        radial-gradient(900px 700px at 50% 120%, rgba(30,58,138,0.18), transparent 60%),
-        linear-gradient(180deg, #060A1A 0%, #0A1128 45%, #050814 100%);
+            background: radial-gradient(1200px 560px at 10% -15%, rgba(142,182,155,0.14), transparent 60%),
+        radial-gradient(1000px 520px at 108% 0%, rgba(218,241,222,0.07), transparent 55%),
+        radial-gradient(900px 700px at 50% 120%, rgba(22,56,50,0.35), transparent 60%),
+        linear-gradient(180deg, #0B2B26 0%, #051F20 45%, #051F20 100%);
       background-attachment: fixed;
     }
     .font-display { font-family: 'Fraunces', serif; }
@@ -28,19 +28,19 @@
       white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
     }
     .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
-    .kf-tab.active { color: #E5C39E; background: rgba(229,195,158,.10); }
-    .kf-tab:active { background: rgba(229,195,158,.16); }
+    .kf-tab.active { color: #DAF1DE; background: rgba(218,241,222,.10); }
+    .kf-tab:active { background: rgba(218,241,222,.16); }
     /* Tab bar FLOTANTE tipo píldora (estilo kits de fitness modernos) */
     #kf-tabbar {
       left: 50%; right: auto; transform: translateX(-50%);
       bottom: calc(14px + env(safe-area-inset-bottom));
       width: calc(100% - 24px); max-width: 640px;
-      border-radius: 28px; border: 1px solid rgba(229,195,158,0.18);
+      border-radius: 28px; border: 1px solid rgba(218,241,222,0.18);
       box-shadow: 0 16px 40px -12px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset;
     }
     body.has-kf-tabbar { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
     .kf-tab { border-radius: 20px; }
-    .kf-tab.active { box-shadow: 0 0 0 1px rgba(229,195,158,0.25) inset; }
+    .kf-tab.active { box-shadow: 0 0 0 1px rgba(218,241,222,0.25) inset; }
     @media (min-width: 768px) {
       #kf-tabbar { max-width: 720px; }
       .kf-tab { min-width: 76px; font-size: 10px; padding: 9px 12px; }
@@ -50,25 +50,25 @@
     section[id] { scroll-margin-top: 84px; }
   </style>
 </head>
-<body class="bg-[#0A1128] text-[#F9F6F0] min-h-screen has-kf-tabbar">
+<body class="bg-[#051F20] text-[#F9F6F0] min-h-screen has-kf-tabbar">
 
-  <nav class="bg-[#131E3A] border-b border-[#E5C39E]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+  <nav class="bg-[#0B2B26] border-b border-[#DAF1DE]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
     <div class="flex items-center gap-2.5">
       <img src="logo.png" alt="Kratero Fit" class="w-8 h-8 object-contain">
       <div class="leading-none">
-        <span class="font-display text-base text-[#E5C39E]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
+        <span class="font-display text-base text-[#DAF1DE]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
         <span class="block text-[9px] font-bold tracking-wide text-white/40 mt-0.5">PANEL COACH / ADMIN</span>
       </div>
     </div>
     <div class="flex flex-wrap gap-4 text-xs font-bold">
-      <a href="admin-dashboard.html" class="hover:text-[#E5C39E]">📊 Resumen</a>
-      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#E5C39E]">👥 Coaches</a>
-      <a href="admin-monitoreo.html" class="hover:text-[#E5C39E]">📈 Monitoreo</a>
-      <a href="admin-rutinas.html" class="text-[#E5C39E] underline">🏋️ Rutinas</a>
-      <a href="admin-nutricion.html" class="hover:text-[#E5C39E]">🥗 Nutrición</a>
-      <a href="admin-transformaciones.html" class="hover:text-[#E5C39E]">✨ Cambios</a>
-      <a href="admin-anuncios.html" class="hover:text-[#E5C39E]">📢 Anuncios</a>
-      <a href="admin-mensajes.html" class="hover:text-[#E5C39E]">💬 Mensajes</a>
+      <a href="admin-dashboard.html" class="hover:text-[#DAF1DE]">📊 Resumen</a>
+      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#DAF1DE]">👥 Coaches</a>
+      <a href="admin-monitoreo.html" class="hover:text-[#DAF1DE]">📈 Monitoreo</a>
+      <a href="admin-rutinas.html" class="text-[#DAF1DE] underline">🏋️ Rutinas</a>
+      <a href="admin-nutricion.html" class="hover:text-[#DAF1DE]">🥗 Nutrición</a>
+      <a href="admin-transformaciones.html" class="hover:text-[#DAF1DE]">✨ Cambios</a>
+      <a href="admin-anuncios.html" class="hover:text-[#DAF1DE]">📢 Anuncios</a>
+      <a href="admin-mensajes.html" class="hover:text-[#DAF1DE]">💬 Mensajes</a>
       <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">Salir</button>
     </div>
   </nav>
@@ -76,13 +76,13 @@
   <main class="max-w-6xl mx-auto p-6 space-y-8">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-[#E5C39E]">Gestión de Rutinas</h1>
+        <h1 class="text-2xl font-bold text-[#DAF1DE]">Gestión de Rutinas</h1>
         <p class="text-xs text-white/50">Asigna y diseña programas de entrenamiento personalizados.</p>
       </div>
 
       <div class="w-full md:w-72">
         <label class="block text-xs text-white/60 mb-1 font-semibold">Seleccionar Alumno:</label>
-        <select id="select-alumno" class="w-full bg-[#131E3A] border border-[#E5C39E]/30 text-xs rounded-xl p-3 text-white focus:outline-none focus:border-[#E5C39E]">
+        <select id="select-alumno" class="w-full bg-[#0B2B26] border border-[#DAF1DE]/30 text-xs rounded-xl p-3 text-white focus:outline-none focus:border-[#DAF1DE]">
           <option value="">Cargando alumnos...</option>
         </select>
       </div>
@@ -90,7 +90,7 @@
 
     <div id="panel-rutinas" class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
       <!-- Rutinas Existentes del Alumno -->
-      <div class="lg:col-span-1 bg-[#131E3A] p-6 rounded-3xl border border-[#E5C39E]/20 space-y-4">
+      <div class="lg:col-span-1 bg-[#0B2B26] p-6 rounded-3xl border border-[#DAF1DE]/20 space-y-4">
         <h2 class="text-lg font-bold text-white">Rutinas Asignadas</h2>
         <div id="lista-rutinas" class="space-y-3">
           <p class="text-xs text-white/40">Sin rutinas cargadas.</p>
@@ -98,14 +98,14 @@
       </div>
 
       <!-- Formulario para Crear / Asignar Nueva Rutina -->
-      <div class="lg:col-span-2 bg-[#131E3A] p-6 rounded-3xl border border-[#E5C39E]/20 space-y-5">
+      <div class="lg:col-span-2 bg-[#0B2B26] p-6 rounded-3xl border border-[#DAF1DE]/20 space-y-5">
         <h2 class="text-lg font-bold text-white">Agregar Ejercicio a la Rutina</h2>
         <p class="text-xs text-white/50 -mt-3">Cada ejercicio se guarda como una tarjeta que el alumno verá en su panel, agrupada por día.</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs text-white/60 mb-1">Día de la semana</label>
-            <select id="rutina-dia" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#E5C39E]">
+            <select id="rutina-dia" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#DAF1DE]">
               <option value="Lunes">Lunes</option>
               <option value="Martes">Martes</option>
               <option value="Miércoles">Miércoles</option>
@@ -117,38 +117,38 @@
           </div>
           <div>
             <label class="block text-xs text-white/60 mb-1">Título del ejercicio</label>
-            <input id="rutina-titulo" type="text" placeholder="Ej. Press de Banca" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#E5C39E]">
+            <input id="rutina-titulo" type="text" placeholder="Ej. Press de Banca" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#DAF1DE]">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs text-white/60 mb-1">Series</label>
-            <input id="rutina-series" type="number" min="1" max="20" value="4" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#E5C39E]">
+            <input id="rutina-series" type="number" min="1" max="20" value="4" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#DAF1DE]">
           </div>
           <div>
             <label class="block text-xs text-white/60 mb-1">Repeticiones</label>
-            <input id="rutina-reps" type="text" placeholder="10-12" value="10-12" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#E5C39E]">
+            <input id="rutina-reps" type="text" placeholder="10-12" value="10-12" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#DAF1DE]">
           </div>
         </div>
 
         <div>
           <label class="block text-xs text-white/60 mb-1">Indicaciones / Descripción</label>
-          <textarea id="rutina-descripcion" rows="3" placeholder="Ej. Descanso de 90s entre series. Baja controlado 3 segundos." class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#E5C39E]"></textarea>
+          <textarea id="rutina-descripcion" rows="3" placeholder="Ej. Descanso de 90s entre series. Baja controlado 3 segundos." class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#DAF1DE]"></textarea>
         </div>
 
         <div>
           <label class="block text-xs text-white/60 mb-1">Video de demostración (opcional)</label>
-          <input id="rutina-video" type="url" placeholder="https://www.youtube.com/embed/..." class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#E5C39E]">
-          <p class="text-[10px] text-white/40 mt-1">Usa el enlace de tipo <span class="text-[#E5C39E]">embed</span> de YouTube para que se vea dentro de la app.</p>
+          <input id="rutina-video" type="url" placeholder="https://www.youtube.com/embed/..." class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#DAF1DE]">
+          <p class="text-[10px] text-white/40 mt-1">Usa el enlace de tipo <span class="text-[#DAF1DE]">embed</span> de YouTube para que se vea dentro de la app.</p>
         </div>
 
-        <button id="btn-guardar-rutina" class="w-full bg-[#E5C39E] text-[#0A1128] font-bold text-xs py-3.5 rounded-xl hover:bg-[#d4b08b] transition">Guardar Ejercicio</button>
+        <button id="btn-guardar-rutina" class="w-full bg-[#DAF1DE] text-[#051F20] font-bold text-xs py-3.5 rounded-xl hover:bg-[#8EB69B] transition">Guardar Ejercicio</button>
         <p id="rutina-msg" class="hidden text-xs text-center font-bold"></p>
       </div>
     </div>
 
-    <div id="sin-seleccion" class="bg-[#131E3A] p-12 rounded-3xl border border-[#E5C39E]/20 text-center text-white/40 text-xs">
+    <div id="sin-seleccion" class="bg-[#0B2B26] p-12 rounded-3xl border border-[#DAF1DE]/20 text-center text-white/40 text-xs">
       Selecciona un alumno para administrar sus rutinas.
     </div>
   </main>
@@ -223,15 +223,15 @@
 
       lista.innerHTML = dias.map(dia => `
         <div class="space-y-2">
-          <p class="text-[10px] font-bold text-[#E5C39E] uppercase tracking-wide border-b border-[#E5C39E]/10 pb-1">${dia}</p>
+          <p class="text-[10px] font-bold text-[#DAF1DE] uppercase tracking-wide border-b border-[#DAF1DE]/10 pb-1">${dia}</p>
           ${porDia[dia].map(r => `
-            <div class="bg-[#0A1128] p-3 rounded-xl border border-[#E5C39E]/10">
+            <div class="bg-[#051F20] p-3 rounded-xl border border-[#DAF1DE]/10">
               <div class="flex justify-between items-start gap-2">
                 <div class="min-w-0">
                   <p class="text-xs font-bold text-white">${r.titulo || '(sin título)'}</p>
                   <p class="text-[10px] text-white/50">${r.series || '?'} series × ${r.repeticiones || '?'} reps</p>
                   ${r.descripcion ? `<p class="text-[10px] text-white/40 mt-1 whitespace-pre-line">${r.descripcion}</p>` : ''}
-                  ${r.video_url ? `<p class="text-[10px] text-[#E5C39E] mt-1">▶ con video</p>` : ''}
+                  ${r.video_url ? `<p class="text-[10px] text-[#DAF1DE] mt-1">▶ con video</p>` : ''}
                 </div>
                 <button data-borrar="${r.id}" class="shrink-0 text-[10px] text-red-400 hover:underline">Eliminar</button>
               </div>
@@ -312,7 +312,7 @@
   </script>
 
   <!-- TAB BAR INFERIOR (móvil) -->
-  <nav id="kf-tabbar" class="fixed z-50 bg-[#131E3A]/95 backdrop-blur">
+  <nav id="kf-tabbar" class="fixed z-50 bg-[#0B2B26]/95 backdrop-blur">
     <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
           <a href="admin-dashboard.html" data-page="admin-dashboard.html" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Resumen</span></a>
           <a href="admin-coaches.html" data-page="admin-coaches.html" id="kf-tab-coaches" class="kf-tab hidden"><span class="kf-tab-icon">👥</span><span>Coaches</span></a>

@@ -10,18 +10,18 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(1200px 560px at 10% -15%, rgba(37,99,235,0.16), transparent 60%),
-        radial-gradient(1000px 520px at 108% 0%, rgba(14,165,233,0.10), transparent 55%),
-        radial-gradient(900px 700px at 50% 120%, rgba(30,58,138,0.18), transparent 60%),
-        linear-gradient(180deg, #060A1A 0%, #0A1128 45%, #050814 100%);
+            background: radial-gradient(1200px 560px at 10% -15%, rgba(142,182,155,0.14), transparent 60%),
+        radial-gradient(1000px 520px at 108% 0%, rgba(218,241,222,0.07), transparent 55%),
+        radial-gradient(900px 700px at 50% 120%, rgba(22,56,50,0.35), transparent 60%),
+        linear-gradient(180deg, #0B2B26 0%, #051F20 45%, #051F20 100%);
       background-attachment: fixed;
     }
     .font-display { font-family: 'Fraunces', serif; }
-    [class*="bg-[#131E3A]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
+    [class*="bg-[#0B2B26]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0A1128; }
-    ::-webkit-scrollbar-thumb { background: #24345c; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #E5C39E; }
+    ::-webkit-scrollbar-track { background: #051F20; }
+    ::-webkit-scrollbar-thumb { background: #235347; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #DAF1DE; }
   
     /* --- Kratero Fit: tab bar inferior (móvil) --- */
     .kf-tabbar-scroll::-webkit-scrollbar { display: none; }
@@ -33,19 +33,19 @@
       white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
     }
     .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
-    .kf-tab.active { color: #E5C39E; background: rgba(229,195,158,.10); }
-    .kf-tab:active { background: rgba(229,195,158,.16); }
+    .kf-tab.active { color: #DAF1DE; background: rgba(218,241,222,.10); }
+    .kf-tab:active { background: rgba(218,241,222,.16); }
     /* Tab bar FLOTANTE tipo píldora (estilo kits de fitness modernos) */
     #kf-tabbar {
       left: 50%; right: auto; transform: translateX(-50%);
       bottom: calc(14px + env(safe-area-inset-bottom));
       width: calc(100% - 24px); max-width: 640px;
-      border-radius: 28px; border: 1px solid rgba(229,195,158,0.18);
+      border-radius: 28px; border: 1px solid rgba(218,241,222,0.18);
       box-shadow: 0 16px 40px -12px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset;
     }
     body.has-kf-tabbar { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
     .kf-tab { border-radius: 20px; }
-    .kf-tab.active { box-shadow: 0 0 0 1px rgba(229,195,158,0.25) inset; }
+    .kf-tab.active { box-shadow: 0 0 0 1px rgba(218,241,222,0.25) inset; }
     @media (min-width: 768px) {
       #kf-tabbar { max-width: 720px; }
       .kf-tab { min-width: 76px; font-size: 10px; padding: 9px 12px; }
@@ -55,34 +55,34 @@
     section[id] { scroll-margin-top: 84px; }
   </style>
 </head>
-<body class="bg-[#0A1128] text-[#F9F6F0] min-h-screen has-kf-tabbar">
+<body class="bg-[#051F20] text-[#F9F6F0] min-h-screen has-kf-tabbar">
 
-  <nav class="bg-[#131E3A] border-b border-[#E5C39E]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+  <nav class="bg-[#0B2B26] border-b border-[#DAF1DE]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
     <div class="flex items-center gap-2.5">
       <img src="logo.png" alt="Kratero Fit" class="w-8 h-8 object-contain">
       <div class="leading-none">
-        <span class="font-display text-base text-[#E5C39E]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
+        <span class="font-display text-base text-[#DAF1DE]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
         <span class="block text-[9px] font-bold tracking-wide text-white/40 mt-0.5">PANEL COACH / ADMIN</span>
       </div>
     </div>
     <div class="flex flex-wrap gap-4 text-xs font-bold">
-      <a href="admin-dashboard.html" class="text-[#E5C39E] underline">📊 Resumen</a>
-      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#E5C39E]">👥 Coaches</a>
-      <a href="admin-monitoreo.html" class="hover:text-[#E5C39E]">📈 Monitoreo</a>
-      <a href="admin-rutinas.html" class="hover:text-[#E5C39E]">🏋️ Rutinas</a>
-      <a href="admin-nutricion.html" class="hover:text-[#E5C39E]">🥗 Nutrición</a>
-      <a href="admin-transformaciones.html" class="hover:text-[#E5C39E]">✨ Cambios</a>
-      <a href="admin-anuncios.html" class="hover:text-[#E5C39E]">📢 Anuncios</a>
-      <a href="admin-mensajes.html" class="hover:text-[#E5C39E]">💬 Mensajes</a>
+      <a href="admin-dashboard.html" class="text-[#DAF1DE] underline">📊 Resumen</a>
+      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#DAF1DE]">👥 Coaches</a>
+      <a href="admin-monitoreo.html" class="hover:text-[#DAF1DE]">📈 Monitoreo</a>
+      <a href="admin-rutinas.html" class="hover:text-[#DAF1DE]">🏋️ Rutinas</a>
+      <a href="admin-nutricion.html" class="hover:text-[#DAF1DE]">🥗 Nutrición</a>
+      <a href="admin-transformaciones.html" class="hover:text-[#DAF1DE]">✨ Cambios</a>
+      <a href="admin-anuncios.html" class="hover:text-[#DAF1DE]">📢 Anuncios</a>
+      <a href="admin-mensajes.html" class="hover:text-[#DAF1DE]">💬 Mensajes</a>
       <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">Salir</button>
     </div>
   </nav>
 
   <main class="max-w-6xl mx-auto p-6 space-y-8">
-    <h1 class="text-2xl font-bold text-[#E5C39E]">Gestión General de Usuarios</h1>
+    <h1 class="text-2xl font-bold text-[#DAF1DE]">Gestión General de Usuarios</h1>
     <p class="text-xs text-white/50 -mt-4">Cambia el tipo de cuenta o el plan asignado a cada usuario y guarda los cambios.</p>
 
-    <div class="bg-[#131E3A] p-6 rounded-3xl border border-[#E5C39E]/20 space-y-4">
+    <div class="bg-[#0B2B26] p-6 rounded-3xl border border-[#DAF1DE]/20 space-y-4">
       <h2 class="text-lg font-bold text-white">Lista de Usuarios Registrados</h2>
       <div id="lista-usuarios" class="space-y-3">
         <p class="text-xs text-[#F9F6F0]/40">Cargando lista de usuarios...</p>
@@ -138,24 +138,24 @@
         const puedeEditarRol = miRol === 'admin';
 
         const row = document.createElement('div');
-        row.className = 'bg-[#0A1128] p-4 rounded-2xl border border-[#E5C39E]/10 flex flex-col md:flex-row md:items-center justify-between gap-3';
+        row.className = 'bg-[#051F20] p-4 rounded-2xl border border-[#DAF1DE]/10 flex flex-col md:flex-row md:items-center justify-between gap-3';
         row.innerHTML = `
           <div>
-            <p class="text-sm font-bold text-[#E5C39E]">${a.nombre || '(sin nombre)'}</p>
+            <p class="text-sm font-bold text-[#DAF1DE]">${a.nombre || '(sin nombre)'}</p>
             <p class="text-xs text-[#F9F6F0]/60">${a.email}</p>
           </div>
           <div class="flex flex-wrap items-center gap-2">
             ${puedeEditarRol ? `
             <select data-field="rol" data-id="${a.id}"
-              class="bg-[#131E3A] border border-[#E5C39E]/30 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none">
+              class="bg-[#0B2B26] border border-[#DAF1DE]/30 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none">
               <option value="usuario" ${a.rol === 'usuario' ? 'selected' : ''}>USUARIO</option>
               <option value="admin" ${a.rol === 'admin' ? 'selected' : ''}>ADMIN</option>
             </select>` : ''}
             <select data-field="plan" data-id="${a.id}"
-              class="bg-[#131E3A] border border-[#E5C39E]/30 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none">
+              class="bg-[#0B2B26] border border-[#DAF1DE]/30 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none">
               ${planOptions}
             </select>
-            <button data-guardar="${a.id}" class="text-xs bg-[#E5C39E] text-[#0A1128] font-bold px-3 py-1.5 rounded-lg hover:bg-[#d4b08b] transition">Guardar</button>
+            <button data-guardar="${a.id}" class="text-xs bg-[#DAF1DE] text-[#051F20] font-bold px-3 py-1.5 rounded-lg hover:bg-[#8EB69B] transition">Guardar</button>
           </div>
         `;
         lista.appendChild(row);
@@ -192,7 +192,7 @@
   </script>
 
   <!-- TAB BAR INFERIOR (móvil) -->
-  <nav id="kf-tabbar" class="fixed z-50 bg-[#131E3A]/95 backdrop-blur">
+  <nav id="kf-tabbar" class="fixed z-50 bg-[#0B2B26]/95 backdrop-blur">
     <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
           <a href="admin-dashboard.html" data-page="admin-dashboard.html" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Resumen</span></a>
           <a href="admin-coaches.html" data-page="admin-coaches.html" id="kf-tab-coaches" class="kf-tab hidden"><span class="kf-tab-icon">👥</span><span>Coaches</span></a>

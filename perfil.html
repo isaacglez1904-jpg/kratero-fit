@@ -10,25 +10,25 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(1200px 560px at 10% -15%, rgba(37,99,235,0.16), transparent 60%),
-        radial-gradient(1000px 520px at 108% 0%, rgba(14,165,233,0.10), transparent 55%),
-        radial-gradient(900px 700px at 50% 120%, rgba(30,58,138,0.18), transparent 60%),
-        linear-gradient(180deg, #060A1A 0%, #0A1128 45%, #050814 100%);
+            background: radial-gradient(1200px 560px at 10% -15%, rgba(142,182,155,0.14), transparent 60%),
+        radial-gradient(1000px 520px at 108% 0%, rgba(218,241,222,0.07), transparent 55%),
+        radial-gradient(900px 700px at 50% 120%, rgba(22,56,50,0.35), transparent 60%),
+        linear-gradient(180deg, #0B2B26 0%, #051F20 45%, #051F20 100%);
       background-attachment: fixed;
     }
     .font-display { font-family: 'Fraunces', serif; }
-    [class*="bg-[#131E3A]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
+    [class*="bg-[#0B2B26]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0A1128; }
-    ::-webkit-scrollbar-thumb { background: #24345c; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #E5C39E; }
+    ::-webkit-scrollbar-track { background: #051F20; }
+    ::-webkit-scrollbar-thumb { background: #235347; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #DAF1DE; }
   </style>
 </head>
-<body class="bg-[#0A1128] text-[#F9F6F0] min-h-screen">
+<body class="bg-[#051F20] text-[#F9F6F0] min-h-screen">
 
-  <nav class="bg-[#131E3A] border-b border-[#E5C39E]/20 px-6 py-4 sticky top-0 z-50 shadow-md">
+  <nav class="bg-[#0B2B26] border-b border-[#DAF1DE]/20 px-6 py-4 sticky top-0 z-50 shadow-md">
     <div class="max-w-3xl mx-auto flex items-center justify-between">
-      <a href="dashboard.html" class="flex items-center gap-2 text-xs font-bold text-white/70 hover:text-[#E5C39E] transition">
+      <a href="dashboard.html" class="flex items-center gap-2 text-xs font-bold text-white/70 hover:text-[#DAF1DE] transition">
         <span aria-hidden="true">←</span> Volver al panel
       </a>
       <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition">Salir</button>
@@ -38,17 +38,17 @@
   <main class="max-w-3xl mx-auto p-4 md:p-8 space-y-8">
 
     <!-- CABECERA -->
-    <section class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-2xl shadow-xl flex items-center gap-4">
-      <div id="perfil-avatar" class="w-16 h-16 rounded-full bg-[#E5C39E]/15 border border-[#E5C39E]/30 flex items-center justify-center text-2xl font-black text-[#E5C39E] font-display shrink-0">?</div>
+    <section class="bg-[#0B2B26] border border-[#DAF1DE]/20 p-6 rounded-2xl shadow-xl flex items-center gap-4">
+      <div id="perfil-avatar" class="w-16 h-16 rounded-full bg-[#DAF1DE]/15 border border-[#DAF1DE]/30 flex items-center justify-center text-2xl font-black text-[#DAF1DE] font-display shrink-0">?</div>
       <div class="min-w-0">
-        <h1 id="perfil-nombre" class="font-display text-2xl text-[#E5C39E] truncate">Cargando...</h1>
+        <h1 id="perfil-nombre" class="font-display text-2xl text-[#DAF1DE] truncate">Cargando...</h1>
         <p id="perfil-email" class="text-xs text-white/50 truncate">—</p>
-        <span id="perfil-plan" class="inline-block mt-1 text-[10px] font-bold bg-[#E5C39E]/10 text-[#E5C39E] border border-[#E5C39E]/20 px-2.5 py-0.5 rounded-full">Plan</span>
+        <span id="perfil-plan" class="inline-block mt-1 text-[10px] font-bold bg-[#DAF1DE]/10 text-[#DAF1DE] border border-[#DAF1DE]/20 px-2.5 py-0.5 rounded-full">Plan</span>
       </div>
     </section>
 
     <!-- COACH ASIGNADO -->
-    <section id="perfil-coach-card" class="hidden bg-[#131E3A] border border-[#E5C39E]/20 p-5 rounded-2xl shadow-xl flex items-center gap-3">
+    <section id="perfil-coach-card" class="hidden bg-[#0B2B26] border border-[#DAF1DE]/20 p-5 rounded-2xl shadow-xl flex items-center gap-3">
       <span class="text-2xl">🧑‍🏫</span>
       <div>
         <p class="text-[10px] font-bold text-white/40 uppercase tracking-wide">Tu entrenador asignado</p>
@@ -57,55 +57,55 @@
     </section>
 
     <!-- DATOS FÍSICOS (editable) -->
-    <section class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-2xl shadow-xl space-y-4">
-      <h2 class="text-lg font-bold text-[#E5C39E]">Ficha física</h2>
+    <section class="bg-[#0B2B26] border border-[#DAF1DE]/20 p-6 rounded-2xl shadow-xl space-y-4">
+      <h2 class="text-lg font-bold text-[#DAF1DE]">Ficha física</h2>
       <form id="form-perfil" class="space-y-4">
         <div>
           <label class="block text-xs font-bold text-white mb-1">Nombre completo</label>
-          <input type="text" id="pf-nombre" required class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#E5C39E]/40 focus:border-[#E5C39E] transition">
+          <input type="text" id="pf-nombre" required class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#DAF1DE]/40 focus:border-[#DAF1DE] transition">
         </div>
         <div class="grid grid-cols-3 gap-3">
           <div>
             <label class="block text-xs font-bold text-white mb-1">Edad</label>
-            <input type="number" id="pf-edad" min="10" max="100" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#E5C39E]">
+            <input type="number" id="pf-edad" min="10" max="100" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#DAF1DE]">
           </div>
           <div>
             <label class="block text-xs font-bold text-white mb-1">Peso (kg)</label>
-            <input type="number" step="0.1" id="pf-peso" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#E5C39E]">
+            <input type="number" step="0.1" id="pf-peso" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#DAF1DE]">
           </div>
           <div>
             <label class="block text-xs font-bold text-white mb-1">Estatura (cm)</label>
-            <input type="number" id="pf-estatura" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#E5C39E]">
+            <input type="number" id="pf-estatura" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#DAF1DE]">
           </div>
         </div>
         <div>
           <label class="block text-xs font-bold text-white mb-1">Nivel de actividad</label>
-          <select id="pf-actividad" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#E5C39E]">
+          <select id="pf-actividad" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#DAF1DE]">
             <option value="Sedentario">Sedentario (Poco o ningún ejercicio)</option>
             <option value="Ligero">Ligero (1-3 días/semana)</option>
             <option value="Moderado">Moderado (3-5 días/semana)</option>
             <option value="Muy Activo">Muy Activo (6-7 días/semana)</option>
           </select>
         </div>
-        <button type="submit" id="btn-guardar-perfil" class="w-full bg-[#E5C39E] text-[#0A1128] font-bold py-3 rounded-xl text-sm hover:bg-[#d4b08b] hover:shadow-[0_8px_24px_-8px_rgba(229,195,158,0.5)] transition">Guardar Cambios</button>
+        <button type="submit" id="btn-guardar-perfil" class="w-full bg-[#DAF1DE] text-[#051F20] font-bold py-3 rounded-xl text-sm hover:bg-[#8EB69B] hover:shadow-[0_8px_24px_-8px_rgba(218,241,222,0.5)] transition">Guardar Cambios</button>
         <p id="perfil-guardado-msg" class="hidden text-xs text-green-400 text-center font-bold">✓ Perfil actualizado correctamente</p>
       </form>
     </section>
 
     <!-- SEGURIDAD -->
-    <section class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-2xl shadow-xl space-y-4">
-      <h2 class="text-lg font-bold text-[#E5C39E]">Seguridad</h2>
+    <section class="bg-[#0B2B26] border border-[#DAF1DE]/20 p-6 rounded-2xl shadow-xl space-y-4">
+      <h2 class="text-lg font-bold text-[#DAF1DE]">Seguridad</h2>
       <form id="form-password" class="space-y-3">
         <div>
           <label class="block text-xs font-bold text-white mb-1">Nueva contraseña</label>
-          <input type="password" id="pf-password" minlength="6" placeholder="Mínimo 6 caracteres" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#E5C39E]">
+          <input type="password" id="pf-password" minlength="6" placeholder="Mínimo 6 caracteres" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#DAF1DE]">
         </div>
         <button type="submit" class="w-full bg-white/10 text-white font-bold py-2.5 rounded-xl text-xs hover:bg-white/20 transition">Actualizar Contraseña</button>
       </form>
     </section>
 
     <p class="text-center text-[10px] text-white/30 pb-4">
-      ¿Dudas sobre tus datos? Revisa nuestros <a href="terminos-privacidad.html" class="underline hover:text-[#E5C39E]">términos y aviso de privacidad</a>.
+      ¿Dudas sobre tus datos? Revisa nuestros <a href="terminos-privacidad.html" class="underline hover:text-[#DAF1DE]">términos y aviso de privacidad</a>.
     </p>
   </main>
 

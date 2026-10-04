@@ -10,10 +10,10 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(1200px 560px at 10% -15%, rgba(37,99,235,0.16), transparent 60%),
-        radial-gradient(1000px 520px at 108% 0%, rgba(14,165,233,0.10), transparent 55%),
-        radial-gradient(900px 700px at 50% 120%, rgba(30,58,138,0.18), transparent 60%),
-        linear-gradient(180deg, #060A1A 0%, #0A1128 45%, #050814 100%);
+            background: radial-gradient(1200px 560px at 10% -15%, rgba(142,182,155,0.14), transparent 60%),
+        radial-gradient(1000px 520px at 108% 0%, rgba(218,241,222,0.07), transparent 55%),
+        radial-gradient(900px 700px at 50% 120%, rgba(22,56,50,0.35), transparent 60%),
+        linear-gradient(180deg, #0B2B26 0%, #051F20 45%, #051F20 100%);
       background-attachment: fixed;
     }
     .font-display { font-family: 'Fraunces', serif; }
@@ -28,19 +28,19 @@
       white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
     }
     .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
-    .kf-tab.active { color: #E5C39E; background: rgba(229,195,158,.10); }
-    .kf-tab:active { background: rgba(229,195,158,.16); }
+    .kf-tab.active { color: #DAF1DE; background: rgba(218,241,222,.10); }
+    .kf-tab:active { background: rgba(218,241,222,.16); }
     /* Tab bar FLOTANTE tipo píldora (estilo kits de fitness modernos) */
     #kf-tabbar {
       left: 50%; right: auto; transform: translateX(-50%);
       bottom: calc(14px + env(safe-area-inset-bottom));
       width: calc(100% - 24px); max-width: 640px;
-      border-radius: 28px; border: 1px solid rgba(229,195,158,0.18);
+      border-radius: 28px; border: 1px solid rgba(218,241,222,0.18);
       box-shadow: 0 16px 40px -12px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset;
     }
     body.has-kf-tabbar { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
     .kf-tab { border-radius: 20px; }
-    .kf-tab.active { box-shadow: 0 0 0 1px rgba(229,195,158,0.25) inset; }
+    .kf-tab.active { box-shadow: 0 0 0 1px rgba(218,241,222,0.25) inset; }
     @media (min-width: 768px) {
       #kf-tabbar { max-width: 720px; }
       .kf-tab { min-width: 76px; font-size: 10px; padding: 9px 12px; }
@@ -50,25 +50,25 @@
     section[id] { scroll-margin-top: 84px; }
   </style>
 </head>
-<body class="bg-[#0A1128] text-[#F9F6F0] min-h-screen has-kf-tabbar">
+<body class="bg-[#051F20] text-[#F9F6F0] min-h-screen has-kf-tabbar">
 
-  <nav class="bg-[#131E3A] border-b border-[#E5C39E]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+  <nav class="bg-[#0B2B26] border-b border-[#DAF1DE]/20 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
     <div class="flex items-center gap-2.5">
       <img src="logo.png" alt="Kratero Fit" class="w-8 h-8 object-contain">
       <div class="leading-none">
-        <span class="font-display text-base text-[#E5C39E]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
+        <span class="font-display text-base text-[#DAF1DE]">Kratero</span><span class="ml-1 text-[9px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
         <span class="block text-[9px] font-bold tracking-wide text-white/40 mt-0.5">PANEL COACH / ADMIN</span>
       </div>
     </div>
     <div class="flex flex-wrap gap-4 text-xs font-bold">
-      <a href="admin-dashboard.html" class="hover:text-[#E5C39E]">📊 Resumen</a>
-      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#E5C39E]">👥 Coaches</a>
-      <a href="admin-monitoreo.html" class="text-[#E5C39E] underline">📈 Monitoreo</a>
-      <a href="admin-rutinas.html" class="hover:text-[#E5C39E]">🏋️ Rutinas</a>
-      <a href="admin-nutricion.html" class="hover:text-[#E5C39E]">🥗 Nutrición</a>
-      <a href="admin-transformaciones.html" class="hover:text-[#E5C39E]">✨ Cambios</a>
-      <a href="admin-anuncios.html" class="hover:text-[#E5C39E]">📢 Anuncios</a>
-      <a href="admin-mensajes.html" class="hover:text-[#E5C39E]">💬 Mensajes</a>
+      <a href="admin-dashboard.html" class="hover:text-[#DAF1DE]">📊 Resumen</a>
+      <a href="admin-coaches.html" id="nav-coaches-link" class="hidden hover:text-[#DAF1DE]">👥 Coaches</a>
+      <a href="admin-monitoreo.html" class="text-[#DAF1DE] underline">📈 Monitoreo</a>
+      <a href="admin-rutinas.html" class="hover:text-[#DAF1DE]">🏋️ Rutinas</a>
+      <a href="admin-nutricion.html" class="hover:text-[#DAF1DE]">🥗 Nutrición</a>
+      <a href="admin-transformaciones.html" class="hover:text-[#DAF1DE]">✨ Cambios</a>
+      <a href="admin-anuncios.html" class="hover:text-[#DAF1DE]">📢 Anuncios</a>
+      <a href="admin-mensajes.html" class="hover:text-[#DAF1DE]">💬 Mensajes</a>
       <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">Salir</button>
     </div>
   </nav>
@@ -76,13 +76,13 @@
   <main class="max-w-6xl mx-auto p-6 space-y-8">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-[#E5C39E]">Monitoreo de Alumnos</h1>
+        <h1 class="text-2xl font-bold text-[#DAF1DE]">Monitoreo de Alumnos</h1>
         <p class="text-xs text-white/50">Revisa la evolución física y envía observaciones a tus alumnos.</p>
       </div>
       
       <div class="w-full md:w-72">
         <label class="block text-xs text-white/60 mb-1 font-semibold">Seleccionar Alumno:</label>
-        <select id="select-alumno" class="w-full bg-[#131E3A] border border-[#E5C39E]/30 text-xs rounded-xl p-3 text-white focus:outline-none focus:border-[#E5C39E]">
+        <select id="select-alumno" class="w-full bg-[#0B2B26] border border-[#DAF1DE]/30 text-xs rounded-xl p-3 text-white focus:outline-none focus:border-[#DAF1DE]">
           <option value="">Cargando alumnos...</option>
         </select>
       </div>
@@ -91,15 +91,15 @@
     <div id="contenedor-alumno" class="space-y-6 hidden">
       <!-- Metricas rapidas -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="bg-[#131E3A] p-5 rounded-2xl border border-[#E5C39E]/20">
+        <div class="bg-[#0B2B26] p-5 rounded-2xl border border-[#DAF1DE]/20">
           <p class="text-xs text-white/50 uppercase font-bold tracking-wider">Último Peso</p>
-          <p id="stat-peso" class="text-2xl font-bold text-[#E5C39E] mt-1">-- kg</p>
+          <p id="stat-peso" class="text-2xl font-bold text-[#DAF1DE] mt-1">-- kg</p>
         </div>
-        <div class="bg-[#131E3A] p-5 rounded-2xl border border-[#E5C39E]/20">
+        <div class="bg-[#0B2B26] p-5 rounded-2xl border border-[#DAF1DE]/20">
           <p class="text-xs text-white/50 uppercase font-bold tracking-wider">% Grasa Estimado</p>
-          <p id="stat-grasa" class="text-2xl font-bold text-[#E5C39E] mt-1">-- %</p>
+          <p id="stat-grasa" class="text-2xl font-bold text-[#DAF1DE] mt-1">-- %</p>
         </div>
-        <div class="bg-[#131E3A] p-5 rounded-2xl border border-[#E5C39E]/20">
+        <div class="bg-[#0B2B26] p-5 rounded-2xl border border-[#DAF1DE]/20">
           <p class="text-xs text-white/50 uppercase font-bold tracking-wider">Último Registro</p>
           <p id="stat-fecha" class="text-lg font-bold text-white mt-1">--</p>
         </div>
@@ -108,11 +108,11 @@
       <!-- Tabla de Registros y Formulario Feedback -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Historial -->
-        <div class="lg:col-span-2 bg-[#131E3A] p-6 rounded-3xl border border-[#E5C39E]/20 space-y-4">
+        <div class="lg:col-span-2 bg-[#0B2B26] p-6 rounded-3xl border border-[#DAF1DE]/20 space-y-4">
           <h2 class="text-lg font-bold text-white">Historial de Check-ins</h2>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-              <thead class="bg-[#0A1128] text-[#E5C39E] uppercase tracking-wider border-b border-[#E5C39E]/20">
+              <thead class="bg-[#051F20] text-[#DAF1DE] uppercase tracking-wider border-b border-[#DAF1DE]/20">
                 <tr>
                   <th class="p-3">Fecha</th>
                   <th class="p-3">Peso</th>
@@ -129,28 +129,28 @@
 
         <!-- Columna lateral: hábitos, cardio y retroalimentación -->
         <div class="space-y-6">
-          <div class="bg-[#131E3A] p-5 rounded-3xl border border-[#E5C39E]/20">
+          <div class="bg-[#0B2B26] p-5 rounded-3xl border border-[#DAF1DE]/20">
             <h2 class="text-sm font-bold text-white mb-3">📅 Constancia de hábitos</h2>
             <div id="resumen-habitos"><p class="text-xs text-white/40">Sin datos.</p></div>
           </div>
 
-          <div class="bg-[#131E3A] p-5 rounded-3xl border border-[#E5C39E]/20">
+          <div class="bg-[#0B2B26] p-5 rounded-3xl border border-[#DAF1DE]/20">
             <h2 class="text-sm font-bold text-white mb-2">🏃 Cardio reciente</h2>
             <div id="resumen-cardio"><p class="text-xs text-white/40">Sin datos.</p></div>
           </div>
 
-          <div class="bg-[#131E3A] p-5 rounded-3xl border border-[#E5C39E]/20 space-y-3">
+          <div class="bg-[#0B2B26] p-5 rounded-3xl border border-[#DAF1DE]/20 space-y-3">
             <h2 class="text-sm font-bold text-white">Enviar Retroalimentación</h2>
             <p class="text-[10px] text-white/40 -mt-1">Se envía como mensaje directo al chat del alumno.</p>
-            <textarea id="txt-feedback" rows="5" placeholder="Escribe tus observaciones o ajustes para el alumno..." class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#E5C39E]"></textarea>
-            <button id="btn-enviar-feedback" class="w-full bg-[#E5C39E] text-[#0A1128] font-bold text-xs py-3 rounded-xl hover:bg-[#d4b08b] transition">Enviar Retroalimentación</button>
+            <textarea id="txt-feedback" rows="5" placeholder="Escribe tus observaciones o ajustes para el alumno..." class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#DAF1DE]"></textarea>
+            <button id="btn-enviar-feedback" class="w-full bg-[#DAF1DE] text-[#051F20] font-bold text-xs py-3 rounded-xl hover:bg-[#8EB69B] transition">Enviar Retroalimentación</button>
             <p id="feedback-msg" class="hidden text-xs text-green-400 text-center font-bold">✓ Mensaje enviado al alumno</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="sin-seleccion" class="bg-[#131E3A] p-12 rounded-3xl border border-[#E5C39E]/20 text-center text-white/40 text-xs">
+    <div id="sin-seleccion" class="bg-[#0B2B26] p-12 rounded-3xl border border-[#DAF1DE]/20 text-center text-white/40 text-xs">
       Por favor selecciona un alumno en el desplegable superior para revisar su monitoreo.
     </div>
   </main>
@@ -270,10 +270,10 @@
       cont.innerHTML = `
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs text-white/60">Últimos 7 días</span>
-          <span class="text-sm font-bold text-[#E5C39E]">${pct}%</span>
+          <span class="text-sm font-bold text-[#DAF1DE]">${pct}%</span>
         </div>
-        <div class="w-full h-2.5 rounded-full bg-[#0A1128] overflow-hidden">
-          <div style="width:${pct}%" class="h-full bg-[#E5C39E]"></div>
+        <div class="w-full h-2.5 rounded-full bg-[#051F20] overflow-hidden">
+          <div style="width:${pct}%" class="h-full bg-[#DAF1DE]"></div>
         </div>
         <p class="text-[10px] text-white/40 mt-2">${total} de ${posibles} hábitos cumplidos</p>`;
     }
@@ -335,7 +335,7 @@
   </script>
 
   <!-- TAB BAR INFERIOR (móvil) -->
-  <nav id="kf-tabbar" class="fixed z-50 bg-[#131E3A]/95 backdrop-blur">
+  <nav id="kf-tabbar" class="fixed z-50 bg-[#0B2B26]/95 backdrop-blur">
     <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
           <a href="admin-dashboard.html" data-page="admin-dashboard.html" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Resumen</span></a>
           <a href="admin-coaches.html" data-page="admin-coaches.html" id="kf-tab-coaches" class="kf-tab hidden"><span class="kf-tab-icon">👥</span><span>Coaches</span></a>

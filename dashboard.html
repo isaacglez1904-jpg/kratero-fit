@@ -12,18 +12,18 @@
     .leaflet-control-attribution { font-size: 8px !important; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(1200px 560px at 10% -15%, rgba(37,99,235,0.16), transparent 60%),
-        radial-gradient(1000px 520px at 108% 0%, rgba(14,165,233,0.10), transparent 55%),
-        radial-gradient(900px 700px at 50% 120%, rgba(30,58,138,0.18), transparent 60%),
-        linear-gradient(180deg, #060A1A 0%, #0A1128 45%, #050814 100%);
+            background: radial-gradient(1200px 560px at 10% -15%, rgba(142,182,155,0.14), transparent 60%),
+        radial-gradient(1000px 520px at 108% 0%, rgba(218,241,222,0.07), transparent 55%),
+        radial-gradient(900px 700px at 50% 120%, rgba(22,56,50,0.35), transparent 60%),
+        linear-gradient(180deg, #0B2B26 0%, #051F20 45%, #051F20 100%);
       background-attachment: fixed;
     }
     .font-display { font-family: 'Fraunces', serif; }
-    [class*="bg-[#131E3A]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
+    [class*="bg-[#0B2B26]"] { box-shadow: 0 14px 34px -18px rgba(0,0,0,.55); }
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0A1128; }
-    ::-webkit-scrollbar-thumb { background: #24345c; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #E5C39E; }
+    ::-webkit-scrollbar-track { background: #051F20; }
+    ::-webkit-scrollbar-thumb { background: #235347; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #DAF1DE; }
   
     /* --- Kratero Fit: tab bar inferior (móvil) --- */
     .kf-tabbar-scroll::-webkit-scrollbar { display: none; }
@@ -35,19 +35,19 @@
       white-space: nowrap; flex-shrink: 0; transition: color .15s ease, background-color .15s ease;
     }
     .kf-tab .kf-tab-icon { font-size: 18px; line-height: 1; }
-    .kf-tab.active { color: #E5C39E; background: rgba(229,195,158,.10); }
-    .kf-tab:active { background: rgba(229,195,158,.16); }
+    .kf-tab.active { color: #DAF1DE; background: rgba(218,241,222,.10); }
+    .kf-tab:active { background: rgba(218,241,222,.16); }
     /* Tab bar FLOTANTE tipo píldora (estilo kits de fitness modernos) */
     #kf-tabbar {
       left: 50%; right: auto; transform: translateX(-50%);
       bottom: calc(14px + env(safe-area-inset-bottom));
       width: calc(100% - 24px); max-width: 640px;
-      border-radius: 28px; border: 1px solid rgba(229,195,158,0.18);
+      border-radius: 28px; border: 1px solid rgba(218,241,222,0.18);
       box-shadow: 0 16px 40px -12px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset;
     }
     body.has-kf-tabbar { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
     .kf-tab { border-radius: 20px; }
-    .kf-tab.active { box-shadow: 0 0 0 1px rgba(229,195,158,0.25) inset; }
+    .kf-tab.active { box-shadow: 0 0 0 1px rgba(218,241,222,0.25) inset; }
     @media (min-width: 768px) {
       #kf-tabbar { max-width: 720px; }
       .kf-tab { min-width: 76px; font-size: 10px; padding: 9px 12px; }
@@ -58,27 +58,27 @@
 
     /* Selector de capa del mapa de Cardio (Calles/Satélite) */
     .cardio-capa-btn { color: rgba(249,246,240,.55); }
-    .cardio-capa-btn.activa { background: #E5C39E; color: #0A1128; }
+    .cardio-capa-btn.activa { background: #DAF1DE; color: #051F20; }
     /* Punto de ubicación en vivo estilo "GPS azul" */
     .cardio-gps-dot { background:#3B82F6; border:2px solid #fff; border-radius:50%; box-shadow:0 0 0 4px rgba(59,130,246,.35); width:14px; height:14px; }
     .cardio-gps-accuracy { background: rgba(59,130,246,.15); border: 1px solid rgba(59,130,246,.4); border-radius: 50%; }
   </style>
 </head>
-<body class="bg-[#0A1128] text-[#F9F6F0] min-h-screen pb-12 has-kf-tabbar">
+<body class="bg-[#051F20] text-[#F9F6F0] min-h-screen pb-12 has-kf-tabbar">
 
   <!-- NAVBAR -->
-  <nav class="bg-[#131E3A] border-b border-[#E5C39E]/20 px-6 py-4 sticky top-0 z-50 shadow-md">
+  <nav class="bg-[#0B2B26] border-b border-[#DAF1DE]/20 px-6 py-4 sticky top-0 z-50 shadow-md">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <img src="logo.png" alt="Kratero Fit" class="w-9 h-9 object-contain drop-shadow-[0_0_10px_rgba(229,195,158,0.25)]">
+        <img src="logo.png" alt="Kratero Fit" class="w-9 h-9 object-contain drop-shadow-[0_0_10px_rgba(218,241,222,0.25)]">
         <div class="leading-none hidden sm:block">
-          <span class="font-display text-lg text-[#E5C39E]">Kratero</span>
+          <span class="font-display text-lg text-[#DAF1DE]">Kratero</span>
           <span class="ml-1 text-[10px] font-bold tracking-[0.2em] text-white/40 align-middle">FIT</span>
         </div>
       </div>
       <div class="flex items-center gap-4">
         <span id="user-display-name" class="text-xs font-semibold text-white/80">Cargando...</span>
-        <a href="perfil.html" class="bg-[#0A1128] border border-[#E5C39E]/40 px-3 py-1.5 rounded-xl text-xs font-bold text-[#E5C39E] hover:bg-[#E5C39E] hover:text-[#0A1128] transition">Mi Perfil</a>
+        <a href="perfil.html" class="bg-[#051F20] border border-[#DAF1DE]/40 px-3 py-1.5 rounded-xl text-xs font-bold text-[#DAF1DE] hover:bg-[#DAF1DE] hover:text-[#051F20] transition">Mi Perfil</a>
         <button id="btn-logout" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition">Salir</button>
       </div>
     </div>
@@ -88,47 +88,47 @@
   <main id="sec-inicio" class="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
 
     <!-- 1. HERO: perfil + anillo de progreso de hábitos, estilo kit de fitness -->
-    <section class="bg-gradient-to-br from-[#131E3A] to-[#0A1128] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl space-y-5">
+    <section class="bg-gradient-to-br from-[#0B2B26] to-[#051F20] border border-[#DAF1DE]/20 p-6 rounded-[28px] shadow-xl space-y-5">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
         <div class="flex items-center gap-4 min-w-0">
-          <div id="hero-avatar" class="w-14 h-14 rounded-full bg-[#E5C39E]/15 border-2 border-[#E5C39E]/40 flex items-center justify-center text-xl font-black text-[#E5C39E] font-display shrink-0">?</div>
+          <div id="hero-avatar" class="w-14 h-14 rounded-full bg-[#DAF1DE]/15 border-2 border-[#DAF1DE]/40 flex items-center justify-center text-xl font-black text-[#DAF1DE] font-display shrink-0">?</div>
           <div class="min-w-0">
             <h2 class="font-display text-2xl text-white truncate" id="welcome-title">¡Bienvenido!</h2>
-            <span id="user-plan-badge" class="inline-block mt-1 bg-gradient-to-r from-[#E5C39E]/15 to-[#E5C39E]/5 border border-[#E5C39E]/40 text-[#E5C39E] px-3 py-1 rounded-full text-[10px] font-bold">Plan Básico</span>
+            <span id="user-plan-badge" class="inline-block mt-1 bg-gradient-to-r from-[#DAF1DE]/15 to-[#DAF1DE]/5 border border-[#DAF1DE]/40 text-[#DAF1DE] px-3 py-1 rounded-full text-[10px] font-bold">Plan Básico</span>
           </div>
         </div>
 
         <!-- Anillo de progreso: hábitos cumplidos hoy -->
-        <div class="flex items-center gap-3 bg-[#0A1128]/70 border border-[#E5C39E]/15 rounded-2xl px-4 py-3 shrink-0">
+        <div class="flex items-center gap-3 bg-[#051F20]/70 border border-[#DAF1DE]/15 rounded-2xl px-4 py-3 shrink-0">
           <div class="relative w-14 h-14 shrink-0">
             <svg viewBox="0 0 56 56" class="w-14 h-14 -rotate-90">
-              <circle cx="28" cy="28" r="23" fill="none" stroke="#1b2a52" stroke-width="6"/>
-              <circle id="ring-habitos" cx="28" cy="28" r="23" fill="none" stroke="#E5C39E" stroke-width="6" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="144.5" style="transition: stroke-dashoffset .6s ease"/>
+              <circle cx="28" cy="28" r="23" fill="none" stroke="#163832" stroke-width="6"/>
+              <circle id="ring-habitos" cx="28" cy="28" r="23" fill="none" stroke="#DAF1DE" stroke-width="6" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="144.5" style="transition: stroke-dashoffset .6s ease"/>
             </svg>
             <span id="ring-habitos-label" class="absolute inset-0 flex items-center justify-center text-[11px] font-black text-white">0/5</span>
           </div>
           <div>
             <p class="text-[9px] text-white/50 font-bold uppercase tracking-wide">Hábitos hoy</p>
-            <p id="ring-habitos-texto" class="text-xs font-bold text-[#E5C39E]">Sin registrar</p>
+            <p id="ring-habitos-texto" class="text-xs font-bold text-[#DAF1DE]">Sin registrar</p>
           </div>
         </div>
       </div>
 
       <!-- Ficha física -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div class="bg-[#0A1128]/70 p-3 rounded-2xl border border-[#E5C39E]/15 text-center">
+        <div class="bg-[#051F20]/70 p-3 rounded-2xl border border-[#DAF1DE]/15 text-center">
           <span class="block text-[10px] text-white/50 uppercase font-bold">Edad</span>
-          <span id="stat-edad" class="text-base font-bold text-[#E5C39E]">- años</span>
+          <span id="stat-edad" class="text-base font-bold text-[#DAF1DE]">- años</span>
         </div>
-        <div class="bg-[#0A1128]/70 p-3 rounded-2xl border border-[#E5C39E]/15 text-center">
+        <div class="bg-[#051F20]/70 p-3 rounded-2xl border border-[#DAF1DE]/15 text-center">
           <span class="block text-[10px] text-white/50 uppercase font-bold">Peso Actual</span>
-          <span id="stat-peso" class="text-base font-bold text-[#E5C39E]">- kg</span>
+          <span id="stat-peso" class="text-base font-bold text-[#DAF1DE]">- kg</span>
         </div>
-        <div class="bg-[#0A1128]/70 p-3 rounded-2xl border border-[#E5C39E]/15 text-center">
+        <div class="bg-[#051F20]/70 p-3 rounded-2xl border border-[#DAF1DE]/15 text-center">
           <span class="block text-[10px] text-white/50 uppercase font-bold">Estatura</span>
-          <span id="stat-estatura" class="text-base font-bold text-[#E5C39E]">- cm</span>
+          <span id="stat-estatura" class="text-base font-bold text-[#DAF1DE]">- cm</span>
         </div>
-        <div class="bg-[#0A1128]/70 p-3 rounded-2xl border border-[#E5C39E]/15 text-center">
+        <div class="bg-[#051F20]/70 p-3 rounded-2xl border border-[#DAF1DE]/15 text-center">
           <span class="block text-[10px] text-white/50 uppercase font-bold">Actividad</span>
           <span id="stat-actividad" class="text-base font-bold text-white">-</span>
         </div>
@@ -137,22 +137,22 @@
 
     <!-- Accesos rápidos tipo tarjeta, con datos en vivo -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <a href="#sec-cardio" class="bg-[#131E3A] border border-[#E5C39E]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#E5C39E]/40 hover:-translate-y-0.5 transition">
+      <a href="#sec-cardio" class="bg-[#0B2B26] border border-[#DAF1DE]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#DAF1DE]/40 hover:-translate-y-0.5 transition">
         <span class="text-xl">🏃</span>
         <span id="qc-cardio-km" class="text-lg font-black text-white">0.0 km</span>
         <span class="text-[10px] text-white/50 font-bold uppercase">Esta semana</span>
       </a>
-      <a href="#sec-rutina" class="bg-[#131E3A] border border-[#E5C39E]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#E5C39E]/40 hover:-translate-y-0.5 transition">
+      <a href="#sec-rutina" class="bg-[#0B2B26] border border-[#DAF1DE]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#DAF1DE]/40 hover:-translate-y-0.5 transition">
         <span class="text-xl">💪</span>
         <span id="qc-rutina-hoy" class="text-lg font-black text-white">-</span>
         <span class="text-[10px] text-white/50 font-bold uppercase">Ejercicios hoy</span>
       </a>
-      <a href="#sec-nutricion" class="bg-[#131E3A] border border-[#E5C39E]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#E5C39E]/40 hover:-translate-y-0.5 transition">
+      <a href="#sec-nutricion" class="bg-[#0B2B26] border border-[#DAF1DE]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#DAF1DE]/40 hover:-translate-y-0.5 transition">
         <span class="text-xl">🥗</span>
         <span id="qc-nutricion-kcal" class="text-lg font-black text-white">-</span>
         <span class="text-[10px] text-white/50 font-bold uppercase">Kcal objetivo</span>
       </a>
-      <a href="#sec-progreso" class="bg-[#131E3A] border border-[#E5C39E]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#E5C39E]/40 hover:-translate-y-0.5 transition">
+      <a href="#sec-progreso" class="bg-[#0B2B26] border border-[#DAF1DE]/15 rounded-[22px] p-4 flex flex-col gap-1 hover:border-[#DAF1DE]/40 hover:-translate-y-0.5 transition">
         <span class="text-xl">📊</span>
         <span id="qc-progreso-peso" class="text-lg font-black text-white">-</span>
         <span class="text-[10px] text-white/50 font-bold uppercase">Último peso</span>
@@ -160,9 +160,9 @@
     </div>
 
     <!-- 2. HABIT TRACKER VISUAL -->
-    <section id="sec-habitos" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl space-y-6">
+    <section id="sec-habitos" class="bg-[#0B2B26] border border-[#DAF1DE]/20 p-6 rounded-[28px] shadow-xl space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <h2 class="text-lg font-bold text-[#E5C39E]">📅 Hábitos y Constancia</h2>
+        <h2 class="text-lg font-bold text-[#DAF1DE]">📅 Hábitos y Constancia</h2>
         <div class="flex items-center gap-3">
           <span id="streak-badge" class="text-xs font-bold bg-orange-500/10 border border-orange-500/30 text-orange-400 px-3 py-1.5 rounded-full">🔥 0 días seguidos</span>
           <span id="today-date" class="text-xs text-white/60 font-semibold">--/--/----</span>
@@ -175,7 +175,7 @@
       </div>
 
       <!-- Calendario de rachas (vista mensual) -->
-      <div class="border-t border-[#E5C39E]/10 pt-5">
+      <div class="border-t border-[#DAF1DE]/10 pt-5">
         <div class="flex items-center justify-between mb-3">
           <h3 class="text-sm font-bold text-white">Calendario del mes</h3>
           <span id="calendar-month-label" class="text-xs text-white/50 font-semibold uppercase"></span>
@@ -194,59 +194,59 @@
     </section>
 
     <!-- 2.5. CARDIO ESTILO STRAVA (running / caminata con mapa en vivo) -->
-    <section id="sec-cardio" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl space-y-4">
+    <section id="sec-cardio" class="bg-[#0B2B26] border border-[#DAF1DE]/20 p-6 rounded-[28px] shadow-xl space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
-        <h2 class="text-lg font-bold text-[#E5C39E]">🏃 Cardio</h2>
+        <h2 class="text-lg font-bold text-[#DAF1DE]">🏃 Cardio</h2>
         <div id="cardio-tipo-selector" class="flex gap-2">
-          <button type="button" data-tipo="running" class="cardio-tipo-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-[#E5C39E]/30 transition">🏃 Correr</button>
-          <button type="button" data-tipo="caminata" class="cardio-tipo-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-[#E5C39E]/30 transition">🚶 Caminar</button>
+          <button type="button" data-tipo="running" class="cardio-tipo-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-[#DAF1DE]/30 transition">🏃 Correr</button>
+          <button type="button" data-tipo="caminata" class="cardio-tipo-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-[#DAF1DE]/30 transition">🚶 Caminar</button>
         </div>
       </div>
 
       <!-- MAPA: siempre visible. Muestra tu punto azul en vivo antes, durante y después de correr -->
       <div class="relative">
-        <div id="cardio-map" class="w-full h-72 rounded-xl overflow-hidden border border-[#E5C39E]/20 bg-[#0A1128]"></div>
+        <div id="cardio-map" class="w-full h-72 rounded-xl overflow-hidden border border-[#DAF1DE]/20 bg-[#051F20]"></div>
 
         <!-- Selector de capa (Calles / Satélite), como el botón de capas de Mapbox/Strava -->
-        <div class="absolute top-2 left-2 z-[400] flex bg-[#0A1128]/90 backdrop-blur border border-[#E5C39E]/25 rounded-lg overflow-hidden shadow-lg">
+        <div class="absolute top-2 left-2 z-[400] flex bg-[#051F20]/90 backdrop-blur border border-[#DAF1DE]/25 rounded-lg overflow-hidden shadow-lg">
           <button type="button" id="btn-capa-calles" class="cardio-capa-btn px-2.5 py-1.5 text-[10px] font-bold transition">🗺️ Calles</button>
           <button type="button" id="btn-capa-satelite" class="cardio-capa-btn px-2.5 py-1.5 text-[10px] font-bold transition">🛰️ Satélite</button>
         </div>
 
         <!-- Estado del GPS, como el indicador de señal de Strava -->
-        <div id="cardio-gps-status" class="absolute top-2 right-2 z-[400] bg-[#0A1128]/90 backdrop-blur border border-[#E5C39E]/25 rounded-lg px-2.5 py-1.5 text-[10px] font-bold text-white/60 shadow-lg">
+        <div id="cardio-gps-status" class="absolute top-2 right-2 z-[400] bg-[#051F20]/90 backdrop-blur border border-[#DAF1DE]/25 rounded-lg px-2.5 py-1.5 text-[10px] font-bold text-white/60 shadow-lg">
           📡 Buscando GPS...
         </div>
 
         <!-- Botón de recentrar en mi ubicación, como el ícono de GPS de Strava -->
-        <button type="button" id="btn-recentrar-cardio" title="Centrar en mi ubicación" class="absolute bottom-2 right-2 z-[400] w-9 h-9 flex items-center justify-center bg-[#0A1128]/90 backdrop-blur border border-[#E5C39E]/25 rounded-full shadow-lg text-base hover:bg-[#E5C39E] hover:text-[#0A1128] transition">🧭</button>
+        <button type="button" id="btn-recentrar-cardio" title="Centrar en mi ubicación" class="absolute bottom-2 right-2 z-[400] w-9 h-9 flex items-center justify-center bg-[#051F20]/90 backdrop-blur border border-[#DAF1DE]/25 rounded-full shadow-lg text-base hover:bg-[#DAF1DE] hover:text-[#051F20] transition">🧭</button>
       </div>
 
       <!-- Panel de inicio -->
       <div id="cardio-start-panel">
-        <button id="btn-iniciar-cardio" class="w-full bg-[#E5C39E] text-[#0A1128] font-bold py-3 rounded-xl text-sm hover:bg-[#d4b08b] transition">▶ Iniciar Actividad</button>
+        <button id="btn-iniciar-cardio" class="w-full bg-[#DAF1DE] text-[#051F20] font-bold py-3 rounded-xl text-sm hover:bg-[#8EB69B] transition">▶ Iniciar Actividad</button>
         <p class="text-[10px] text-white/40 text-center mt-2">Tu ruta se dibuja en vivo sobre el mapa mientras corres, como en Strava.</p>
       </div>
 
       <!-- Panel en vivo (oculto hasta que se inicia una actividad) -->
       <div id="cardio-live-panel" class="hidden space-y-3">
         <!-- Panel de estadísticas estilo "bottom sheet" de Strava: distancia como métrica protagonista -->
-        <div class="bg-[#0A1128] border border-[#E5C39E]/15 rounded-xl p-4 text-center">
+        <div class="bg-[#051F20] border border-[#DAF1DE]/15 rounded-xl p-4 text-center">
           <span class="block text-[10px] text-white/50 uppercase font-bold tracking-wide">Distancia</span>
-          <span id="cardio-live-distancia" class="block text-4xl font-black text-[#E5C39E] font-display">0.00 <span class="text-lg font-bold">km</span></span>
+          <span id="cardio-live-distancia" class="block text-4xl font-black text-[#DAF1DE] font-display">0.00 <span class="text-lg font-bold">km</span></span>
         </div>
         <div class="grid grid-cols-3 gap-3 text-center">
-          <div class="bg-[#0A1128] p-3 rounded-xl border border-[#E5C39E]/15">
+          <div class="bg-[#051F20] p-3 rounded-xl border border-[#DAF1DE]/15">
             <span class="block text-[10px] text-white/50 uppercase font-bold">Duración</span>
-            <span id="cardio-live-duracion" class="text-lg font-bold text-[#E5C39E]">00:00</span>
+            <span id="cardio-live-duracion" class="text-lg font-bold text-[#DAF1DE]">00:00</span>
           </div>
-          <div class="bg-[#0A1128] p-3 rounded-xl border border-[#E5C39E]/15">
+          <div class="bg-[#051F20] p-3 rounded-xl border border-[#DAF1DE]/15">
             <span class="block text-[10px] text-white/50 uppercase font-bold">Ritmo</span>
-            <span id="cardio-live-ritmo" class="text-lg font-bold text-[#E5C39E]">--:-- /km</span>
+            <span id="cardio-live-ritmo" class="text-lg font-bold text-[#DAF1DE]">--:-- /km</span>
           </div>
-          <div class="bg-[#0A1128] p-3 rounded-xl border border-[#E5C39E]/15">
+          <div class="bg-[#051F20] p-3 rounded-xl border border-[#DAF1DE]/15">
             <span class="block text-[10px] text-white/50 uppercase font-bold">Kcal</span>
-            <span id="cardio-live-calorias" class="text-lg font-bold text-[#E5C39E]">0</span>
+            <span id="cardio-live-calorias" class="text-lg font-bold text-[#DAF1DE]">0</span>
           </div>
         </div>
 
@@ -259,7 +259,7 @@
       </div>
 
       <!-- Historial estilo feed de Strava -->
-      <div class="border-t border-[#E5C39E]/10 pt-4">
+      <div class="border-t border-[#DAF1DE]/10 pt-4">
         <h3 class="text-sm font-bold text-white mb-3">Historial de Actividades</h3>
         <div id="cardio-historial" class="space-y-3">
           <p class="text-xs text-white/40">Cargando actividades...</p>
@@ -269,7 +269,7 @@
 
     <!-- 3. ANUNCIOS DEL ENTRENADOR -->
     <section>
-      <h2 class="text-lg font-bold text-[#E5C39E] mb-3">📢 Anuncios e Avisos</h2>
+      <h2 class="text-lg font-bold text-[#DAF1DE] mb-3">📢 Anuncios e Avisos</h2>
       <div id="anuncios-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <p class="text-xs text-white/50">Cargando anuncios...</p>
       </div>
@@ -277,15 +277,15 @@
 
     <!-- 4. RUTINAS DE ENTRENAMIENTO -->
     <section id="sec-rutina">
-      <h2 class="text-lg font-bold text-[#E5C39E] mb-3">💪 Mi Rutina de Entrenamiento</h2>
+      <h2 class="text-lg font-bold text-[#DAF1DE] mb-3">💪 Mi Rutina de Entrenamiento</h2>
       <div id="rutinas-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <p class="text-xs text-white/50">Cargando rutinas...</p>
       </div>
     </section>
 
     <!-- 5. PLAN DE NUTRICIÓN -->
-    <section id="sec-nutricion" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl space-y-4">
-      <h2 class="text-lg font-bold text-[#E5C39E]">🥗 Mi Plan Nutricional</h2>
+    <section id="sec-nutricion" class="bg-[#0B2B26] border border-[#DAF1DE]/20 p-6 rounded-[28px] shadow-xl space-y-4">
+      <h2 class="text-lg font-bold text-[#DAF1DE]">🥗 Mi Plan Nutricional</h2>
       <div id="nutricion-container" class="space-y-4">
         <p class="text-xs text-white/50">Cargando plan de nutrición...</p>
       </div>
@@ -295,10 +295,10 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
       <!-- REGISTRO DE AVANCES + GRÁFICA -->
-      <section id="sec-progreso" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl space-y-4">
-        <h2 class="text-lg font-bold text-[#E5C39E]">📊 Mi Progreso Corporal</h2>
+      <section id="sec-progreso" class="bg-[#0B2B26] border border-[#DAF1DE]/20 p-6 rounded-[28px] shadow-xl space-y-4">
+        <h2 class="text-lg font-bold text-[#DAF1DE]">📊 Mi Progreso Corporal</h2>
 
-        <div class="bg-[#0A1128] border border-[#E5C39E]/10 rounded-xl p-3">
+        <div class="bg-[#051F20] border border-[#DAF1DE]/10 rounded-xl p-3">
           <canvas id="chart-avances" height="160"></canvas>
           <p id="chart-empty-msg" class="text-xs text-white/40 text-center py-6 hidden">Aún no hay suficientes registros para graficar. ¡Guarda tu primer avance!</p>
         </div>
@@ -307,40 +307,40 @@
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-bold text-white mb-1">Peso (kg)</label>
-              <input type="number" step="0.1" id="av-peso" required placeholder="72.5" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#E5C39E]">
+              <input type="number" step="0.1" id="av-peso" required placeholder="72.5" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#DAF1DE]">
             </div>
             <div>
               <label class="block text-xs font-bold text-white mb-1">% Grasa (Opcional)</label>
-              <input type="number" step="0.1" id="av-grasa" placeholder="15" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#E5C39E]">
+              <input type="number" step="0.1" id="av-grasa" placeholder="15" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#DAF1DE]">
             </div>
           </div>
           <div>
             <label class="block text-xs font-bold text-white mb-1">Notas / Sensaciones</label>
-            <input type="text" id="av-notas" placeholder="Ej. Me sentí fuerte esta semana" class="w-full bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#E5C39E]">
+            <input type="text" id="av-notas" placeholder="Ej. Me sentí fuerte esta semana" class="w-full bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#DAF1DE]">
           </div>
-          <button type="submit" class="w-full bg-[#E5C39E] text-[#0A1128] font-bold py-2.5 rounded-xl text-xs hover:bg-[#d4b08b] transition">Guardar Avance</button>
+          <button type="submit" class="w-full bg-[#DAF1DE] text-[#051F20] font-bold py-2.5 rounded-xl text-xs hover:bg-[#8EB69B] transition">Guardar Avance</button>
         </form>
 
-        <h3 class="text-xs font-bold text-[#E5C39E] pt-2">Historial Reciente:</h3>
+        <h3 class="text-xs font-bold text-[#DAF1DE] pt-2">Historial Reciente:</h3>
         <div id="historial-avances" class="space-y-2 max-h-40 overflow-y-auto pr-1">
           <p class="text-xs text-white/40">Sin registros previos.</p>
         </div>
       </section>
 
       <!-- CHAT DIRECTO CON ENTRENADOR -->
-      <section id="sec-chat" class="bg-[#131E3A] border border-[#E5C39E]/20 p-6 rounded-[28px] shadow-xl flex flex-col h-[400px]">
-        <h2 class="text-lg font-bold text-[#E5C39E] mb-2 flex items-center gap-2">
+      <section id="sec-chat" class="bg-[#0B2B26] border border-[#DAF1DE]/20 p-6 rounded-[28px] shadow-xl flex flex-col h-[400px]">
+        <h2 class="text-lg font-bold text-[#DAF1DE] mb-2 flex items-center gap-2">
           💬 Mensajes con <span id="chat-coach-name">Tu Entrenador</span>
           <span id="chat-unread-dot" class="hidden w-2.5 h-2.5 bg-red-500 rounded-full"></span>
         </h2>
 
-        <div id="chat-messages" class="flex-1 overflow-y-auto bg-[#0A1128] p-3 rounded-xl space-y-3 border border-[#E5C39E]/10 mb-3">
+        <div id="chat-messages" class="flex-1 overflow-y-auto bg-[#051F20] p-3 rounded-xl space-y-3 border border-[#DAF1DE]/10 mb-3">
           <p class="text-xs text-white/40 text-center">Cargando conversación...</p>
         </div>
 
         <form id="form-chat" class="flex gap-2">
-          <input type="text" id="chat-input" placeholder="Escribe un mensaje..." required class="flex-1 bg-[#0A1128] border border-[#E5C39E]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#E5C39E]">
-          <button type="submit" class="bg-[#E5C39E] text-[#0A1128] font-bold px-4 rounded-xl text-xs hover:bg-[#d4b08b] transition">Enviar</button>
+          <input type="text" id="chat-input" placeholder="Escribe un mensaje..." required class="flex-1 bg-[#051F20] border border-[#DAF1DE]/30 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#DAF1DE]">
+          <button type="submit" class="bg-[#DAF1DE] text-[#051F20] font-bold px-4 rounded-xl text-xs hover:bg-[#8EB69B] transition">Enviar</button>
         </form>
       </section>
 
@@ -350,9 +350,9 @@
 
   <!-- MODAL DE VIDEO -->
   <div id="video-modal" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4">
-    <div class="bg-[#131E3A] border border-[#E5C39E]/30 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl">
-      <div class="flex justify-between items-center p-3 border-b border-[#E5C39E]/10">
-        <span class="text-xs font-bold text-[#E5C39E]">Demostración del Ejercicio</span>
+    <div class="bg-[#0B2B26] border border-[#DAF1DE]/30 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl">
+      <div class="flex justify-between items-center p-3 border-b border-[#DAF1DE]/10">
+        <span class="text-xs font-bold text-[#DAF1DE]">Demostración del Ejercicio</span>
         <button onclick="cerrarVideoModal()" class="text-white/60 hover:text-white text-lg leading-none px-2">✕</button>
       </div>
       <div class="aspect-video bg-black">
@@ -551,12 +551,12 @@
         const heatSquares = heatDates.map(d => {
           const ds = fechaStr(d);
           const done = !!(habitosMap[ds] && habitosMap[ds][h.key]);
-          const style = done ? `background:${h.color};` : `background:#0A1128; border:1px solid ${h.color}33;`;
+          const style = done ? `background:${h.color};` : `background:#051F20; border:1px solid ${h.color}33;`;
           return `<div class="w-2.5 h-2.5 rounded-[3px]" style="${style}" title="${ds}"></div>`;
         }).join('');
 
         return `
-          <div class="bg-[#0A1128] border border-[#E5C39E]/10 rounded-xl p-4">
+          <div class="bg-[#051F20] border border-[#DAF1DE]/10 rounded-xl p-4">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <div class="flex items-center gap-2 shrink-0">
                 <span class="text-lg">${h.icon}</span>
@@ -626,9 +626,9 @@
 
         let cls = 'bg-white/5 text-white/30 border border-white/5';
         if (!isFuture && completos > 0) {
-          const intensity = completos >= 4 ? 'bg-[#E5C39E] text-[#0A1128] font-bold border-[#E5C39E]'
-            : completos >= 2 ? 'bg-[#E5C39E]/50 text-[#0A1128] font-bold border-[#E5C39E]/60'
-            : 'bg-[#E5C39E]/20 text-white border-[#E5C39E]/30';
+          const intensity = completos >= 4 ? 'bg-[#DAF1DE] text-[#051F20] font-bold border-[#DAF1DE]'
+            : completos >= 2 ? 'bg-[#DAF1DE]/50 text-[#051F20] font-bold border-[#DAF1DE]/60'
+            : 'bg-[#DAF1DE]/20 text-white border-[#DAF1DE]/30';
           cls = intensity;
         }
         if (ds === todayStr) cls += ' ring-2 ring-white';
@@ -664,8 +664,8 @@
 
       if (anuncios && anuncios.length > 0) {
         container.innerHTML = anuncios.map(a => `
-          <div class="bg-[#131E3A] border border-[#E5C39E]/20 p-4 rounded-xl space-y-1">
-            <h3 class="font-bold text-[#E5C39E] text-sm">${a.titulo}</h3>
+          <div class="bg-[#0B2B26] border border-[#DAF1DE]/20 p-4 rounded-xl space-y-1">
+            <h3 class="font-bold text-[#DAF1DE] text-sm">${a.titulo}</h3>
             <p class="text-xs text-white/80">${a.contenido}</p>
           </div>
         `).join('');
@@ -715,20 +715,20 @@
 
       if (rutinas && rutinas.length > 0) {
         container.innerHTML = rutinas.map(r => `
-          <div class="bg-[#131E3A] border border-[#E5C39E]/20 p-4 rounded-[22px] space-y-3 flex flex-col justify-between hover:border-[#E5C39E]/40 transition">
+          <div class="bg-[#0B2B26] border border-[#DAF1DE]/20 p-4 rounded-[22px] space-y-3 flex flex-col justify-between hover:border-[#DAF1DE]/40 transition">
             <div class="flex items-start gap-3">
-              <div class="w-11 h-11 rounded-2xl bg-[#E5C39E]/10 border border-[#E5C39E]/25 flex items-center justify-center text-lg shrink-0">💪</div>
+              <div class="w-11 h-11 rounded-2xl bg-[#DAF1DE]/10 border border-[#DAF1DE]/25 flex items-center justify-center text-lg shrink-0">💪</div>
               <div class="min-w-0">
-                <span class="text-[9px] bg-[#E5C39E]/10 text-[#E5C39E] px-2 py-0.5 rounded-full font-bold uppercase">${r.dia_semana}</span>
+                <span class="text-[9px] bg-[#DAF1DE]/10 text-[#DAF1DE] px-2 py-0.5 rounded-full font-bold uppercase">${r.dia_semana}</span>
                 <h3 class="font-bold text-white text-sm mt-1 truncate">${r.titulo}</h3>
               </div>
             </div>
             <p class="text-xs text-white/60 whitespace-pre-line">${r.descripcion || ''}</p>
             <div class="flex flex-wrap gap-1.5">
-              ${r.series ? `<span class="text-[10px] font-bold bg-[#0A1128] border border-[#E5C39E]/15 text-[#E5C39E] px-2.5 py-1 rounded-full">${r.series} series</span>` : ''}
-              ${r.repeticiones ? `<span class="text-[10px] font-bold bg-[#0A1128] border border-[#E5C39E]/15 text-[#E5C39E] px-2.5 py-1 rounded-full">${r.repeticiones} reps</span>` : ''}
+              ${r.series ? `<span class="text-[10px] font-bold bg-[#051F20] border border-[#DAF1DE]/15 text-[#DAF1DE] px-2.5 py-1 rounded-full">${r.series} series</span>` : ''}
+              ${r.repeticiones ? `<span class="text-[10px] font-bold bg-[#051F20] border border-[#DAF1DE]/15 text-[#DAF1DE] px-2.5 py-1 rounded-full">${r.repeticiones} reps</span>` : ''}
             </div>
-            ${r.video_url ? `<button onclick="abrirVideoModal('${r.video_url.replace(/'/g, "\\'")}')" class="text-xs bg-[#E5C39E]/10 border border-[#E5C39E]/30 text-[#E5C39E] font-bold py-2.5 rounded-xl hover:bg-[#E5C39E] hover:text-[#0A1128] transition">▶ Ver Demostración</button>` : ''}
+            ${r.video_url ? `<button onclick="abrirVideoModal('${r.video_url.replace(/'/g, "\\'")}')" class="text-xs bg-[#DAF1DE]/10 border border-[#DAF1DE]/30 text-[#DAF1DE] font-bold py-2.5 rounded-xl hover:bg-[#DAF1DE] hover:text-[#051F20] transition">▶ Ver Demostración</button>` : ''}
           </div>
         `).join('');
       } else {
@@ -774,23 +774,23 @@
         <div class="flex flex-col sm:flex-row items-center gap-5">
           <!-- Anillo de macros estilo kit de fitness: segmentos por color, kcal al centro -->
           <div class="relative w-28 h-28 shrink-0 rounded-full" style="background: conic-gradient(#60a5fa 0% ${pProt}%, #4ade80 ${pProt}% ${pProt + pCarb}%, #fb923c ${pProt + pCarb}% 100%);">
-            <div class="absolute inset-[9px] rounded-full bg-[#131E3A] flex flex-col items-center justify-center">
+            <div class="absolute inset-[9px] rounded-full bg-[#0B2B26] flex flex-col items-center justify-center">
               <span class="text-xl font-black text-white">${nut.calorias || 0}</span>
               <span class="text-[9px] text-white/40 font-bold tracking-wide">KCAL / DÍA</span>
             </div>
           </div>
           <div class="flex-1 w-full space-y-2">
-            <h3 class="font-bold text-base text-[#E5C39E]">${nut.titulo}</h3>
+            <h3 class="font-bold text-base text-[#DAF1DE]">${nut.titulo}</h3>
             <div class="grid grid-cols-3 gap-2 text-center text-xs">
-              <div class="bg-[#0A1128] p-2 rounded-xl border border-blue-400/20"><span class="block font-bold text-blue-400 text-sm">${prot}g</span>Proteína</div>
-              <div class="bg-[#0A1128] p-2 rounded-xl border border-green-400/20"><span class="block font-bold text-green-400 text-sm">${carb}g</span>Carbos</div>
-              <div class="bg-[#0A1128] p-2 rounded-xl border border-orange-400/20"><span class="block font-bold text-orange-400 text-sm">${gras}g</span>Grasa</div>
+              <div class="bg-[#051F20] p-2 rounded-xl border border-blue-400/20"><span class="block font-bold text-blue-400 text-sm">${prot}g</span>Proteína</div>
+              <div class="bg-[#051F20] p-2 rounded-xl border border-green-400/20"><span class="block font-bold text-green-400 text-sm">${carb}g</span>Carbos</div>
+              <div class="bg-[#051F20] p-2 rounded-xl border border-orange-400/20"><span class="block font-bold text-orange-400 text-sm">${gras}g</span>Grasa</div>
             </div>
             <p class="text-[10px] text-white/40">${pProt}% proteína · ${pCarb}% carbohidratos · ${pGras}% grasa</p>
           </div>
         </div>
 
-        <p class="text-xs text-white/80 whitespace-pre-line bg-[#0A1128] p-3 rounded-xl border border-[#E5C39E]/10 mt-4">${nut.detalles || ''}</p>
+        <p class="text-xs text-white/80 whitespace-pre-line bg-[#051F20] p-3 rounded-xl border border-[#DAF1DE]/10 mt-4">${nut.detalles || ''}</p>
       `;
     }
 
@@ -805,9 +805,9 @@
 
       if (avances && avances.length > 0) {
         container.innerHTML = avances.map(a => `
-          <div class="bg-[#0A1128] border border-[#E5C39E]/10 p-2.5 rounded-xl flex justify-between items-center text-xs">
+          <div class="bg-[#051F20] border border-[#DAF1DE]/10 p-2.5 rounded-xl flex justify-between items-center text-xs">
             <div>
-              <span class="font-bold text-[#E5C39E]">${a.peso} kg</span>
+              <span class="font-bold text-[#DAF1DE]">${a.peso} kg</span>
               ${a.grasa ? `<span class="text-white/60">(${a.grasa}% grasa)</span>` : ''}
               ${a.notas ? `<p class="text-[10px] text-white/50">${a.notas}</p>` : ''}
             </div>
@@ -846,8 +846,8 @@
             {
               label: 'Peso (kg)',
               data: pesos,
-              borderColor: '#E5C39E',
-              backgroundColor: 'rgba(229,195,158,0.15)',
+              borderColor: '#DAF1DE',
+              backgroundColor: 'rgba(218,241,222,0.15)',
               yAxisID: 'y',
               tension: 0.3,
               fill: true
@@ -869,7 +869,7 @@
           plugins: { legend: { labels: { color: '#F9F6F0', font: { size: 10 } } } },
           scales: {
             x: { ticks: { color: '#F9F6F0AA', font: { size: 9 } }, grid: { color: '#ffffff10' } },
-            y: { position: 'left', ticks: { color: '#E5C39E', font: { size: 9 } }, grid: { color: '#ffffff10' } },
+            y: { position: 'left', ticks: { color: '#DAF1DE', font: { size: 9 } }, grid: { color: '#ffffff10' } },
             y1: { position: 'right', ticks: { color: '#3B82F6', font: { size: 9 } }, grid: { display: false } }
           }
         }
@@ -921,7 +921,7 @@
           const isMe = m.sender_id === currentUser.id;
           return `
             <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
-              <div class="max-w-[80%] p-2.5 rounded-xl text-xs ${isMe ? 'bg-[#E5C39E] text-[#0A1128] font-semibold' : 'bg-[#131E3A] border border-[#E5C39E]/20 text-white'}">
+              <div class="max-w-[80%] p-2.5 rounded-xl text-xs ${isMe ? 'bg-[#DAF1DE] text-[#051F20] font-semibold' : 'bg-[#0B2B26] border border-[#DAF1DE]/20 text-white'}">
                 ${m.mensaje}
               </div>
               <span class="text-[9px] text-white/40 mt-0.5">${new Date(m.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
@@ -980,9 +980,9 @@
     function updateCardioTipoUI() {
       document.querySelectorAll('.cardio-tipo-btn').forEach(btn => {
         const activo = btn.dataset.tipo === cardioTipo;
-        btn.classList.toggle('bg-[#E5C39E]', activo);
-        btn.classList.toggle('text-[#0A1128]', activo);
-        btn.classList.toggle('bg-[#0A1128]', !activo);
+        btn.classList.toggle('bg-[#DAF1DE]', activo);
+        btn.classList.toggle('text-[#051F20]', activo);
+        btn.classList.toggle('bg-[#051F20]', !activo);
         btn.classList.toggle('text-white/60', !activo);
       });
     }
@@ -1060,7 +1060,7 @@
       const el = document.getElementById('cardio-gps-status');
       if (!el) return;
       el.innerText = texto;
-      el.className = `absolute top-2 right-2 z-[400] bg-[#0A1128]/90 backdrop-blur border rounded-lg px-2.5 py-1.5 text-[10px] font-bold shadow-lg ${color}`;
+      el.className = `absolute top-2 right-2 z-[400] bg-[#051F20]/90 backdrop-blur border rounded-lg px-2.5 py-1.5 text-[10px] font-bold shadow-lg ${color}`;
     }
 
     // El mapa se crea UNA vez al cargar el dashboard y vive siempre, corras o no.
@@ -1077,7 +1077,7 @@
       cardioMap.setView([20.6597, -103.3496], 13); // vista provisional hasta el primer fix GPS
 
       // La ruta recorrida: se va dibujando punto por punto mientras corres
-      cardioPolyline = L.polyline([], { color: '#E5C39E', weight: 5, opacity: 0.95, lineJoin: 'round', lineCap: 'round' }).addTo(cardioMap);
+      cardioPolyline = L.polyline([], { color: '#DAF1DE', weight: 5, opacity: 0.95, lineJoin: 'round', lineCap: 'round' }).addTo(cardioMap);
 
       // Si el usuario arrastra el mapa, dejamos de auto-centrar (como Strava/Maps)
       cardioMap.on('dragstart', () => { cardioSeguirUbicacion = false; });
@@ -1108,7 +1108,7 @@
 
       // Indicador de calidad de señal
       if (accuracy <= 10)      setGpsStatus('📡 GPS excelente', 'border-green-500/30 text-green-400');
-      else if (accuracy <= 25) setGpsStatus('📡 GPS bueno', 'border-[#E5C39E]/25 text-[#E5C39E]');
+      else if (accuracy <= 25) setGpsStatus('📡 GPS bueno', 'border-[#DAF1DE]/25 text-[#DAF1DE]');
       else                     setGpsStatus('📡 GPS débil', 'border-yellow-500/30 text-yellow-400');
 
       if (cardioMap) {
@@ -1308,8 +1308,8 @@
           : '--';
         const mapId = `cardio-mini-map-${a.id}`;
         return `
-          <div class="bg-[#0A1128] border border-[#E5C39E]/10 rounded-xl overflow-hidden">
-            <div id="${mapId}" class="w-full h-32 bg-[#131E3A]"></div>
+          <div class="bg-[#051F20] border border-[#DAF1DE]/10 rounded-xl overflow-hidden">
+            <div id="${mapId}" class="w-full h-32 bg-[#0B2B26]"></div>
             <div class="p-3 flex items-center gap-2">
               <span class="text-lg">${icono}</span>
               <div>
@@ -1337,7 +1337,7 @@
         // Vista satelital para las tarjetas del historial: se ve como una "foto" de la ruta, igual que el feed de Strava
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(miniMap);
         const latlngs = a.ruta.map(p => [p.lat, p.lng]);
-        const poly = L.polyline(latlngs, { color: '#E5C39E', weight: 3.5 }).addTo(miniMap);
+        const poly = L.polyline(latlngs, { color: '#DAF1DE', weight: 3.5 }).addTo(miniMap);
         L.circleMarker(latlngs[0], { radius: 4, color: '#fff', weight: 1.5, fillColor: '#22C55E', fillOpacity: 1 }).addTo(miniMap);
         L.circleMarker(latlngs[latlngs.length - 1], { radius: 4, color: '#fff', weight: 1.5, fillColor: '#EF4444', fillOpacity: 1 }).addTo(miniMap);
         miniMap.fitBounds(poly.getBounds(), { padding: [16, 16] });
@@ -1355,7 +1355,7 @@
   </script>
 
   <!-- TAB BAR INFERIOR (móvil) -->
-  <nav id="kf-tabbar" class="fixed z-50 bg-[#131E3A]/95 backdrop-blur">
+  <nav id="kf-tabbar" class="fixed z-50 bg-[#0B2B26]/95 backdrop-blur">
     <div class="kf-tabbar-scroll flex items-stretch gap-1 overflow-x-auto px-2 py-1.5 max-w-3xl mx-auto">
       <a href="#sec-inicio" data-anchor="sec-inicio" class="kf-tab"><span class="kf-tab-icon">🏠</span><span>Inicio</span></a>
       <a href="#sec-habitos" data-anchor="sec-habitos" class="kf-tab"><span class="kf-tab-icon">📅</span><span>Hábitos</span></a>
@@ -1363,7 +1363,7 @@
       <a href="#sec-rutina" data-anchor="sec-rutina" class="kf-tab"><span class="kf-tab-icon">💪</span><span>Rutina</span></a>
       <a href="#sec-nutricion" data-anchor="sec-nutricion" class="kf-tab"><span class="kf-tab-icon">🥗</span><span>Nutrición</span></a>
       <a href="#sec-progreso" data-anchor="sec-progreso" class="kf-tab"><span class="kf-tab-icon">📊</span><span>Progreso</span></a>
-      <a href="#sec-chat" data-anchor="sec-chat" class="kf-tab relative"><span class="relative"><span class="kf-tab-icon">💬</span><span id="kf-tab-chat-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-[#131E3A]"></span></span><span>Chat</span></a>
+      <a href="#sec-chat" data-anchor="sec-chat" class="kf-tab relative"><span class="relative"><span class="kf-tab-icon">💬</span><span id="kf-tab-chat-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-[#0B2B26]"></span></span><span>Chat</span></a>
       <a href="perfil.html" class="kf-tab"><span class="kf-tab-icon">👤</span><span>Perfil</span></a>
     </div>
   </nav>
